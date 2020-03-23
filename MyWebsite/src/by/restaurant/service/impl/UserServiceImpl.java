@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
 			 UserDAO userDAO = daoFactory.getUserDAO();
 			 user = userDAO.getUser(login, password);
 		 } catch (DAOException e) {
-			 throw new ServiceException("Error in getUserById().", e);
+			 throw new ServiceException("Error during getting user (in service)", e);
        }
 		 return user;
 	}
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 				 added = false;
 			 }
 		 } catch (DAOException e) {
-			 throw new ServiceException("Error in getUserById().", e);
+			 throw new ServiceException("Error during additing user (in service)", e);
        }
 		 return added;
 	}

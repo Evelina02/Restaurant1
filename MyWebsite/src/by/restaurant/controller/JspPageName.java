@@ -9,5 +9,6 @@ public final class JspPageName {
 	public static final String WELCOME_PAGE = "jsp/welcome.jsp";
 	public static final String FIRST_PAGE = "index.jsp";
 	public static final String ERROR_PAGE = "error.jsp";
-	
+	public static final String MENU_PAGE = "jsp/menu.jsp";
+
 }

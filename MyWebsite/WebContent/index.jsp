@@ -15,6 +15,8 @@
 	<ul>
         <li><a href="jsp/authorization.jsp">Войти</a></li>
         <li><a href="jsp/registration.jsp">Регистрация</a></li>
+        <li><a href="${pageContext.request.contextPath}/Controller?command=show_menu">Меню</a></li>
+        
 	</ul>
 </body>
 </html>

@@ -55,7 +55,7 @@ public class SignUp implements Command {
 				}else {
 //					user.setSignedIn(true);
 					session.setAttribute(SessionAttributeName.LOGIN_ATTRIBUTE, user.getLogin());
-	                session.setAttribute(SessionAttributeName.ROLE_ATTRIBUTE, user.getRole().name());
+	                session.setAttribute(SessionAttributeName.ROLE_ATTRIBUTE, user.getRole());
 	                request.setAttribute(RequestParameterName.REGISTER_SUCCESS_MESSAGE, REGISTER_SUCCESS_MESSAGE);
 					//request.setAttribute(RequestParameterName.MESSAGE, user.getLogin());
 					page = JspPageName.WELCOME_PAGE;

@@ -40,7 +40,7 @@ public class SignIn implements Command {
 				}else {
 					//user.setSignedIn(true);
 	                session.setAttribute(SessionAttributeName.LOGIN_ATTRIBUTE, user.getLogin());
-	                session.setAttribute(SessionAttributeName.ROLE_ATTRIBUTE, user.getRole().name());
+	                session.setAttribute(SessionAttributeName.ROLE_ATTRIBUTE, user.getRole());
 					//request.setAttribute(RequestParameterName.MESSAGE, user.getLogin());
 					page = JspPageName.WELCOME_PAGE;		
 				}

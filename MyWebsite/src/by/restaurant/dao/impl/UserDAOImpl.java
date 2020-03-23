@@ -16,6 +16,7 @@ public class UserDAOImpl implements UserDAO {
 	private ConnectionPool pool = ConnectionPool.getInstance();
 	private Connection connection;
 	private PreparedStatement ps;
+	private ResultSet rs;
 	
 	private static final String INSERT_USER = 
 			"insert into users(login, password, role, email, address, "
@@ -63,7 +64,7 @@ public class UserDAOImpl implements UserDAO {
 	public User getUser(String login, String password) throws DAOException{
 		
 		User user = null;
-
+		
 		try {
 			
 			connection = pool.takeConnection();
@@ -71,7 +72,7 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(1, login);
 			ps.setString(2, password);
 			
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			if(!rs.next()) {
 				return null;
 			}
@@ -91,14 +92,15 @@ public class UserDAOImpl implements UserDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException ex) {
-                    //log
-                }
+			try {
+				rs.close();
+				ps.close();
+				connection.close();
+            } catch (SQLException ex) {
+              //log
             }
-		}
+        }
+	
 			
 		return user;
 	}
@@ -111,7 +113,7 @@ public class UserDAOImpl implements UserDAO {
 			ps = connection.prepareStatement(SELECT_USER_BY_LOGIN);
 			ps.setString(1, login);
 			
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			if(!rs.next()) {
 				return false;
 			}
@@ -124,12 +126,12 @@ public class UserDAOImpl implements UserDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException ex) {
-                    //log
-                }
+			try {
+				rs.close();
+				ps.close();
+				connection.close();
+            } catch (SQLException ex) {
+              //log
             }
 		}
 		return false;
