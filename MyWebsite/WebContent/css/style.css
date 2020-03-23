@@ -1,0 +1,16 @@
+h1{
+	font-size: 40px;
+	text-align: center;
+}
+h2{
+	color: red;
+	font-size: 30px;
+	text-align: center;
+	font-style: italic;
+}
+body{
+	background-color: #d8bfd8;
+}
+form{
+	text-align: center;
+}
