@@ -4,25 +4,44 @@
 <html>
 <head>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
 
-<title>Авторизация</title>
+<title>${authorization_text}</title>
 </head>
 <body>
-	<h1>Авторизация</h1>
+<c:import url="header.jsp"/>
+<fmt:setLocale value="${sessionScope.local}" />
+<fmt:setBundle basename="resources.localization.local" var="loc" />
+<fmt:message bundle="${loc}" key="text.registration" var="registration_text" />
+<fmt:message bundle="${loc}" key="text.authorization" var="authorization_text" />
+<fmt:message bundle="${loc}" key="text.sign_in" var="sign_in_text" />
+<fmt:message bundle="${loc}" key="text.enter.login" var="enter_login" />
+<fmt:message bundle="${loc}" key="text.enter.password1" var="enter_password1" />
+<fmt:message bundle="${loc}" key="wrong_password" var="wrong_password" />
+<fmt:message bundle="${loc}" key="wrong_login" var="wrong_login" />
+
+	<h1>${authorization_text}</h1>
 	<br> 
-	<h2><c:out value="${noSuchLogin}"/></h2>
-	<h2><c:out value="${wrongPassword}"/></h2>
-	
+	<h2><c:if test="${not empty requestScope.noSuchLogin}">
+          <c:out value="${wrong_login}"/>
+    </c:if></h2>
+      
+    <h2><c:if test="${not empty requestScope.wrongPassword}">
+          <c:out value="${wrong_password}"/>
+    </c:if></h2>
+      
+      
+      
 	<form action="${pageContext.request.contextPath}/Controller" method="post" onsubmit="return validateForm(this)">
 		<input type="hidden" name="command" value="sign_in"><p>
-		Введите логин<input type="text" name="login" placeholder="Введите" maxlength="10" required><br><br> 
-		Введите пароль<input type="password" name="password" placeholder="Введите" maxlength="10" required></p> 
+		<input type="text" name="login" placeholder=${enter_login} maxlength="10" required><br><br> 
+		<input type="password" name="password" placeholder=${enter_password1} maxlength="10" required></p> 
 		<hr><br>
-		<input type="submit" name="sign_in" value="Войти" >
+		<input type="submit" name="sign_in" value=${sign_in_text} >
 		<br><br> 
-		<a href="${pageContext.request.contextPath}/jsp/registration.jsp">Регистрация</a>
+		<a href="${pageContext.request.contextPath}/jsp/registration.jsp">${registration_text}</a>
 	</form>
 	
 	<script type="text/javascript">

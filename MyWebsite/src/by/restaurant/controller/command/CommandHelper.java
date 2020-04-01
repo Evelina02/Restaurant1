@@ -17,6 +17,7 @@ public class CommandHelper {
 		commands.put(CommandName.SIGN_OUT, new SignOut());
 		commands.put(CommandName.SIGN_UP, new SignUp());
 		commands.put(CommandName.SHOW_MENU, new ShowMenu());
+		commands.put(CommandName.CHANGE_LANGUAGE, new ChangeLanguage());
 
 		commands.put(CommandName.NO_SUCH_COMMAND, new NoSuchCommand());
 	}

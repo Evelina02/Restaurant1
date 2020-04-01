@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import by.restaurant.bean.util.Category;
-import by.restaurant.bean.util.State;
+import by.restaurant.bean.util.DishState;
 
 public class Dish implements Serializable {
 
@@ -15,17 +15,18 @@ public class Dish implements Serializable {
 	private double price;
 	private String picture;
 	private Category category;
-	private double amount;
-	private State state;
+	private String amount;
+	private DishState state;
+	private boolean isDeleted;
 	
 	private Set<String> ingredients;
 	private Set<String> refusalOfIngredients;
 	
-	public Dish() {};	
-	
-	public Dish(int id, String name, double price, String picture, Category category, double amount, State state,
-			Set<String> ingredients, Set<String> refusalOfIngredients) {
-		super();
+	public Dish() {}
+
+	public Dish(int id, String name, double price, String picture, Category category, String amount, DishState state,
+			boolean isDeleted, Set<String> ingredients, Set<String> refusalOfIngredients) {
+
 		this.id = id;
 		this.name = name;
 		this.price = price;
@@ -33,11 +34,10 @@ public class Dish implements Serializable {
 		this.category = category;
 		this.amount = amount;
 		this.state = state;
+		this.isDeleted = isDeleted;
 		this.ingredients = ingredients;
 		this.refusalOfIngredients = refusalOfIngredients;
 	}
-
-
 
 	public int getId() {
 		return id;
@@ -79,20 +79,28 @@ public class Dish implements Serializable {
 		this.category = category;
 	}
 
-	public double getAmount() {
+	public String getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 
-	public State getState() {
+	public DishState getState() {
 		return state;
 	}
 
-	public void setState(State state) {
+	public void setState(DishState state) {
 		this.state = state;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
 	public Set<String> getIngredients() {
@@ -111,17 +119,79 @@ public class Dish implements Serializable {
 		this.refusalOfIngredients = refusalOfIngredients;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	@Override
 	public String toString() {
 		return "Dish [id=" + id + ", name=" + name + ", price=" + price + ", picture=" + picture + ", category="
-				+ category + ", amount=" + amount + ", state=" + state + ", ingredients=" + ingredients
-				+ ", refusalOfIngredients=" + refusalOfIngredients + "]";
+				+ category + ", amount=" + amount + ", state=" + state + ", isDeleted=" + isDeleted + ", ingredients="
+				+ ingredients + ", refusalOfIngredients=" + refusalOfIngredients + "]";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+		result = prime * result + ((category == null) ? 0 : category.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((ingredients == null) ? 0 : ingredients.hashCode());
+		result = prime * result + (isDeleted ? 1231 : 1237);
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((picture == null) ? 0 : picture.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(price);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((refusalOfIngredients == null) ? 0 : refusalOfIngredients.hashCode());
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Dish other = (Dish) obj;
+		if (amount == null) {
+			if (other.amount != null)
+				return false;
+		} else if (!amount.equals(other.amount))
+			return false;
+		if (category != other.category)
+			return false;
+		if (id != other.id)
+			return false;
+		if (ingredients == null) {
+			if (other.ingredients != null)
+				return false;
+		} else if (!ingredients.equals(other.ingredients))
+			return false;
+		if (isDeleted != other.isDeleted)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (picture == null) {
+			if (other.picture != null)
+				return false;
+		} else if (!picture.equals(other.picture))
+			return false;
+		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
+			return false;
+		if (refusalOfIngredients == null) {
+			if (other.refusalOfIngredients != null)
+				return false;
+		} else if (!refusalOfIngredients.equals(other.refusalOfIngredients))
+			return false;
+		if (state != other.state)
+			return false;
+		return true;
+	};	
+	
 	
 	
 }

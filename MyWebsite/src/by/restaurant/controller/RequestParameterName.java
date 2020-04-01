@@ -5,8 +5,14 @@ public final class RequestParameterName {
 	private RequestParameterName() {};
 	
 	public static final String COMMAND_NAME = "command";
+	public static final String LOGIN = "login";
+	public static final String PASSWORD = "password";
+	public static final String EMAIL = "email";
+	public static final String ADDRESS = "address";
+
 	public static final String NO_SUCH_LOGIN = "noSuchLogin";
 	public static final String WRONG_PASSWORD = "wrongPassword";
+	public static final String HELLO_MESSAGE = "helloMessage";
 	public static final String GOODBYE_MESSAGE = "goodbyeMessage";
 	public static final String LOGIN_EXISTS = "loginExists";
 	public static final String REGISTER_SUCCESS_MESSAGE = "successMessage";

@@ -6,7 +6,7 @@ import by.restaurant.bean.Dish;
 
 public interface DishDAO {
 
-	int addDish(Dish dish) throws DAOException;
+	void addDish(Dish dish) throws DAOException;
 	List<Dish> findSnacks() throws DAOException;
 	List<Dish> findHotDishes() throws DAOException;
 	List<Dish> findSalads() throws DAOException;

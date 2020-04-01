@@ -1,10 +1,14 @@
 package by.restaurant.controller.command.impl;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import by.restaurant.bean.User;
 import by.restaurant.controller.JspPageName;
 import by.restaurant.controller.RequestParameterName;
+import by.restaurant.controller.Router;
+import by.restaurant.controller.Router.RouteType;
 import by.restaurant.controller.SessionAttributeName;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.CommandException;
@@ -17,16 +21,16 @@ import by.restaurant.service.factory.ServiceFactory;
 
 public class SignIn implements Command {
 
-	private static final String WRONG_LOGIN = "There is not a user with such login!";
-	private static final String WRONG_PASSWORD = "Wrong password!";
-	
 	@Override
-	public String execute(HttpServletRequest request) throws CommandException {
+	public Router execute(HttpServletRequest request) throws CommandException {
 		
-		String page = null;
+		Router router = new Router();
+		String page = JspPageName.ERROR_PAGE;
 		HttpSession session = request.getSession(); 
-		String login = request.getParameter("login");
-		String password = request.getParameter("password");
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.localization.local");
+		String login = request.getParameter(RequestParameterName.LOGIN);
+		String password = request.getParameter(RequestParameterName.PASSWORD);
+
 
 		try {
 
@@ -35,24 +39,38 @@ public class SignIn implements Command {
 			if(userService.isExist(login)) {
 				User user = userService.getUser(login, password);
 				if(user == null) {
-					request.setAttribute(RequestParameterName.WRONG_PASSWORD, WRONG_PASSWORD);
+					request.setAttribute(RequestParameterName.WRONG_PASSWORD, resourceBundle.getString("wrong_password"));
 					page = JspPageName.SIGN_IN_PAGE;
+					router.setPagePath(page);
 				}else {
-					//user.setSignedIn(true);
-	                session.setAttribute(SessionAttributeName.LOGIN_ATTRIBUTE, user.getLogin());
-	                session.setAttribute(SessionAttributeName.ROLE_ATTRIBUTE, user.getRole());
-					//request.setAttribute(RequestParameterName.MESSAGE, user.getLogin());
-					page = JspPageName.WELCOME_PAGE;		
+	                session.setAttribute(SessionAttributeName.ID_USER, user.getId());
+	                session.setAttribute(SessionAttributeName.LOGIN, user.getLogin());
+	                session.setAttribute(SessionAttributeName.ROLE, user.getRole());
+	        		final String HELLO_MESSAGE = resourceBundle.getString("message.hello") + "" + session.getAttribute(SessionAttributeName.LOGIN) + "!";
+
+	                request.setAttribute(RequestParameterName.HELLO_MESSAGE, HELLO_MESSAGE);
+	                String commandName = (String)session.getAttribute("command");
+	                
+					if(commandName == null) {
+	                	page = JspPageName.WELCOME_PAGE;
+	                }else {
+	                	page = request.getContextPath() + "/Controller?command=" + commandName;
+	                }	
+	                router.setPagePath(page);
+	                router.setRouteType(RouteType.REDIRECT);;
 				}
+
+				
 			}else {
-				request.setAttribute(RequestParameterName.NO_SUCH_LOGIN, WRONG_LOGIN);
-				page = JspPageName.SIGN_IN_PAGE;			
+				request.setAttribute(RequestParameterName.NO_SUCH_LOGIN, resourceBundle.getString("wrong_login"));
+				page = JspPageName.SIGN_IN_PAGE;		
+				router.setPagePath(page);
 			}
 		} catch (ServiceException e) {
 			throw new CommandException("Error during signing in (getting service)", e);
 		}
 		
-		return page;
+		return router;
 		
 	}
 

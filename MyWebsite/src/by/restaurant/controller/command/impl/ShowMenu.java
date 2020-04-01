@@ -10,6 +10,7 @@ import by.restaurant.bean.User;
 import by.restaurant.bean.util.Role;
 import by.restaurant.controller.JspPageName;
 import by.restaurant.controller.RequestParameterName;
+import by.restaurant.controller.Router;
 import by.restaurant.controller.SessionAttributeName;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.CommandException;
@@ -21,13 +22,13 @@ import by.restaurant.service.factory.ServiceFactory;
 public class ShowMenu implements Command {
 
 	@Override
-	public String execute(HttpServletRequest request) throws CommandException {
+	public Router execute(HttpServletRequest request) throws CommandException {
 		
-		String page = null;
+		Router router = new Router();
+		String page = JspPageName.ERROR_PAGE;
 		HttpSession session = request.getSession(); 
 
 		try {
-
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			DishService dishService = serviceFactory.getDishService();
 
@@ -45,20 +46,25 @@ public class ShowMenu implements Command {
             request.setAttribute(RequestParameterName.DESSERTS, desserts);
             request.setAttribute(RequestParameterName.DRINKS, drinks);
 
-            Role role = Role.valueOf(session.getAttribute(SessionAttributeName.ROLE_ATTRIBUTE).toString());
-            if (role == Role.ADMIN) {
-                page = JspPageName.ADMIN_MENU_PAGE;
-            } else {
-                page = JspPageName.MENU_PAGE;
-            }
-			
+            session.setAttribute("command", "show_menu");
+
+
+//            Role role = Role.valueOf(session.getAttribute(SessionAttributeName.ROLE_ATTRIBUTE).toString());
+//            if (role == Role.ADMIN) {
+//                page = JspPageName.ADMIN_MENU_PAGE;
+//            } else {
+//                page = JspPageName.MENU_PAGE;
+//            }
+            
+            page = JspPageName.MENU_PAGE;
+            router.setPagePath(page);
 
 		} catch (ServiceException e) {
 			//log
 			throw new CommandException("Error during finding all dishes (getting service)", e);
 		}
 		
-		return page;
+		return router;
 	}
 
 }

@@ -18,70 +18,39 @@ import by.restaurant.dao.pool.*;
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    public Controller() {
-        super();
-    }
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
-		//processRequest(request, response);
 		doPost(request, response);
 	}
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		//processRequest(request, response);
-		
-		String page = null;
+		String page = JspPageName.ERROR_PAGE;
 
 		try {
 			String commandName = request.getParameter(RequestParameterName.COMMAND_NAME);
 			Command command = CommandHelper.getInstance().getCommand(commandName);
 				
-			page = command.execute(request);
+	        Router router = command.execute(request);
+	        page = router.getPagePath();
+	        if (router.getRouteType() == Router.RouteType.FORWARD) {
+	            RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+	            if(dispatcher != null) {
+					dispatcher.forward(request, response);
+				}else {
+					RequestDispatcher d = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
+					d.forward(request, response);
+				}
+	        } else {
+	            response.sendRedirect(page);
+	        }
+	        
 		}catch(CommandException e) {
 			page = JspPageName.ERROR_PAGE;
 		}catch(Exception e) {
 			page = JspPageName.ERROR_PAGE;
 		}
-
-		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-		
-		if(dispatcher != null) {
-			dispatcher.forward(request, response);
-		}else {
-			errorMessageDireclyFromResponse(response);
-		}
 	}
 	
-//	private void processRequest(HttpServletRequest request, HttpServletResponse response) {
-//		
-//
-//	}
-		
-		private void errorMessageDireclyFromResponse(HttpServletResponse response) throws ServletException, IOException {
-			
-			response.setContentType("text/html");
-			response.getWriter().println("ERROR !!!");
-			
-		}
-
-		@Override
-		public void init() throws ServletException {
-			super.init();
-			try {
-				ConnectionPool.getInstance().initPoolData();
-			} catch (ConnectionPoolException e) {
-				e.printStackTrace();
-				//
-			}
-		}
-		
-	    @Override
-	    public void destroy() {
-	    	ConnectionPool.getInstance().dispose();
-	    	super.destroy();
-	    }
-
 }

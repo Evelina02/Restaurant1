@@ -10,8 +10,29 @@ import by.restaurant.dao.UserDAO;
 import by.restaurant.dao.factory.DAOFactory;
 import by.restaurant.service.DishService;
 import by.restaurant.service.ServiceException;
+import by.restaurant.service.impl.validator.Validator;
+import by.restaurant.service.impl.validator.ValidatorException;
 
 public class DishServiceImpl implements DishService {
+
+	
+	@Override
+	public void addDish(Dish dish) throws ServiceException {
+
+		if(!Validator.validateIsNull(dish)) {
+			//log
+			throw new ValidatorException("Object dish is null!");
+		}
+		
+		try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 DishDAO dishDAO = daoFactory.getDishDAO();
+			 dishDAO.addDish(dish);; 
+		 } catch (DAOException e) {
+			 throw new ServiceException("Error during adding dish (in service)", e);
+       }
+	}
+	
 
 	@Override
 	public List<Dish> findSnacks() throws ServiceException {

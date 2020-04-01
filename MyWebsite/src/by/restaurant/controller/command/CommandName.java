@@ -6,6 +6,6 @@ public enum CommandName {
 	SIGN_OUT,
 	SIGN_UP,
 	SHOW_MENU,
-	
+	CHANGE_LANGUAGE,
 	NO_SUCH_COMMAND
 }

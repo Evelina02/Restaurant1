@@ -1,8 +1,7 @@
 package by.restaurant.bean.util;
 
-public enum State {
-
+public enum DishState {
+	
 	IN_PROCESS,
-	DONE,
-	CANCELED
+	DONE
 }

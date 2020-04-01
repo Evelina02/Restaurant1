@@ -1,39 +1,39 @@
 package by.restaurant.controller.command.impl;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import by.restaurant.bean.User;
-import by.restaurant.bean.util.Role;
 import by.restaurant.controller.JspPageName;
 import by.restaurant.controller.RequestParameterName;
+import by.restaurant.controller.Router;
 import by.restaurant.controller.SessionAttributeName;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.CommandException;
-import by.restaurant.dao.DAOException;
-import by.restaurant.dao.UserDAO;
-import by.restaurant.dao.factory.DAOFactory;
+
 
 public class SignOut implements Command {
 
 	
 	@Override
-	public String execute(HttpServletRequest request) throws CommandException {
+	public Router execute(HttpServletRequest request) throws CommandException {
 		
-		String page = null;
+		Router router = new Router();
+		String page = JspPageName.ERROR_PAGE;
 		HttpSession session = request.getSession();
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.localization.local");
 
-		final String GOODBYE = "Bye, " + session.getAttribute(SessionAttributeName.LOGIN_ATTRIBUTE) + "!";
-
-		//user.setSignedIn(false);
+		final String GOODBYE = resourceBundle.getString("message.goodbye") + session.getAttribute(SessionAttributeName.LOGIN) + "!";
 
 		request.setAttribute(RequestParameterName.GOODBYE_MESSAGE, GOODBYE);
-		page = JspPageName.FIRST_PAGE;
-
-		session.removeAttribute(SessionAttributeName.LOGIN_ATTRIBUTE);
-		session.removeAttribute(SessionAttributeName.ROLE_ATTRIBUTE);
+		page = JspPageName.WELCOME_PAGE;
+		router.setPagePath(page);
 		
-		return page;
-
+        session.removeAttribute(SessionAttributeName.ID_USER);
+		session.removeAttribute(SessionAttributeName.LOGIN);
+		session.removeAttribute(SessionAttributeName.ROLE);
+		
+		
+		return router;
 	}
 }

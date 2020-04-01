@@ -1,5 +1,7 @@
 package by.restaurant.controller.command.impl;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -7,7 +9,9 @@ import by.restaurant.bean.User;
 import by.restaurant.bean.util.Role;
 import by.restaurant.controller.JspPageName;
 import by.restaurant.controller.RequestParameterName;
+import by.restaurant.controller.Router;
 import by.restaurant.controller.SessionAttributeName;
+import by.restaurant.controller.Router.RouteType;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.CommandException;
 import by.restaurant.dao.DAOException;
@@ -19,20 +23,17 @@ import by.restaurant.service.factory.ServiceFactory;
 
 public class SignUp implements Command {
 
-	private static final String LOGIN_EXISTS = "User with such login already exists!";
-	private static final String REGISTER_SUCCESS_MESSAGE = "Thank you for registration!";
-	private static final String REGISTER_ERROR_MESSAGE = "Error during registration!";
-
 	@Override
-	public String execute(HttpServletRequest request) throws CommandException {
+	public Router execute(HttpServletRequest request) throws CommandException {
 		
-		String page = null;
+		Router router = new Router();
+		String page = JspPageName.ERROR_PAGE;
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.localization.local");
 		HttpSession session = request.getSession();
-		String login = request.getParameter("login");
-		String password = request.getParameter("password1");
-		String email = request.getParameter("email");
-		String address = request.getParameter("address");
-
+		String login = request.getParameter(RequestParameterName.LOGIN);
+		String password = request.getParameter(RequestParameterName.PASSWORD);
+		String email = request.getParameter(RequestParameterName.EMAIL);
+		String address = request.getParameter(RequestParameterName.ADDRESS);
 		try {
 			
 			User user = new User(login, password, Role.CLIENT, email);
@@ -44,29 +45,41 @@ public class SignUp implements Command {
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			UserService userService = serviceFactory.getUserService();
 			if(userService.isExist(login)) {
-				request.setAttribute(RequestParameterName.LOGIN_EXISTS, LOGIN_EXISTS);
+				request.setAttribute(RequestParameterName.LOGIN_EXISTS, resourceBundle.getString("message.login_exists"));
 				page = JspPageName.SIGN_UP_PAGE;
+            	router.setPagePath(page);
+
 			}else {
 				boolean added = userService.addUser(user);
 				
 				if(!added) {
-					request.setAttribute(RequestParameterName.REGISTER_ERROR_MESSAGE, REGISTER_ERROR_MESSAGE);
+					request.setAttribute(RequestParameterName.REGISTER_ERROR_MESSAGE, resourceBundle.getString("message.register.error"));
 					page = JspPageName.SIGN_IN_PAGE;
+                	router.setPagePath(page);
+
 				}else {
-//					user.setSignedIn(true);
-					session.setAttribute(SessionAttributeName.LOGIN_ATTRIBUTE, user.getLogin());
-	                session.setAttribute(SessionAttributeName.ROLE_ATTRIBUTE, user.getRole());
-	                request.setAttribute(RequestParameterName.REGISTER_SUCCESS_MESSAGE, REGISTER_SUCCESS_MESSAGE);
-					//request.setAttribute(RequestParameterName.MESSAGE, user.getLogin());
+	                session.setAttribute(SessionAttributeName.ID_USER, user.getId());
+					session.setAttribute(SessionAttributeName.LOGIN, user.getLogin());
+	                session.setAttribute(SessionAttributeName.ROLE, user.getRole());
+	                request.setAttribute(RequestParameterName.REGISTER_SUCCESS_MESSAGE, resourceBundle.getString("message.register.success_message"));
 					page = JspPageName.WELCOME_PAGE;
-				}
+					String commandName = (String)session.getAttribute("command");
+
+					if(commandName == null) {
+	                	page = JspPageName.WELCOME_PAGE;
+	                }else {
+	                	page = request.getContextPath() + "/Controller?command=" + commandName;
+	                }	
+	                	router.setPagePath(page);
+	                	router.setRouteType(RouteType.REDIRECT);;
+					}
 			}
 	
 		} catch (ServiceException e) {
 			throw new CommandException("Error during signing up(getting service))", e);
 		}
-		
-		return page;
-	}
+				
+		return router;
+		}
 
 }

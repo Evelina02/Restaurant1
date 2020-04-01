@@ -12,5 +12,5 @@ public interface UserService {
 	
 	boolean isExist(String login) throws ServiceException;
 	
-	ArrayList<User> getAllUsers() throws ServiceException;
+	ArrayList<User> getAllActiveUsers() throws ServiceException;
 }
