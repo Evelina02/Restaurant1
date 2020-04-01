@@ -3,11 +3,11 @@ package by.restaurant.controller.command.impl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import by.restaurant.controller.JspPageName;
 import by.restaurant.controller.Router;
 import by.restaurant.controller.Router.RouteType;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.CommandException;
+import by.restaurant.controller.constantname.JspPageName;
 
 public class ChangeLanguage implements Command {
 

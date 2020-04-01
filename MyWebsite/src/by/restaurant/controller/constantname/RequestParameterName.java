@@ -1,4 +1,4 @@
-package by.restaurant.controller;
+package by.restaurant.controller.constantname;
 
 public final class RequestParameterName {
 	

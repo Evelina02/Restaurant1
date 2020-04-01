@@ -2,10 +2,10 @@ package by.restaurant.controller.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
 
-import by.restaurant.controller.JspPageName;
 import by.restaurant.controller.Router;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.CommandException;
+import by.restaurant.controller.constantname.JspPageName;
 
 public class NoSuchCommand implements Command {
 

@@ -7,13 +7,13 @@ import javax.servlet.http.HttpSession;
 
 import by.restaurant.bean.User;
 import by.restaurant.bean.util.Role;
-import by.restaurant.controller.JspPageName;
-import by.restaurant.controller.RequestParameterName;
 import by.restaurant.controller.Router;
-import by.restaurant.controller.SessionAttributeName;
 import by.restaurant.controller.Router.RouteType;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.CommandException;
+import by.restaurant.controller.constantname.JspPageName;
+import by.restaurant.controller.constantname.RequestParameterName;
+import by.restaurant.controller.constantname.SessionAttributeName;
 import by.restaurant.dao.DAOException;
 import by.restaurant.dao.UserDAO;
 import by.restaurant.dao.factory.DAOFactory;

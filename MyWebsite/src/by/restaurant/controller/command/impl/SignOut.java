@@ -4,12 +4,13 @@ import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import by.restaurant.controller.JspPageName;
-import by.restaurant.controller.RequestParameterName;
+
 import by.restaurant.controller.Router;
-import by.restaurant.controller.SessionAttributeName;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.CommandException;
+import by.restaurant.controller.constantname.JspPageName;
+import by.restaurant.controller.constantname.RequestParameterName;
+import by.restaurant.controller.constantname.SessionAttributeName;
 
 
 public class SignOut implements Command {
