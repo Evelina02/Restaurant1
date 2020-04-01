@@ -29,7 +29,7 @@ public class Controller extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String page = JspPageName.ERROR_PAGE;
-
+		RequestDispatcher dispatcher;
 		try {
 			String commandName = request.getParameter(RequestParameterName.COMMAND_NAME);
 			Command command = CommandHelper.getInstance().getCommand(commandName);
@@ -37,21 +37,23 @@ public class Controller extends HttpServlet {
 	        Router router = command.execute(request);
 	        page = router.getPagePath();
 	        if (router.getRouteType() == Router.RouteType.FORWARD) {
-	            RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+	            dispatcher = request.getRequestDispatcher(page);
 	            if(dispatcher != null) {
 					dispatcher.forward(request, response);
 				}else {
-					RequestDispatcher d = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
-					d.forward(request, response);
+					dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
+					dispatcher.forward(request, response);
 				}
 	        } else {
 	            response.sendRedirect(page);
 	        }
 	        
 		}catch(CommandException e) {
-			page = JspPageName.ERROR_PAGE;
+            dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
+            dispatcher.forward(request, response);
 		}catch(Exception e) {
-			page = JspPageName.ERROR_PAGE;
+			dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
+            dispatcher.forward(request, response);
 		}
 	}
 	

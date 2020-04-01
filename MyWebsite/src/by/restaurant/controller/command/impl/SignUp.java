@@ -53,7 +53,7 @@ public class SignUp implements Command {
 				boolean added = userService.addUser(user);
 				
 				if(!added) {
-					request.setAttribute(RequestParameterName.REGISTER_ERROR_MESSAGE, resourceBundle.getString("message.register.error"));
+					request.setAttribute(RequestParameterName.REGISTER_ERROR_MESSAGE, resourceBundle.getString("register.error"));
 					page = JspPageName.SIGN_IN_PAGE;
                 	router.setPagePath(page);
 
@@ -61,7 +61,7 @@ public class SignUp implements Command {
 	                session.setAttribute(SessionAttributeName.ID_USER, user.getId());
 					session.setAttribute(SessionAttributeName.LOGIN, user.getLogin());
 	                session.setAttribute(SessionAttributeName.ROLE, user.getRole());
-	                request.setAttribute(RequestParameterName.REGISTER_SUCCESS_MESSAGE, resourceBundle.getString("message.register.success_message"));
+	                request.setAttribute(RequestParameterName.REGISTER_SUCCESS_MESSAGE, resourceBundle.getString("register.success_message"));
 					page = JspPageName.WELCOME_PAGE;
 					String commandName = (String)session.getAttribute("command");
 
