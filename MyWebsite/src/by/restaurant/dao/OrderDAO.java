@@ -7,5 +7,5 @@ import by.restaurant.bean.Order;
 public interface OrderDAO {
 
 	void addOrder(Order order, int idUser)throws DAOException;
-	List<Order> getOrdersInProcess() throws DAOException;
+	List<Order> findOrdersInProcess() throws DAOException;
 }

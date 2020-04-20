@@ -4,28 +4,28 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import by.restaurant.bean.util.DeliveryType;
-import by.restaurant.bean.util.OrderState;
-import by.restaurant.bean.util.PaymentType;
+import by.restaurant.bean.constant.DeliveryType;
+import by.restaurant.bean.constant.OrderState;
+import by.restaurant.bean.constant.PaymentType;
 
 public class Order implements Serializable{
 
     private static final long serialVersionUID = 112L;
 
 	private int id;
-	private LocalDateTime orderTime;
-	private LocalDateTime deliveryTime;
+	private String orderTime;
+	private String deliveryTime;
 	private double price;
 	private PaymentType paymentType;
 	private DeliveryType deliveryType;
 	private OrderState state;
 	
-	private Set<String> dishes;
+	private Set<Dish> dishes;
 
 	public Order() {}
 
-	public Order(int id, LocalDateTime orderTime, LocalDateTime deliveryTime, double price, PaymentType paymentType,
-			DeliveryType deliveryType, OrderState state, Set<String> dishes) {
+	public Order(int id, String orderTime, String deliveryTime, double price, PaymentType paymentType,
+			DeliveryType deliveryType, OrderState state, Set<Dish> dishes) {
 
 		this.id = id;
 		this.orderTime = orderTime;
@@ -45,19 +45,19 @@ public class Order implements Serializable{
 		this.id = id;
 	}
 
-	public LocalDateTime getOrderTime() {
+	public String getOrderTime() {
 		return orderTime;
 	}
 
-	public void setOrderTime(LocalDateTime orderTime) {
+	public void setOrderTime(String orderTime) {
 		this.orderTime = orderTime;
 	}
 
-	public LocalDateTime getDeliveryTime() {
+	public String getDeliveryTime() {
 		return deliveryTime;
 	}
 
-	public void setDeliveryTime(LocalDateTime deliveryTime) {
+	public void setDeliveryTime(String deliveryTime) {
 		this.deliveryTime = deliveryTime;
 	}
 
@@ -93,11 +93,11 @@ public class Order implements Serializable{
 		this.state = state;
 	}
 
-	public Set<String> getDishes() {
+	public Set<Dish> getDishes() {
 		return dishes;
 	}
 
-	public void setDishes(Set<String> dishes) {
+	public void setDishes(Set<Dish> dishes) {
 		this.dishes = dishes;
 	}
 
@@ -162,6 +162,5 @@ public class Order implements Serializable{
 		return true;
 	}
 
-	
 	
 }

@@ -2,6 +2,7 @@ package by.restaurant.service.impl;
 
 import java.util.List;
 
+import by.restaurant.bean.Basket;
 import by.restaurant.bean.Dish;
 import by.restaurant.bean.User;
 import by.restaurant.dao.DAOException;
@@ -118,5 +119,30 @@ public class DishServiceImpl implements DishService {
 		 return dishes;
 	} 
 	
+	public void putDishToBasket(Basket basket, Dish dish, int count) {
+		//валидация
+		basket.getDishes().add(dish);
+		basket.getCountDishById().put(dish.getId(), count);
+	}
 	
+	public Basket deleteDishFromBasket(Basket basket, int idDish) {
+		// валидация
+
+		Dish dish = null;
+		for (Dish d : basket.getDishes()) {
+			if (d.getId() == idDish) {
+				dish = d;
+			}
+		}
+
+		basket.getDishes().remove(dish);
+		basket.getCountDishById().remove(idDish);
+		
+		return basket;
+	}
+	
+	public void clearBasket(Basket basket) {
+		basket.getDishes().clear();
+		basket.getCountDishById().clear();
+	}
 }

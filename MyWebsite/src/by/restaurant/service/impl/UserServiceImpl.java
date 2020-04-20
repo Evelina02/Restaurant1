@@ -19,20 +19,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUser(String login, String password) throws ServiceException{
 		
-		if(!Validator.validateLogin(login)) {
-			//log
-			throw new ValidatorException("Wrong login!");
-		}
-		if(!Validator.validatePassword(password)) {
-			//log
-			throw new ValidatorException("Wrong password!");
-		}
+//		if(!Validator.validateLogin(login)) {
+//			//log
+//			throw new ValidatorException("Wrong login!");
+//		}
+//		if(!Validator.validatePassword(password)) {
+//			//log
+//			throw new ValidatorException("Wrong password!");
+//		}
+		
 		User user;
-		 try {
+		try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();
 			 UserDAO userDAO = daoFactory.getUserDAO();
 			 user = userDAO.getUser(login, password);
-		 } catch (DAOException e) {
+		} catch (DAOException e) {
 			 throw new ServiceException("Error during getting user (in service)", e);
        }
 		 return user;
@@ -41,10 +42,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean addUser(User user) throws ServiceException {
 
-		if(!Validator.validateIsNull(user)) {
-			//log
-			throw new ValidatorException("Object user is null!");
-		}
+//		if(!Validator.validateIsNull(user)) {
+//			//log
+//			throw new ValidatorException("Object user is null!");
+//		}
 		
 		boolean added;
 		 try {
@@ -79,10 +80,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean isExist(String login) throws ServiceException{
 		
-		if(!Validator.validateLogin(login)) {
-			//log
-			throw new ValidatorException("Wrong login!");
-		}
+//		if(!Validator.validateLogin(login)) {
+//			//log
+//			throw new ValidatorException("Wrong login!");
+//		}
 		boolean exist;
 		 try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();

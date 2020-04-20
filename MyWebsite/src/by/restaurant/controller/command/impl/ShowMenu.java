@@ -1,14 +1,18 @@
 package by.restaurant.controller.command.impl;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.ResourceBundle;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import by.restaurant.bean.Dish;
 import by.restaurant.bean.User;
-import by.restaurant.bean.util.Role;
-import by.restaurant.controller.Router;
+import by.restaurant.bean.constant.Role;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.CommandException;
 import by.restaurant.controller.constantname.JspPageName;
@@ -16,56 +20,139 @@ import by.restaurant.controller.constantname.RequestParameterName;
 import by.restaurant.controller.constantname.SessionAttributeName;
 import by.restaurant.service.DishService;
 import by.restaurant.service.ServiceException;
-import by.restaurant.service.UserService;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class ShowMenu implements Command {
 
+	private static List<Dish> snacks;
+    private static List<Dish> hotDishes;
+    private static List<Dish> salads;
+    private static List<Dish> pizza;
+    private static List<Dish> desserts;
+    private static List<Dish> drinks;
+    
+    private static final String DISH_ADDED_MESSAGE = "dishAddedMessage";
+
 	@Override
-	public Router execute(HttpServletRequest request) throws CommandException {
-		
-		Router router = new Router();
-		String page = JspPageName.ERROR_PAGE;
+	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.localization.local");
 		HttpSession session = request.getSession(); 
 
 		try {
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			DishService dishService = serviceFactory.getDishService();
 
-		    List<Dish> snacks = dishService.findSnacks();
-		    List<Dish> hotDishes = dishService.findHotDishes();
-		    List<Dish> salads = dishService.findSalads();
-		    List<Dish> pizza = dishService.findPizza();
-		    List<Dish> desserts = dishService.findDesserts();
-		    List<Dish> drinks = dishService.findDrinks();
+			snacks = dishService.findSnacks();
+		    hotDishes = dishService.findHotDishes();
+		    salads = dishService.findSalads();
+		    pizza = dishService.findPizza();
+		    desserts = dishService.findDesserts();
+		    drinks = dishService.findDrinks();
 
-            request.setAttribute(RequestParameterName.SNACKS, snacks);
-            request.setAttribute(RequestParameterName.HOT_DISHES, hotDishes);
-            request.setAttribute(RequestParameterName.SALADS, salads);
-            request.setAttribute(RequestParameterName.PIZZA, pizza);
-            request.setAttribute(RequestParameterName.DESSERTS, desserts);
-            request.setAttribute(RequestParameterName.DRINKS, drinks);
+		    String message = request.getParameter(RequestParameterName.MESSAGE);
+//		    if(message!=null && message.equals(RequestParameterName.DISH_ADDED)){
+//			    request.setAttribute(DISH_ADDED_MESSAGE, RequestParameterName.DISH_ADDED);
+//		    }
+		    if(message!=null && message.equals(RequestParameterName.DISH_ADDED)){
+	    		request.setAttribute(RequestParameterName.DISH_ADDED, resourceBundle.getString("dish_added"));
+		    }
+
+		    request.setAttribute(RequestParameterName.SNACKS, snacks);
+		    request.setAttribute(RequestParameterName.HOT_DISHES, hotDishes);
+		    request.setAttribute(RequestParameterName.SALADS, salads);
+		    request.setAttribute(RequestParameterName.PIZZA, pizza);
+		    request.setAttribute(RequestParameterName.DESSERTS, desserts);
+		    request.setAttribute(RequestParameterName.DRINKS, drinks);
 
             session.setAttribute("command", "show_menu");
-
-
-//            Role role = Role.valueOf(session.getAttribute(SessionAttributeName.ROLE_ATTRIBUTE).toString());
-//            if (role == Role.ADMIN) {
-//                page = JspPageName.ADMIN_MENU_PAGE;
-//            } else {
-//                page = JspPageName.MENU_PAGE;
+//
+//            if(request.getAttribute(RequestParameterName.DISH_ADDED) != null){
+//        		request.setAttribute(RequestParameterName.DISH_ADDED, resourceBundle.getString("dish_added"));
 //            }
-            
-            page = JspPageName.MENU_PAGE;
-            router.setPagePath(page);
 
-		} catch (ServiceException e) {
-			//log
-			throw new CommandException("Error during finding all dishes (getting service)", e);
-		}
-		
-		return router;
+
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.MENU_PAGE);
+    		dispatcher.forward(request, response);
+    		
+	    } catch (ServiceException e) {
+	        //log
+	    	RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
+			dispatcher.forward(request, response);
+	    }
+
 	}
 
+	 
+		public static List<Dish> getSnacks() {
+			return snacks;
+		}
+
+
+
+		public static void setSnacks(List<Dish> snacks) {
+			ShowMenu.snacks = snacks;
+		}
+
+
+
+		public static List<Dish> getHotDishes() {
+			return hotDishes;
+		}
+
+
+
+		public static void setHotDishes(List<Dish> hotDishes) {
+			ShowMenu.hotDishes = hotDishes;
+		}
+
+
+
+		public static List<Dish> getSalads() {
+			return salads;
+		}
+
+
+
+		public static void setSalads(List<Dish> salads) {
+			ShowMenu.salads = salads;
+		}
+
+
+
+		public static List<Dish> getPizza() {
+			return pizza;
+		}
+
+
+
+		public static void setPizza(List<Dish> pizza) {
+			ShowMenu.pizza = pizza;
+		}
+
+
+
+		public static List<Dish> getDesserts() {
+			return desserts;
+		}
+
+
+
+		public static void setDesserts(List<Dish> desserts) {
+			ShowMenu.desserts = desserts;
+		}
+
+
+
+		public static List<Dish> getDrinks() {
+			return drinks;
+		}
+
+
+
+		public static void setDrinks(List<Dish> drinks) {
+			ShowMenu.drinks = drinks;
+		}
 }
 

@@ -15,7 +15,7 @@ public final class RequestParameterName {
 	public static final String HELLO_MESSAGE = "helloMessage";
 	public static final String GOODBYE_MESSAGE = "goodbyeMessage";
 	public static final String LOGIN_EXISTS = "loginExists";
-	public static final String REGISTER_SUCCESS_MESSAGE = "successMessage";
+	public static final String REGISTER_SUCCESS_MESSAGE = "registerSuccess";
 	public static final String REGISTER_ERROR_MESSAGE = "registerError";
 
 	public static final String SNACKS = "snacks";
@@ -24,6 +24,19 @@ public final class RequestParameterName {
 	public static final String PIZZA = "pizza";
 	public static final String DESSERTS = "desserts";
 	public static final String DRINKS = "drinks";
+	
+	public static final String DISH_ID = "dishId";
+	public static final String DISH_NAME = "dishName";
+	public static final String DISH_INGREDIENTS = "dishIngredients";
+	public static final String DISH_PICTURE = "dishPicture";
+	public static final String DISH_AMOUNT = "dishAmount";
+	public static final String DISH_PRICE = "dishPrice";
 
+	public static final String MESSAGE = "message";
+	public static final String DISH_ADDED = "dishAdded";
+	public static final String DISH_DELETED = "dishDeleted";
+	public static final String SIGN_IN_REQUIRED = "signInRequired";
+	public static final String COUNT = "count";
+	public static final Object BASKET_CLEARED = "basketCleared";
 }
 

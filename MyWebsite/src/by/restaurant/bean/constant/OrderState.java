@@ -1,4 +1,4 @@
-package by.restaurant.bean.util;
+package by.restaurant.bean.constant;
 
 public enum OrderState {
 

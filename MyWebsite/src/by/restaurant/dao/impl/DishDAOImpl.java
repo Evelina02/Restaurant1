@@ -9,22 +9,19 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import by.restaurant.bean.Dish;
 import by.restaurant.bean.User;
-import by.restaurant.bean.util.Category;
+import by.restaurant.bean.constant.Category;
 import by.restaurant.dao.DAOException;
 import by.restaurant.dao.DishDAO;
+
 import by.restaurant.dao.pool.ConnectionPool;
 import by.restaurant.dao.pool.ConnectionPoolException;
 
 public class DishDAOImpl implements DishDAO {
 
+    //private static Logger logger = LogManager.getLogger();
 	private ConnectionPool pool = ConnectionPool.getInstance();
-	private Connection connection;
-	private Statement st;
-	private PreparedStatement ps;
-	private ResultSet rs;
 	
     
     private static final String SELECT_SALADS = 
@@ -48,6 +45,9 @@ public class DishDAOImpl implements DishDAO {
     private static final String INSERT_DISH = 
     		"insert into dish(name, price, picture, category, amount)"
     		+ " values(?, ?, ?, ?, ?)";
+    private static final String SELECT_INGREDIENT_BY_NAME = 
+    		"select id_ingredient from ingredient where name=?";//////
+    
     private static final String INSERT_INGREDIENT = 
     		"insert into ingredient(name) values(?)";
     private static final String INSERT_DISH_CONTENTS = 
@@ -59,10 +59,13 @@ public class DishDAOImpl implements DishDAO {
 	@Override
 	public void addDish(Dish dish) throws DAOException{
 		
-		//int status = 0;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		
 		try {
 			connection = pool.takeConnection();
-
+			connection.setAutoCommit(false);
+			
 			ps = connection.prepareStatement(INSERT_DISH);
 			ps.setString(1, dish.getName());
 			ps.setDouble(2, dish.getPrice());
@@ -70,32 +73,43 @@ public class DishDAOImpl implements DishDAO {
 			ps.setString(4, dish.getCategory().name());
 			ps.setString(5, dish.getAmount());
 			ps.executeUpdate();
-			
-			insertIngredients(dish.getIngredients());
 
-			dish.setId(selectIdDishByName(dish.getName()));
+			insertIngredients(connection, dish.getIngredients());
 
-			insertDishContents(dish.getIngredients(), dish.getId());
+			dish.setId(selectIdDishByName(connection, dish.getName()));
+
+			insertDishContents(connection, dish.getIngredients(), dish.getId());
 			
+			connection.commit();
 			}catch(SQLException e) {
+				if(connection != null) {
+					try {
+						connection.rollback();
+					}catch(SQLException ex) {
+						//log
+					}
+				}
 				throw new DAOException("Error during additing dish in database!", e);
+				
 			}catch(ConnectionPoolException e) {
 				throw new DAOException("Error during getting connection from connection pool!", e);
 			} finally {
 				try {
-					ps.close();
-					connection.close();
-	            } catch (SQLException ex) {
-	              //log
-	            }
+					connection.setAutoCommit(true);
+				} catch (SQLException e) {
+					// log
+				}
+				pool.closeConnection(connection, ps);
 			}
-		//return status;
 	}
 
 
 	@Override
 	public List<Dish> findSnacks() throws DAOException {
 
+		Connection connection = null;
+		Statement st = null;
+		ResultSet rs = null;
 		List<Dish> dishes = new ArrayList<Dish>();
 
 		try {
@@ -110,14 +124,9 @@ public class DishDAOImpl implements DishDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-			try {
-				rs.close();
-				st.close();
-				connection.close();
-            } catch (SQLException ex) {
-              //log
-            }
+			pool.closeConnection(connection, st, rs);
 		}
+		
 		return dishes;		
 	}
 
@@ -125,6 +134,10 @@ public class DishDAOImpl implements DishDAO {
 	@Override
 	public List<Dish> findHotDishes() throws DAOException {
 
+		Connection connection = null;
+		Statement st = null;
+		ResultSet rs = null;
+		
 		List<Dish> dishes = new ArrayList<Dish>();
 
 		try {
@@ -139,13 +152,7 @@ public class DishDAOImpl implements DishDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-			try {
-				rs.close();
-				st.close();
-				connection.close();
-            } catch (SQLException ex) {
-              //log
-            }
+			pool.closeConnection(connection, st, rs);
 		}
 		return dishes;		
 	}
@@ -154,6 +161,10 @@ public class DishDAOImpl implements DishDAO {
 	@Override
 	public List<Dish> findPizza() throws DAOException {
 
+		Connection connection = null;
+		Statement st = null;
+		ResultSet rs = null;
+		
 		List<Dish> dishes = new ArrayList<Dish>();
 
 		try {
@@ -168,13 +179,7 @@ public class DishDAOImpl implements DishDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-			try {
-				rs.close();
-				st.close();
-				connection.close();
-            } catch (SQLException ex) {
-              //log
-            }
+			pool.closeConnection(connection, st, rs);
 		}
 		return dishes;		
 	}
@@ -183,6 +188,10 @@ public class DishDAOImpl implements DishDAO {
 	@Override
 	public List<Dish> findDesserts() throws DAOException {
 
+		Connection connection = null;
+		Statement st = null;
+		ResultSet rs = null;
+		
 		List<Dish> dishes = new ArrayList<Dish>();
 
 		try {
@@ -197,13 +206,7 @@ public class DishDAOImpl implements DishDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-			try {
-				rs.close();
-				st.close();
-				connection.close();
-            } catch (SQLException ex) {
-              //log
-            }
+			pool.closeConnection(connection, st, rs);
 		}
 		return dishes;		
 	}
@@ -212,6 +215,10 @@ public class DishDAOImpl implements DishDAO {
 	@Override
 	public List<Dish> findDrinks() throws DAOException {
 
+		Connection connection = null;
+		Statement st = null;
+		ResultSet rs = null;
+		
 		List<Dish> dishes = new ArrayList<Dish>();
 
 		try {
@@ -226,13 +233,7 @@ public class DishDAOImpl implements DishDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-			try {
-				rs.close();
-				st.close();
-				connection.close();
-            } catch (SQLException ex) {
-              //log
-            }
+			pool.closeConnection(connection, st, rs);
 		}
 		return dishes;	
 	}
@@ -241,6 +242,10 @@ public class DishDAOImpl implements DishDAO {
 	@Override 
 	public List<Dish> findSalads() throws DAOException{
 
+		Connection connection = null;
+		Statement st = null;
+		ResultSet rs = null;
+		
 		List<Dish> dishes = new ArrayList<Dish>();
 
 		try {
@@ -256,31 +261,33 @@ public class DishDAOImpl implements DishDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-			try {
-				rs.close();
-				st.close();
-				connection.close();
-            } catch (SQLException ex) {
-              //log
-            }
+			pool.closeConnection(connection, st, rs);
 		}
 
 		return dishes;
 		}
 	
-	private void insertIngredients(Set<String> ingredients) throws SQLException {
+	private void insertIngredients(Connection connection, Set<String> ingredients) throws SQLException {
 		
-		ps = connection.prepareStatement(INSERT_INGREDIENT);
 		for(String ingredient: ingredients) {
+			PreparedStatement ps = connection.prepareStatement(SELECT_INGREDIENT_BY_NAME);
 			ps.setString(1, ingredient);
-			ps.executeUpdate();
+			ResultSet rs = ps.executeQuery();
+			if(!rs.next()) {
+				PreparedStatement ps1 = connection.prepareStatement(INSERT_INGREDIENT);
+
+				ps1.setString(1, ingredient);
+				ps1.executeUpdate();
+				
+				ps1.close();
+			}
+			ps.close();
 		}
-		ps.close();
 	}
 	
-	private void insertDishContents(Set<String> ingredients, int idDish) throws SQLException {
+	private void insertDishContents(Connection connection, Set<String> ingredients, int idDish) throws SQLException {
 		
-		ps = connection.prepareStatement(INSERT_DISH_CONTENTS);
+		PreparedStatement ps = connection.prepareStatement(INSERT_DISH_CONTENTS);
 		for(String ingredient: ingredients) {
 			ps.setInt(1, idDish);
 			ps.setString(2, ingredient);
@@ -288,17 +295,20 @@ public class DishDAOImpl implements DishDAO {
 		ps.close();
 	}
 	
-	private int selectIdDishByName(String name) throws SQLException {
+	private int selectIdDishByName(Connection connection, String name) throws SQLException {
 		
-		ps = connection.prepareStatement(SELECT_ID_DISH_BY_NAME);
+		PreparedStatement ps = connection.prepareStatement(SELECT_ID_DISH_BY_NAME);
 		ps.setString(1, name);
-		rs = ps.executeQuery();
+		ResultSet rs = ps.executeQuery();
 		int idDish = rs.getInt(1);
+		
+		rs.close();
+		ps.close();
 		
 		return idDish;		
 	}
 	
-	private Dish createDishFromResultSet(ResultSet rs) throws SQLException {
+	private Dish createDishFromResultSet(ResultSet rs) throws SQLException, ConnectionPoolException {
 		
 		Dish dish = new Dish();
 
@@ -307,7 +317,7 @@ public class DishDAOImpl implements DishDAO {
 		dish.setId(id_dish);
 		dish.setName(rs.getString(2));
 		dish.setPrice(rs.getDouble(3));
-		dish.setPicture(rs.getString(4));//????
+		dish.setPicture(rs.getString(4));
 		dish.setCategory(Category.valueOf(rs.getString(5)));
 		dish.setAmount(rs.getString(6));
 		
@@ -316,20 +326,22 @@ public class DishDAOImpl implements DishDAO {
 		return dish;
 	}
 
-	private Set<String> createIngredientsFromResultSet(int id_dish) throws SQLException {
+	private Set<String> createIngredientsFromResultSet(int id_dish) throws SQLException, ConnectionPoolException {
 
 		Set<String> ingredients = new HashSet<>();
 
-		ps = connection.prepareStatement(SELECT_INGREDIENTS_OF_DISH);
-		ps.setInt(1, rs.getInt(1));
+		Connection connection = pool.takeConnection();;
+
+		PreparedStatement ps = connection.prepareStatement(SELECT_INGREDIENTS_OF_DISH);
+		ps.setInt(1, id_dish);
 		
-		rs = ps.executeQuery();
+		ResultSet rs = ps.executeQuery();
 	
 		while(rs.next()) {
 			ingredients.add(rs.getString(1));
 		}
-		rs.close();
-		ps.close();
+		pool.closeConnection(connection, ps, rs);
+
 			
 		return ingredients;
 }

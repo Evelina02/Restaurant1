@@ -18,6 +18,10 @@ public class CommandHelper {
 		commands.put(CommandName.SIGN_UP, new SignUp());
 		commands.put(CommandName.SHOW_MENU, new ShowMenu());
 		commands.put(CommandName.CHANGE_LANGUAGE, new ChangeLanguage());
+		commands.put(CommandName.SHOW_BASKET, new ShowBasket());
+		commands.put(CommandName.ADD_DISH_TO_BASKET, new AddDishToBasket());
+		commands.put(CommandName.DELETE_DISH_FROM_BASKET, new DeleteDishFromBasket());
+		commands.put(CommandName.CLEAR_BASKET, new ClearBasket());
 
 		commands.put(CommandName.NO_SUCH_COMMAND, new NoSuchCommand());
 	}

@@ -28,33 +28,19 @@ public class Controller extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String page = JspPageName.ERROR_PAGE;
-		RequestDispatcher dispatcher;
+		
+		String commandName = request.getParameter(RequestParameterName.COMMAND_NAME);
+		Command command = null;
+		
 		try {
-			String commandName = request.getParameter(RequestParameterName.COMMAND_NAME);
-			Command command = CommandHelper.getInstance().getCommand(commandName);
-				
-	        Router router = command.execute(request);
-	        page = router.getPagePath();
-	        if (router.getRouteType() == Router.RouteType.FORWARD) {
-	            dispatcher = request.getRequestDispatcher(page);
-	            if(dispatcher != null) {
-					dispatcher.forward(request, response);
-				}else {
-					dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
-					dispatcher.forward(request, response);
-				}
-	        } else {
-	            response.sendRedirect(page);
-	        }
-	        
-		}catch(CommandException e) {
-            dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
-            dispatcher.forward(request, response);
-		}catch(Exception e) {
-			dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
-            dispatcher.forward(request, response);
+			command = CommandHelper.getInstance().getCommand(commandName);
+		} catch (CommandException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+		command.execute(request, response);
+
 	}
 	
 }

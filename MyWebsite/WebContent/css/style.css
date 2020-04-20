@@ -1,16 +1,70 @@
-h1{
-	font-size: 40px;
-	text-align: center;
-}
-h2{
-	color: red;
-	font-size: 30px;
-	text-align: center;
-	font-style: italic;
-}
 body{
-	background-color: #d8bfd8;
+	font-family: 'Montserrat', sans-serif;
+	margin: 0px -15px;
+
 }
-form{
+header{
+	height: 75px;
+	margin: 0 -15px;
+	background: rgba(0, 0, 0, 0.5);
+
+}
+header a img{ /*эмблема*/
+	display: block;
+	padding-top: 40px;
+	padding-left: 100px;
+}
+header nav ul{
+	list-style-type: none;
+	padding-right: 30px;
+	padding-left:80px;
+	margin-left:80px;
+}
+#ln_btn{
+	display:block;
+	margin-left:auto;
+}
+header nav ul li{
+	display: inline-block;
+	margin-right: 10px;
+	margin-left:50px;
+	margin-top:15px;
+}
+header nav ul li a{
+	color: #fff;
+	font-size: 20px;
+	text-decoration: none;
+}
+header nav ul li a:hover{
+	color: #39b9ef;
+	text-decoration: underline;
+	}
+div.call-to h1{
+	margin-top: 250px;
+	margin-bottom: 0px;
 	text-align: center;
+	color: #fff;
+	font-size: 72px;
+	font-weight: bold;
+}
+
+#welcome{
+	height:800px;
+	background-image: url(../img/fon.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size:100%; 
+}
+#btn{
+ 
+	margin-right:10px;
+	margin-left:auto;
+	margin-top:20px;
+}
+#btn .btn-light:hover{
+	color:#fff;
+	background:#000;
+}
+.alert{
+	text-align:  center;
 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-import by.restaurant.bean.util.Role;
+import by.restaurant.bean.constant.Role;
 
 public class User implements Serializable{
 

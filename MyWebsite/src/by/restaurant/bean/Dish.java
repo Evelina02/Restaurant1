@@ -3,8 +3,8 @@ package by.restaurant.bean;
 import java.io.Serializable;
 import java.util.Set;
 
-import by.restaurant.bean.util.Category;
-import by.restaurant.bean.util.DishState;
+import by.restaurant.bean.constant.Category;
+import by.restaurant.bean.constant.DishState;
 
 public class Dish implements Serializable {
 

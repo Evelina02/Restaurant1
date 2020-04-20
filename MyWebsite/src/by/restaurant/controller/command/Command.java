@@ -1,10 +1,12 @@
 package by.restaurant.controller.command;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
-import by.restaurant.controller.Router;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public interface Command {
 
-	public Router execute(HttpServletRequest request) throws CommandException;
+	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 }

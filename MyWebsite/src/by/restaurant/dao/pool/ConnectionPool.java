@@ -104,38 +104,43 @@ public final class ConnectionPool {
 	public void closeConnection(Connection con, Statement st, ResultSet rs) {
 		
 		try {
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            //logger.log(Level.ERROR, "Connection isn't return to the pool.",e);
+        }
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (SQLException e) {
+            //logger.log(Level.ERROR, "ResultSet isn't closed.",e);
+        }
+        try {
+            if (st != null) {
+                st.close();
+            }
+        } catch (SQLException e) {
+            //logger.log(Level.ERROR, "Statement isn't closed.",e);
+        }
 		
-			con.close();
-		} catch (SQLException e) {
-			// logger.log(Level.ERROR, "Connection isn't return to the pool.");
-		}
-		
-		try {
-			rs.close();
-		} catch (SQLException e) {
-			// logger.log(Level.ERROR, "ResultSet isn't closed.");
-		}
-		
-		try {
-			st.close();
-		} catch (SQLException e) {
-			// logger.log(Level.ERROR, "Statement isn't closed.");
-		}
 	}
 	
 	public void closeConnection(Connection con, Statement st) {
 		
 		try {
-			con.close();
-		} catch (SQLException e) {
-			// logger.log(Level.ERROR, "Connection isn't return to the pool.");
-		}
-		
-		try {
-			st.close();
-		} catch (SQLException e) {
-			// logger.log(Level.ERROR, "Statement isn't closed.");
-		}
+            if(con!=null){
+            con.close();}
+        } catch (SQLException e) {
+            //logger.log(Level.ERROR, "Connection isn't return to the pool.",e);
+        }
+        try {
+            if(st!=null){
+            st.close();}
+        } catch (SQLException e) {
+            //logger.log(Level.ERROR, "Statement isn't closed.",e);
+        }
 	}
 		
 	private void closeConnectionsQueue(BlockingQueue<Connection> queue)	throws SQLException { 

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.restaurant.bean.User;
-import by.restaurant.bean.util.Role;
+import by.restaurant.bean.constant.Role;
 import by.restaurant.dao.DAOException;
 import by.restaurant.dao.UserDAO;
 import by.restaurant.dao.pool.ConnectionPool;
@@ -17,11 +17,9 @@ import by.restaurant.dao.pool.ConnectionPoolException;
 
 public class UserDAOImpl implements UserDAO {
 
+    //private static Logger logger = LogManager.getLogger();
 	private ConnectionPool pool = ConnectionPool.getInstance();
-	private Connection connection;
-	private Statement statement;
-	private PreparedStatement ps;
-	private ResultSet rs;
+
 	
 	private static final String INSERT_USER = 
 			"insert into users(login, password, role, email, address)"
@@ -35,6 +33,10 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public int addUser(User user) throws DAOException{
+		
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
 		int status = 0;
 		
@@ -54,20 +56,18 @@ public class UserDAOImpl implements UserDAO {
 			}catch(ConnectionPoolException e) {
 				throw new DAOException("Error during getting connection from connection pool!", e);
 			} finally {
-	            if (connection != null) {
-	                try {
-	                    connection.close();
-	                } catch (SQLException ex) {
-	                    //log
-	                }
-	            }
-	        }
+				pool.closeConnection(connection, ps, rs);
+			}
+		
 		return status;
 	}
 
 	@Override
 	public User getUser(String login, String password) throws DAOException{
 		
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		User user = null;
 		
 		try {
@@ -88,14 +88,8 @@ public class UserDAOImpl implements UserDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-			try {
-				rs.close();
-				ps.close();
-				connection.close();
-            } catch (SQLException ex) {
-              //log
-            }
-        }
+			pool.closeConnection(connection, ps, rs);
+		}
 	
 			
 		return user;
@@ -103,6 +97,10 @@ public class UserDAOImpl implements UserDAO {
 	
 	public boolean isExist(String login) throws DAOException{
 
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
 		try {
 			
 			connection = pool.takeConnection();
@@ -122,24 +120,22 @@ public class UserDAOImpl implements UserDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-			try {
-				rs.close();
-				ps.close();
-				connection.close();
-            } catch (SQLException ex) {
-              //log
-            }
+			pool.closeConnection(connection, ps, rs);
 		}
 		return false;
 	}
 
 	public ArrayList<User> findActiveUsers() throws DAOException {
         
+		Connection connection = null;
+		Statement st = null;
+		ResultSet rs = null;
+		
 		ArrayList<User> userList = new ArrayList<>();
         try {
 			connection = pool.takeConnection();
-        	statement = connection.createStatement();
-            rs = statement.executeQuery(SELECT_UNBANNED_USERS);
+        	st = connection.createStatement();
+            rs = st.executeQuery(SELECT_UNBANNED_USERS);
             while (rs.next()) {
                 userList.add(createUserFromResultSet(rs));
             }
@@ -149,13 +145,7 @@ public class UserDAOImpl implements UserDAO {
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
-			try {
-				rs.close();
-				statement.close();
-				connection.close();
-            } catch (SQLException ex) {
-              //log
-            }
+			pool.closeConnection(connection, st, rs);
 		}
         return userList;
     }
