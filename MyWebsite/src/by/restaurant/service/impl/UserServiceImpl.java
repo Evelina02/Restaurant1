@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.restaurant.bean.Dish;
+import by.restaurant.bean.Review;
 import by.restaurant.bean.User;
 import by.restaurant.dao.DAOException;
 import by.restaurant.dao.DishDAO;
@@ -64,13 +65,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ArrayList<User> getAllActiveUsers() throws ServiceException {
+	public List<User> getAllUsers() throws ServiceException {
 		
-		ArrayList<User> users;
+		List<User> users;
 		try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();
 			 UserDAO userDAO = daoFactory.getUserDAO();
-			 users = userDAO.findActiveUsers(); 
+			 users = userDAO.findAllUsers(); 
 		 } catch (DAOException e) {
 			 throw new ServiceException("Error during getting all active users (in service)", e);
        }
@@ -94,5 +95,222 @@ public class UserServiceImpl implements UserService {
        }
 		return exist;
 	}
+
+	@Override
+	public User getUserById(int idUser) throws ServiceException {
+
+		User user = null;
+		try {
+			DAOFactory daoFactory = DAOFactory.getInstance();
+			UserDAO userDAO = daoFactory.getUserDAO();
+			user = userDAO.getUserById(idUser);
+		} catch (DAOException e) {
+			throw new ServiceException("Error during checking isExist user in service", e);
+		}
+		return user;
+	}
+
+	@Override
+	public boolean updateUser(int idUser, String login, String email, String address) throws ServiceException {
+		
+		boolean added;
+
+		try {
+			DAOFactory daoFactory = DAOFactory.getInstance();
+			UserDAO userDAO = daoFactory.getUserDAO();
+			int status = userDAO.updateUser(idUser, login, email, address);
+			if(status == 1) {
+				 added = true;
+			 }else {
+				 added = false;
+			 }
+		} catch (DAOException e) {
+			throw new ServiceException("Error during checking isExist user in service", e);
+		}
+		return added;
+	}
+
+	@Override
+	public List<Review> showAllReviews() throws ServiceException {
+		
+		List<Review> reviews;
+		try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 reviews = userDAO.showAllReviews();
+		 } catch (DAOException e) {
+			 throw new ServiceException("Error during getting all active users (in service)", e);
+       }
+		 return reviews;
+	}
+
+	@Override
+	public boolean changePassword(int idUser, String oldPassword, String newPassword) throws ServiceException {
+		
+		boolean changed;
+		 try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 int status = userDAO.changePassword(idUser, oldPassword, newPassword);
+			 if(status == 1) {
+				 changed = true;
+			 }else {
+				 changed = false;
+			 }
+		 } catch (DAOException e) {
+			 throw new ServiceException("Error during additing user (in service)", e);
+      }
+		 return changed;
+	}
+
+	@Override
+	public boolean banUser(int idUser) throws ServiceException {
+		
+		boolean banned;
+		 try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 int status = userDAO.banUser(idUser);
+			 if(status == 1) {
+				 banned = true;
+			 }else {
+				 banned = false;
+			 }
+		 } catch (DAOException e) {
+			 throw new ServiceException("Error during additing user (in service)", e);
+     }
+		 return banned;
+	}
+
+	@Override
+	public boolean unbanUser(int idUser) throws ServiceException {
+		
+		boolean unbanned;
+		 try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 int status = userDAO.unbanUser(idUser);
+			 if(status == 1) {
+				 unbanned = true;
+			 }else {
+				 unbanned = false;
+			 }
+		 } catch (DAOException e) {
+			 throw new ServiceException("Error during additing user (in service)", e);
+    }
+		 return unbanned;
+	}
+
+	@Override
+	public boolean isBanned(String login) throws ServiceException {
+		
+		boolean banned;
+		 try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 banned = userDAO.isBanned(login);
+		 } catch (DAOException e) {
+			 throw new ServiceException("Error during checking isExist user in service", e);
+      }
+		return banned;
+	}
+
+	@Override
+	public boolean addReview(Review review, int idUser) throws ServiceException {
+		
+		boolean added;
+		 try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 int status = userDAO.addReview(review, idUser);
+			 if(status == 1) {
+				 added = true;
+			 }else {
+				 added = false;
+			 }
+		 } catch (DAOException e) {
+			 throw new ServiceException("Error during additing review (in service)", e);
+      }
+		 return added;
+	}
+
+	@Override
+	public boolean deleteReview(int reviewId) throws ServiceException {
 	
+		boolean deleted;
+		 try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 int status = userDAO.deleteReview(reviewId);
+			 if(status == 1) {
+				 deleted = true;
+			 }else {
+				 deleted = false;
+			 }
+		 } catch (DAOException e) {
+			 throw new ServiceException("Error during additing review (in service)", e);
+     }
+		 return deleted;
+	}
+
+	@Override
+	public boolean resetPassword(String login, String newPassword) throws ServiceException {
+		
+		boolean reseted;
+		 try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 int status = userDAO.resetPassword(login, newPassword);
+			 if(status == 1) {
+				 reseted = true;
+			 }else {
+				 reseted = false;
+			 }
+		 } catch (DAOException e) {
+			 throw new ServiceException("Error during additing review (in service)", e);
+    }
+		 return reseted;
+	}
+
+	@Override
+	public String getEmailByLogin(String login) throws ServiceException {
+		
+		String email;
+		try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 email = userDAO.getEmailByLogin(login);
+		} catch (DAOException e) {
+			 throw new ServiceException("Error during getting email of user (in service)", e);
+       }
+		 return email;
+	}
+
+	@Override
+	public String getEmailById(int idUser) throws ServiceException {
+		
+		String email;
+		try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 email = userDAO.getEmailById(idUser);
+		} catch (DAOException e) {
+			 throw new ServiceException("Error during getting email of user (in service)", e);
+       }
+		 return email;
+	}
+
+	@Override
+	public int getIdByLogin(String login) throws ServiceException {
+		
+		int idUser;
+		try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 idUser = userDAO.getIdByLogin(login);
+		} catch (DAOException e) {
+			 throw new ServiceException("Error during getting email of user (in service)", e);
+       }
+		 return idUser;
+	}
 }

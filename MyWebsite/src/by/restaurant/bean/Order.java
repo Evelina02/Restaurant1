@@ -15,26 +15,36 @@ public class Order implements Serializable{
 	private int id;
 	private String orderTime;
 	private String deliveryTime;
-	private double price;
 	private PaymentType paymentType;
 	private DeliveryType deliveryType;
 	private OrderState state;
-	
-	private Set<Dish> dishes;
+	private String userLogin;
+	private Basket basket;
 
 	public Order() {}
 
-	public Order(int id, String orderTime, String deliveryTime, double price, PaymentType paymentType,
-			DeliveryType deliveryType, OrderState state, Set<Dish> dishes) {
+	public Order(String orderTime, String deliveryTime, PaymentType paymentType, DeliveryType deliveryType,
+			Basket basket, OrderState state) {
+		
+		this.orderTime = orderTime;
+		this.deliveryTime = deliveryTime;
+		this.paymentType = paymentType;
+		this.deliveryType = deliveryType;
+		this.basket = basket;
+		this.state = state;
+	}
 
+	public Order(int id, String orderTime, String deliveryTime, PaymentType paymentType, DeliveryType deliveryType,
+			OrderState state, String userLogin, Basket basket) {
+		super();
 		this.id = id;
 		this.orderTime = orderTime;
 		this.deliveryTime = deliveryTime;
-		this.price = price;
 		this.paymentType = paymentType;
 		this.deliveryType = deliveryType;
 		this.state = state;
-		this.dishes = dishes;
+		this.userLogin = userLogin;
+		this.basket = basket;
 	}
 
 	public int getId() {
@@ -61,14 +71,6 @@ public class Order implements Serializable{
 		this.deliveryTime = deliveryTime;
 	}
 
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
 	public PaymentType getPaymentType() {
 		return paymentType;
 	}
@@ -93,35 +95,34 @@ public class Order implements Serializable{
 		this.state = state;
 	}
 
-	public Set<Dish> getDishes() {
-		return dishes;
+	public String getUserLogin() {
+		return userLogin;
 	}
 
-	public void setDishes(Set<Dish> dishes) {
-		this.dishes = dishes;
+	public void setUserLogin(String userLogin) {
+		this.userLogin = userLogin;
 	}
 
-	@Override
-	public String toString() {
-		return "Order [id=" + id + ", orderTime=" + orderTime + ", deliveryTime=" + deliveryTime + ", price=" + price
-				+ ", paymentType=" + paymentType + ", deliveryType=" + deliveryType + ", state=" + state + ", dishes="
-				+ dishes + "]";
+	public Basket getBasket() {
+		return basket;
+	}
+
+	public void setBasket(Basket basket) {
+		this.basket = basket;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((basket == null) ? 0 : basket.hashCode());
 		result = prime * result + ((deliveryTime == null) ? 0 : deliveryTime.hashCode());
 		result = prime * result + ((deliveryType == null) ? 0 : deliveryType.hashCode());
-		result = prime * result + ((dishes == null) ? 0 : dishes.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((orderTime == null) ? 0 : orderTime.hashCode());
 		result = prime * result + ((paymentType == null) ? 0 : paymentType.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(price);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		result = prime * result + ((userLogin == null) ? 0 : userLogin.hashCode());
 		return result;
 	}
 
@@ -134,17 +135,17 @@ public class Order implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Order other = (Order) obj;
+		if (basket == null) {
+			if (other.basket != null)
+				return false;
+		} else if (!basket.equals(other.basket))
+			return false;
 		if (deliveryTime == null) {
 			if (other.deliveryTime != null)
 				return false;
 		} else if (!deliveryTime.equals(other.deliveryTime))
 			return false;
 		if (deliveryType != other.deliveryType)
-			return false;
-		if (dishes == null) {
-			if (other.dishes != null)
-				return false;
-		} else if (!dishes.equals(other.dishes))
 			return false;
 		if (id != other.id)
 			return false;
@@ -155,12 +156,22 @@ public class Order implements Serializable{
 			return false;
 		if (paymentType != other.paymentType)
 			return false;
-		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
-			return false;
 		if (state != other.state)
+			return false;
+		if (userLogin == null) {
+			if (other.userLogin != null)
+				return false;
+		} else if (!userLogin.equals(other.userLogin))
 			return false;
 		return true;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", orderTime=" + orderTime + ", deliveryTime=" + deliveryTime + ", paymentType="
+				+ paymentType + ", deliveryType=" + deliveryType + ", state=" + state + ", userLogin=" + userLogin
+				+ ", basket=" + basket + "]";
+	}
+
+
 }

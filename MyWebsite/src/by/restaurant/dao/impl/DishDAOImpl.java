@@ -55,13 +55,29 @@ public class DishDAOImpl implements DishDAO {
     		+ "values(?, (select id_ingredient from ingredient where name=?))";
     private static final String SELECT_ID_DISH_BY_NAME = 
     		"select id_dish from dish where name=?";
+
+
+	private static final String SELECT_ALL_DISHES = 
+			"select * from dish where is_deleted=0";
+
+	private static final String DELETE_DISH = 
+			"update dish set is_deleted=1 where id_dish=?";
+
+
+	private static final String UPDATE_DISH = 
+			"update dish set picture=?, price=?, amount=? where id_dish=?";
+		
+	private static final String SEARCH_DISH_BY_PART_OF_NAME =
+			"select * from dish where match(name) against (?) and is_deleted=0";
     
-	@Override
-	public void addDish(Dish dish) throws DAOException{
+	@Override 
+	public int addDish(Dish dish) throws DAOException{
 		
 		Connection connection = null;
 		PreparedStatement ps = null;
 		
+		int status = 0;
+
 		try {
 			connection = pool.takeConnection();
 			connection.setAutoCommit(false);
@@ -73,14 +89,16 @@ public class DishDAOImpl implements DishDAO {
 			ps.setString(4, dish.getCategory().name());
 			ps.setString(5, dish.getAmount());
 			ps.executeUpdate();
-
-			insertIngredients(connection, dish.getIngredients());
-
+			
 			dish.setId(selectIdDishByName(connection, dish.getName()));
 
-			insertDishContents(connection, dish.getIngredients(), dish.getId());
-			
+			if(dish.getIngredients() != null) {
+				insertIngredients(connection, dish.getIngredients());
+				insertDishContents(connection, dish.getIngredients(), dish.getId());
+			}
+
 			connection.commit();
+			status = 1;
 			}catch(SQLException e) {
 				if(connection != null) {
 					try {
@@ -101,8 +119,37 @@ public class DishDAOImpl implements DishDAO {
 				}
 				pool.closeConnection(connection, ps);
 			}
+		return status;
 	}
 
+	
+	@Override
+	public List<Dish> searchDishByPartOfName(String partOfName) throws DAOException {
+
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<Dish> dishes = new ArrayList<Dish>();
+
+		try {
+			connection = pool.takeConnection();
+			ps = connection.prepareStatement(SEARCH_DISH_BY_PART_OF_NAME);
+			ps.setString(1, partOfName);
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				dishes.add(createDishFromResultSet(rs));
+			}
+		}catch(SQLException e) {
+			throw new DAOException("Error during finding snacks in database!", e);
+		}catch(ConnectionPoolException e) {
+			throw new DAOException("Error during getting connection from connection pool!", e);
+		} finally {
+			pool.closeConnection(connection, ps, rs);
+		}
+		
+		return dishes;		
+	}
 
 	@Override
 	public List<Dish> findSnacks() throws DAOException {
@@ -291,16 +338,20 @@ public class DishDAOImpl implements DishDAO {
 		for(String ingredient: ingredients) {
 			ps.setInt(1, idDish);
 			ps.setString(2, ingredient);
+			
+			ps.executeUpdate();
 		}
 		ps.close();
 	}
 	
 	private int selectIdDishByName(Connection connection, String name) throws SQLException {
 		
+		int idDish;
 		PreparedStatement ps = connection.prepareStatement(SELECT_ID_DISH_BY_NAME);
 		ps.setString(1, name);
 		ResultSet rs = ps.executeQuery();
-		int idDish = rs.getInt(1);
+		rs.next();
+		idDish = rs.getInt(1);
 		
 		rs.close();
 		ps.close();
@@ -345,4 +396,93 @@ public class DishDAOImpl implements DishDAO {
 			
 		return ingredients;
 }
+
+
+	@Override
+	public List<Dish> getAllDishes() throws DAOException {
+
+		Connection connection = null;
+		Statement st = null;
+		ResultSet rs = null;
+		List<Dish> dishes = new ArrayList<Dish>();
+
+		try {
+			connection = pool.takeConnection();
+			st = connection.createStatement();
+			rs = st.executeQuery(SELECT_ALL_DISHES);
+			while (rs.next()) {
+				dishes.add(createDishFromResultSet(rs));
+			}
+		}catch(SQLException e) {
+			throw new DAOException("Error during finding snacks in database!", e);
+		}catch(ConnectionPoolException e) {
+			throw new DAOException("Error during getting connection from connection pool!", e);
+		} finally {
+			pool.closeConnection(connection, st, rs);
+		}
+		
+		return dishes;		
+	}
+
+
+	@Override
+	public int deleteDish(int dishId) throws DAOException {
+
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		int status = 0;
+		
+		try {
+			connection = pool.takeConnection();
+
+			ps = connection.prepareStatement(DELETE_DISH);
+			
+			ps.setInt(1,dishId);
+			
+			status = ps.executeUpdate();
+			}catch(SQLException e) {
+				throw new DAOException("Error during deleting dish!", e);
+			}catch(ConnectionPoolException e) {
+				throw new DAOException("Error during getting connection from connection pool!", e);
+			} finally {
+				pool.closeConnection(connection, ps, rs);
+			}
+		
+		return status;
+	
+	}
+
+
+	@Override
+	public int updateDish(int idDish, String picture, Double price, String amount) throws DAOException {
+
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		int status = 0;
+
+		try {
+			connection = pool.takeConnection();
+
+			ps = connection.prepareStatement(UPDATE_DISH);
+
+			ps.setString(1, picture);
+			ps.setDouble(2, price);
+			ps.setString(3, amount);
+			ps.setInt(4, idDish);
+
+			status = ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DAOException("Error during additing user in database!", e);
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("Error during getting connection from connection pool!", e);
+		} finally {
+			pool.closeConnection(connection, ps, rs);
+		}
+
+		return status;
+	}
 }

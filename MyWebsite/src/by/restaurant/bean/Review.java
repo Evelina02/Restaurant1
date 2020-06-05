@@ -9,39 +9,63 @@ public class Review implements Serializable{
 
 	private int id;
 	private String body;
-	private LocalDateTime reviewTime;
+	private String time;
+	private String userLogin;
 	private boolean isDeleted;
 	
+	public Review() {}
+
+	public Review(String body, String time) {
+		super();
+		this.body = body;
+		this.time = time;
+	}
 	
-	public Review(int id, String body, LocalDateTime reviewTime, boolean isDeleted) {
+	public Review(int id, String body, String time, String userLogin, boolean isDeleted) {
 		super();
 		this.id = id;
 		this.body = body;
-		this.reviewTime = reviewTime;
+		this.time = time;
+		this.userLogin = userLogin;
 		this.isDeleted = isDeleted;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public String getBody() {
 		return body;
 	}
+
 	public void setBody(String body) {
 		this.body = body;
 	}
-	public LocalDateTime getReviewTime() {
-		return reviewTime;
+
+	public String getTime() {
+		return time;
 	}
-	public void setReviewTime(LocalDateTime reviewTime) {
-		this.reviewTime = reviewTime;
+
+	public void setTime(String time) {
+		this.time = time;
 	}
+
+	public String getUserLogin() {
+		return userLogin;
+	}
+
+	public void setUserLogin(String userLogin) {
+		this.userLogin = userLogin;
+	}
+
 	public boolean isDeleted() {
 		return isDeleted;
 	}
+
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
@@ -53,7 +77,8 @@ public class Review implements Serializable{
 		result = prime * result + ((body == null) ? 0 : body.hashCode());
 		result = prime * result + id;
 		result = prime * result + (isDeleted ? 1231 : 1237);
-		result = prime * result + ((reviewTime == null) ? 0 : reviewTime.hashCode());
+		result = prime * result + ((time == null) ? 0 : time.hashCode());
+		result = prime * result + ((userLogin == null) ? 0 : userLogin.hashCode());
 		return result;
 	}
 
@@ -75,18 +100,27 @@ public class Review implements Serializable{
 			return false;
 		if (isDeleted != other.isDeleted)
 			return false;
-		if (reviewTime == null) {
-			if (other.reviewTime != null)
+		if (time == null) {
+			if (other.time != null)
 				return false;
-		} else if (!reviewTime.equals(other.reviewTime))
+		} else if (!time.equals(other.time))
+			return false;
+		if (userLogin == null) {
+			if (other.userLogin != null)
+				return false;
+		} else if (!userLogin.equals(other.userLogin))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Review [id=" + id + ", body=" + body + ", reviewTime=" + reviewTime + ", isDeleted=" + isDeleted + "]";
+		return "Review [id=" + id + ", body=" + body + ", time=" + time + ", userLogin=" + userLogin + ", isDeleted="
+				+ isDeleted + "]";
 	}
-	
-	
+
+
+
+
+
 }

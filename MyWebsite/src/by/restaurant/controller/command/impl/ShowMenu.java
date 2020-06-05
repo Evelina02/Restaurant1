@@ -32,6 +32,7 @@ public class ShowMenu implements Command {
     private static List<Dish> drinks;
     
     private static final String DISH_ADDED_MESSAGE = "dishAddedMessage";
+    private static final String NOTHING_FOUND_MESSAGE = "nothing_found";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -51,9 +52,9 @@ public class ShowMenu implements Command {
 		    drinks = dishService.findDrinks();
 
 		    String message = request.getParameter(RequestParameterName.MESSAGE);
-//		    if(message!=null && message.equals(RequestParameterName.DISH_ADDED)){
-//			    request.setAttribute(DISH_ADDED_MESSAGE, RequestParameterName.DISH_ADDED);
-//		    }
+		    if(message!=null && message.equals(NOTHING_FOUND_MESSAGE)){
+			    request.setAttribute(RequestParameterName.NOTHING_FOUND_MESSAGE, resourceBundle.getString(NOTHING_FOUND_MESSAGE));
+		    }
 		    if(message!=null && message.equals(RequestParameterName.DISH_ADDED)){
 	    		request.setAttribute(RequestParameterName.DISH_ADDED, resourceBundle.getString("dish_added"));
 		    }
@@ -65,7 +66,7 @@ public class ShowMenu implements Command {
 		    request.setAttribute(RequestParameterName.DESSERTS, desserts);
 		    request.setAttribute(RequestParameterName.DRINKS, drinks);
 
-            session.setAttribute("command", "show_menu");
+            session.setAttribute(SessionAttributeName.COMMAND, "show_menu");
 //
 //            if(request.getAttribute(RequestParameterName.DISH_ADDED) != null){
 //        		request.setAttribute(RequestParameterName.DISH_ADDED, resourceBundle.getString("dish_added"));

@@ -3,54 +3,61 @@ package by.restaurant.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Basket implements Serializable {
 
 	 private static final long serialVersionUID = 18L;
 	 
-	 private List<Dish> dishes;
+	 private Set<Dish> dishes;
 	 private Map <Integer, Integer> countDishById;
+	 private double totalPrice;
 	
 	 public Basket() {
-		 
-		 dishes = new ArrayList<Dish>();
-		 countDishById = new HashMap<>();
-			
-	 }
 
-	 public Basket(List<Dish> dishes, Map<Integer, Integer> countDishById) {
+		 dishes = new HashSet<>();
+		 countDishById = new HashMap<>();
+	}
+	 
+	public Basket(Set<Dish> dishes, Map<Integer, Integer> countDishById, double totalPrice) {
+		super();
 		this.dishes = dishes;
 		this.countDishById = countDishById;
-	 }
-	
-
-	public List<Dish> getDishes() {
+		this.totalPrice = totalPrice;
+	}
+	public Set<Dish> getDishes() {
 		return dishes;
 	}
-
-	public void setDishes(List<Dish> dishes) {
+	public void setDishes(Set<Dish> dishes) {
 		this.dishes = dishes;
 	}
-
 	public Map<Integer, Integer> getCountDishById() {
 		return countDishById;
 	}
-
 	public void setCountDishById(Map<Integer, Integer> countDishById) {
 		this.countDishById = countDishById;
 	}
-
+	public double getTotalPrice() {
+		return totalPrice;
+	}
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((countDishById == null) ? 0 : countDishById.hashCode());
 		result = prime * result + ((dishes == null) ? 0 : dishes.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(totalPrice);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -70,15 +77,14 @@ public class Basket implements Serializable {
 				return false;
 		} else if (!dishes.equals(other.dishes))
 			return false;
+		if (Double.doubleToLongBits(totalPrice) != Double.doubleToLongBits(other.totalPrice))
+			return false;
 		return true;
 	}
-
 	@Override
 	public String toString() {
-		return "Basket [dishes=" + dishes + ", countDishById=" + countDishById + "]";
+		return "Basket [dishes=" + dishes + ", countDishById=" + countDishById + ", totalPrice=" + totalPrice + "]";
 	}
-	 
-	 
-	 
+	
 	 
 }

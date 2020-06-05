@@ -4,9 +4,11 @@ import java.util.List;
 
 import by.restaurant.bean.Basket;
 import by.restaurant.bean.Dish;
+import by.restaurant.bean.Order;
 import by.restaurant.bean.User;
 import by.restaurant.dao.DAOException;
 import by.restaurant.dao.DishDAO;
+import by.restaurant.dao.OrderDAO;
 import by.restaurant.dao.UserDAO;
 import by.restaurant.dao.factory.DAOFactory;
 import by.restaurant.service.DishService;
@@ -18,22 +20,43 @@ public class DishServiceImpl implements DishService {
 
 	
 	@Override
-	public void addDish(Dish dish) throws ServiceException {
+	public boolean addDish(Dish dish) throws ServiceException {
 
 		if(!Validator.validateIsNull(dish)) {
 			//log
 			throw new ValidatorException("Object dish is null!");
 		}
 		
+		boolean added;
+
+		try {
+			DAOFactory daoFactory = DAOFactory.getInstance();
+			DishDAO dishDAO = daoFactory.getDishDAO();
+			int status = dishDAO.addDish(dish);
+			if(status == 1) {
+				added = true;
+			 }else {
+				 added = false;
+			 }
+		} catch (DAOException e) {
+			throw new ServiceException("Error during changing dish in service", e);
+		}
+		return added;
+	}
+	
+	@Override
+	public List<Dish> searchDishByPartOfName(String partOfName) throws ServiceException {
+
+		List<Dish> dishes;
 		try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();
 			 DishDAO dishDAO = daoFactory.getDishDAO();
-			 dishDAO.addDish(dish);; 
+			 dishes = dishDAO.searchDishByPartOfName(partOfName); 
 		 } catch (DAOException e) {
-			 throw new ServiceException("Error during adding dish (in service)", e);
+			 throw new ServiceException("Error during finding dish (in service)", e);
        }
+		 return dishes;
 	}
-	
 
 	@Override
 	public List<Dish> findSnacks() throws ServiceException {
@@ -125,7 +148,7 @@ public class DishServiceImpl implements DishService {
 		basket.getCountDishById().put(dish.getId(), count);
 	}
 	
-	public Basket deleteDishFromBasket(Basket basket, int idDish) {
+	public void deleteDishFromBasket(Basket basket, int idDish) {
 		// валидация
 
 		Dish dish = null;
@@ -138,11 +161,82 @@ public class DishServiceImpl implements DishService {
 		basket.getDishes().remove(dish);
 		basket.getCountDishById().remove(idDish);
 		
-		return basket;
 	}
 	
 	public void clearBasket(Basket basket) {
+		// валидация
+
 		basket.getDishes().clear();
 		basket.getCountDishById().clear();
 	}
+	
+	public void countTotalPrice(Basket basket) {
+		// валидация
+
+		
+		double totalPrice = 0;
+		for(Dish dish : basket.getDishes()){
+			totalPrice += dish.getPrice()*basket.getCountDishById().get(dish.getId());
+		}
+		basket.setTotalPrice(totalPrice);
+	}
+
+
+	@Override
+	public List<Dish> getAllDishes() throws ServiceException {
+
+		List<Dish> alldishes;
+		try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 DishDAO dishDAO = daoFactory.getDishDAO();
+			 alldishes = dishDAO.getAllDishes(); 
+			 
+		 } catch (DAOException e) {
+			 throw new ServiceException("Error during finding all dishes (in service)", e);
+       }
+		 return alldishes;
+	}
+
+
+	@Override
+	public boolean deleteDish(int dishId) throws ServiceException {
+
+		boolean deleted;
+		try {
+			DAOFactory daoFactory = DAOFactory.getInstance();
+			DishDAO orderDAO = daoFactory.getDishDAO();
+
+			int status = orderDAO.deleteDish(dishId);
+			if(status == 1) {
+				deleted = true;
+			 }else {
+				 deleted = false;
+			 }
+		} catch (DAOException e) {
+			throw new ServiceException("Error during deleting dish (in service)", e);
+		}
+		return deleted;
+	}
+
+
+	@Override
+	public boolean updateDish(int idDish, String picture, Double price, String amount) throws ServiceException {
+
+		boolean updated;
+
+		try {
+			DAOFactory daoFactory = DAOFactory.getInstance();
+			DishDAO dishDAO = daoFactory.getDishDAO();
+			int status = dishDAO.updateDish(idDish, picture, price, amount);
+			if(status == 1) {
+				updated = true;
+			 }else {
+				 updated = false;
+			 }
+		} catch (DAOException e) {
+			throw new ServiceException("Error during changing dish in service", e);
+		}
+		return updated;
+	}
+
 }

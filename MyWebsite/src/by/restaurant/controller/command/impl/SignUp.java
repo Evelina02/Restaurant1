@@ -9,10 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import by.restaurant.bean.User;
 import by.restaurant.bean.constant.Role;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.CommandException;
+import by.restaurant.controller.command.util.Sender;
 import by.restaurant.controller.constantname.JspPageName;
 import by.restaurant.controller.constantname.RequestParameterName;
 import by.restaurant.controller.constantname.SessionAttributeName;
@@ -25,58 +28,64 @@ import by.restaurant.service.factory.ServiceFactory;
 
 public class SignUp implements Command {
 
+	private static final String MAIL_SUBJECT = "Спасибо за регистрацию!";
+	private static final String MAIL_BODY = "Вы успешно зарегистрированы на сайте онлайн-ресторана!";
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.localization.local");
+		HttpSession session = request.getSession();
+
 		String login = request.getParameter(RequestParameterName.LOGIN);
 		String password = request.getParameter(RequestParameterName.PASSWORD);
 		String email = request.getParameter(RequestParameterName.EMAIL);
 		String address = request.getParameter(RequestParameterName.ADDRESS);
 		try {
-			
-			User user = new User(login, password, Role.CLIENT, email);
-			
-			if(address != null) {
-				user.setAddress(address);
-			}
-			
+
+			User user = new User(login, BCrypt.hashpw(password, BCrypt.gensalt()), Role.CLIENT, email, address);
+
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			UserService userService = serviceFactory.getUserService();
-			if(userService.isExist(login)) {
-				request.setAttribute(RequestParameterName.LOGIN_EXISTS, resourceBundle.getString("message.login_exists"));
+			if (userService.isExist(login)) {
+				request.setAttribute(RequestParameterName.LOGIN_EXISTS,
+						resourceBundle.getString("message.login_exists"));
 				RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.SIGN_UP_PAGE);
 				dispatcher.forward(request, response);
-				
-			}
-			boolean added = userService.addUser(user);
-			
-			if(!added) {
-				request.setAttribute(RequestParameterName.REGISTER_ERROR_MESSAGE, resourceBundle.getString("register.error"));
-				RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.SIGN_IN_PAGE);
-				dispatcher.forward(request, response);
-			}
-			
-			HttpSession session = request.getSession();
-            session.setAttribute(SessionAttributeName.ID_USER, user.getId());
-			session.setAttribute(SessionAttributeName.LOGIN, user.getLogin());
-            session.setAttribute(SessionAttributeName.ROLE, user.getRole());
-            request.setAttribute(RequestParameterName.REGISTER_SUCCESS_MESSAGE, resourceBundle.getString("register.success_message"));
 
-            
-            String commandName = (String)session.getAttribute("command");
-			
-            if(commandName == null) {
-				response.sendRedirect(JspPageName.WELCOME_PAGE);
-	        }else {
-	        	response.sendRedirect(request.getContextPath() + "/Controller?command=" + commandName);
-	        }
+			} else {
+				boolean added = userService.addUser(user);
 
-	    } catch (ServiceException e) {
-	        //log
-	    	RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
+				if (!added) {
+					request.setAttribute(RequestParameterName.REGISTER_ERROR_MESSAGE,
+							resourceBundle.getString("register.error"));
+					RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.SIGN_IN_PAGE);
+					dispatcher.forward(request, response);
+				} else {
+					int userId = userService.getIdByLogin(login);
+					session.setAttribute(SessionAttributeName.ID_USER, userId);
+					session.setAttribute(SessionAttributeName.LOGIN, user.getLogin());
+					session.setAttribute(SessionAttributeName.ROLE, user.getRole());
+					request.setAttribute(RequestParameterName.REGISTER_SUCCESS_MESSAGE,
+							resourceBundle.getString("register.success_message"));
+
+					Sender sslSender = new Sender();
+					sslSender.send(MAIL_SUBJECT, MAIL_BODY, email);
+				}
+				String commandName = (String) session.getAttribute(SessionAttributeName.COMMAND);
+
+				if (commandName == null) {
+					response.sendRedirect(JspPageName.WELCOME_PAGE);
+				} else {
+					response.sendRedirect(request.getContextPath() + "/Controller?command=" + commandName);
+				}
+			}
+
+		} catch (ServiceException e) {
+			// log
+			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
-	    }
-			
+		}
+
 	}
 }

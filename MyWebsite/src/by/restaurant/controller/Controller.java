@@ -35,7 +35,6 @@ public class Controller extends HttpServlet {
 		try {
 			command = CommandHelper.getInstance().getCommand(commandName);
 		} catch (CommandException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

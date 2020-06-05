@@ -24,6 +24,18 @@ public class Dish implements Serializable {
 	
 	public Dish() {}
 
+	
+	public Dish(String name, double price, String picture, Category category, String amount, Set<String> ingredients) {
+		super();
+		this.name = name;
+		this.price = price;
+		this.picture = picture;
+		this.category = category;
+		this.amount = amount;
+		this.ingredients = ingredients;
+	}
+
+
 	public Dish(int id, String name, double price, String picture, Category category, String amount, DishState state,
 			boolean isDeleted, Set<String> ingredients, Set<String> refusalOfIngredients) {
 
@@ -38,6 +50,18 @@ public class Dish implements Serializable {
 		this.ingredients = ingredients;
 		this.refusalOfIngredients = refusalOfIngredients;
 	}
+
+
+
+	public Dish(String name, double price, String picture, Category category, String amount) {
+		super();
+		this.name = name;
+		this.price = price;
+		this.picture = picture;
+		this.category = category;
+		this.amount = amount;
+	}
+
 
 	public int getId() {
 		return id;

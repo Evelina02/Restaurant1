@@ -9,9 +9,33 @@
 	<meta charset="utf-8">
 	
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link href="${pageContext.request.contextPath}/css/style.css" type="text/css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css">
 
 
+<style type="text/css">
+
+#welcome{
+	height:800px;
+	background-image: url(../img/fon.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size:100%; 
+}
+#btn{
+ 
+	margin-right:10px;
+	margin-left:auto;
+	margin-top:20px;
+}
+#btn .btn-light:hover{
+	color:#fff;
+	background:#000;
+}
+.alert{
+	text-align:  center;
+}
+
+</style>
 <title>Insert title here</title>
 </head>
 <body id="welcome">
@@ -38,13 +62,15 @@
 
     	<c:if test="${not empty requestScope.goodbyeMessage}">
 			<div class="alert alert-success" role="alert">
-	        	<strong><c:out value="${goodbye}"/></strong>
+	        	<strong><c:out value="${goodbye}, ${requestScope.login}!"/></strong>
         	</div>
     	</c:if>
 
+
+	
         <div class="call-to row no-gutters" >
           <div class="col-12">
-            <h1>Добро пожаловать</h1>
+            <h1>Добро пожаловать!</h1>
           </div>
         </div>
 

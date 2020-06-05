@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.constantname.JspPageName;
+import by.restaurant.controller.constantname.SessionAttributeName;
 
 public class ChangeLanguage implements Command {
 
@@ -17,7 +18,7 @@ public class ChangeLanguage implements Command {
 
 		session.setAttribute("local", request.getParameter("language"));
 
-		String commandName = (String)session.getAttribute("command");
+		String commandName = (String)session.getAttribute(SessionAttributeName.COMMAND);
 		if(commandName == null) {
 			response.sendRedirect(JspPageName.WELCOME_PAGE);
         }else {

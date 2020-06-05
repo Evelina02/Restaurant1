@@ -12,6 +12,9 @@ import javax.servlet.http.HttpSession;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.constantname.JspPageName;
 import by.restaurant.controller.constantname.RequestParameterName;
+import by.restaurant.controller.constantname.SessionAttributeName;
+import by.restaurant.service.DishService;
+import by.restaurant.service.factory.ServiceFactory;
 
 public class ShowBasket implements Command {
 
@@ -21,15 +24,15 @@ public class ShowBasket implements Command {
 		ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.localization.local");
 		HttpSession session = request.getSession();
 
-		String message = request.getParameter(RequestParameterName.MESSAGE);
-		if (message != null && message.equals(RequestParameterName.DISH_DELETED)) {
-			request.setAttribute(RequestParameterName.DISH_DELETED, resourceBundle.getString("dish_deleted"));
-		}
-		
-		if (message != null && message.equals(RequestParameterName.BASKET_CLEARED)) {
-			request.setAttribute(RequestParameterName.DISH_DELETED, resourceBundle.getString("basket_cleared"));
-		}
-		session.setAttribute("command", "show_basket");
+//		String message = request.getParameter(RequestParameterName.MESSAGE);
+//		if (message != null && message.equals(RequestParameterName.DISH_DELETED)) {
+//			request.setAttribute(RequestParameterName.DISH_DELETED, resourceBundle.getString("dish_deleted"));
+//		}
+//		
+//		if (message != null && message.equals(RequestParameterName.BASKET_CLEARED)) {
+//			request.setAttribute(RequestParameterName.BASKET_CLEARED, resourceBundle.getString("basket_cleared"));
+//		}
+		session.setAttribute(SessionAttributeName.COMMAND, "show_basket");
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.BASKET_PAGE);
 		dispatcher.forward(request, response);
