@@ -34,11 +34,13 @@ public class Controller extends HttpServlet {
 		
 		try {
 			command = CommandHelper.getInstance().getCommand(commandName);
+			command.execute(request, response);
+
 		} catch (CommandException e) {
-			e.printStackTrace();
+			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
+			dispatcher.forward(request, response);
 		}
 
-		command.execute(request, response);
 
 	}
 	
