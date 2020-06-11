@@ -1,13 +1,9 @@
 package by.restaurant.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import by.restaurant.bean.Dish;
 import by.restaurant.bean.Review;
 import by.restaurant.bean.User;
 import by.restaurant.dao.DAOException;
-import by.restaurant.dao.DishDAO;
 import by.restaurant.dao.UserDAO;
 import by.restaurant.dao.factory.DAOFactory;
 import by.restaurant.service.ServiceException;
@@ -20,13 +16,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUser(String login, String password) throws ServiceException{
 		
-//		if(!Validator.validateLogin(login)) {
-//			//log
-//			throw new ValidatorException("Wrong login!");
-//		}
+		if(!Validator.validateLogin(login)) {
+			//log
+			throw new ValidatorException("Login is not correct!");
+		}
 //		if(!Validator.validatePassword(password)) {
 //			//log
-//			throw new ValidatorException("Wrong password!");
+//			throw new ValidatorException("Password is not correct!");
 //		}
 		
 		User user;
@@ -43,10 +39,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean addUser(User user) throws ServiceException {
 
-//		if(!Validator.validateIsNull(user)) {
-//			//log
-//			throw new ValidatorException("Object user is null!");
-//		}
+		if(!Validator.validateIsNull(user)) {
+			//log
+			throw new ValidatorException("Object user is null!");
+		}
 		
 		boolean added;
 		 try {
@@ -81,10 +77,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean isExist(String login) throws ServiceException{
 		
-//		if(!Validator.validateLogin(login)) {
-//			//log
-//			throw new ValidatorException("Wrong login!");
-//		}
+		if(!Validator.validateLogin(login)) {
+			//log
+			throw new ValidatorException("Wrong login!");
+		}
+		
 		boolean exist;
 		 try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();
@@ -99,6 +96,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserById(int idUser) throws ServiceException {
 
+		if(!Validator.validatePositiveNumber(idUser)) {
+			//log
+			throw new ValidatorException("Id of user is a negative number!");
+		}
+		
 		User user = null;
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
@@ -112,6 +114,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean updateUser(int idUser, String login, String email, String address) throws ServiceException {
+		
+		if(!Validator.validateLogin(login) || !Validator.validateString(email) || 
+				!Validator.validateString(address)){
+			//log
+			throw new ValidatorException("Information of user is not correct!");
+		}
 		
 		boolean added;
 
@@ -147,6 +155,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean changePassword(int idUser, String oldPassword, String newPassword) throws ServiceException {
 		
+		if(!Validator.validatePassword(oldPassword) || !Validator.validatePassword(newPassword)){
+			//log
+			throw new ValidatorException("Password is not correct!");
+		}
+		
 		boolean changed;
 		 try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();
@@ -165,6 +178,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean banUser(int idUser) throws ServiceException {
+		
+		if(!Validator.validatePositiveNumber(idUser)) {
+			//log
+			throw new ValidatorException("Id of user is a negative number!");
+		}
 		
 		boolean banned;
 		 try {
@@ -185,6 +203,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean unbanUser(int idUser) throws ServiceException {
 		
+		if(!Validator.validatePositiveNumber(idUser)) {
+			//log
+			throw new ValidatorException("Id of user is a negative number!");
+		}
+		
 		boolean unbanned;
 		 try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();
@@ -204,6 +227,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean isBanned(String login) throws ServiceException {
 		
+		if (!Validator.validateLogin(login)) {
+			// log
+			throw new ValidatorException("Login is not correct!");
+		}
+		
 		boolean banned;
 		 try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();
@@ -217,6 +245,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean addReview(Review review, int idUser) throws ServiceException {
+		
+		if(!Validator.validateIsNull(review)) {
+			//log
+			throw new ValidatorException("Object is null!");
+		}
 		
 		boolean added;
 		 try {
@@ -237,6 +270,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean deleteReview(int reviewId) throws ServiceException {
 	
+		if(!Validator.validatePositiveNumber(reviewId)) {
+			//log
+			throw new ValidatorException("Id of review is a negative number!");
+		}
+		
 		boolean deleted;
 		 try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();
@@ -255,6 +293,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean resetPassword(String login, String newPassword) throws ServiceException {
+		
+		if (!Validator.validateLogin(login)) {
+			// log
+			throw new ValidatorException("Login is not correct!");
+		}
+//		if (!Validator.validatePassword(newPassword)) {
+//			// log
+//			throw new ValidatorException("Password is not correct!");
+//		}
 		
 		boolean reseted;
 		 try {
@@ -275,6 +322,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String getEmailByLogin(String login) throws ServiceException {
 		
+		if (!Validator.validateLogin(login)) {
+			// log
+			throw new ValidatorException("Login is not correct!");
+		}
+
 		String email;
 		try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();
@@ -288,6 +340,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String getEmailById(int idUser) throws ServiceException {
+		
+		if(!Validator.validatePositiveNumber(idUser)) {
+			//log
+			throw new ValidatorException("Id of user is a negative number!");
+		}
 		
 		String email;
 		try {
@@ -303,6 +360,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int getIdByLogin(String login) throws ServiceException {
 		
+		if (!Validator.validateLogin(login)) {
+			// log
+			throw new ValidatorException("Login is not correct!");
+		}
+
 		int idUser;
 		try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();

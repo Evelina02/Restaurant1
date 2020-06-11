@@ -140,9 +140,6 @@ margin-bottom: 0px;
 }
 </style>
 
-
-
-
 <title>${reviews_text}</title>
 </head>
 <body style="background-color: #ffffe0;">
@@ -155,7 +152,12 @@ margin-bottom: 0px;
 	<fmt:message bundle="${loc}" key="add_review_error"
 		var="add_review_error" />
 	<fmt:message bundle="${loc}" key="review_deleted" var="review_deleted" />
-		
+	<fmt:message bundle="${loc}" key="add_button" var="add_button" />
+	<fmt:message bundle="${loc}" key="delete_button" var="delete_button" />
+	<fmt:message bundle="${loc}" key="add_your_review" var="add_your_review" />
+	
+
+
 
 	<c:if test="${not empty requestScope.addReviewSuccess}">
 		<div class="alert alert-success" role="alert">
@@ -190,10 +192,10 @@ margin-bottom: 0px;
 								<input type="hidden" name="command" value="add_review">
 
 								<textarea class="form-control" rows="2" name="comment"
-									placeholder="Добавьте Ваш комментарий"></textarea>
+									placeholder="${add_your_review}"></textarea>
 								<div class="mar-top clearfix">
 									<button class="btn btn-sm btn-primary pull-right" type="submit">
-										<i class="fa fa-pencil fa-fw"></i> Добавить
+										<i class="fa fa-pencil fa-fw"></i> ${add_button}
 									</button>
 
 								</div>
@@ -215,7 +217,7 @@ margin-bottom: 0px;
 										<p class="login-text text-semibold media-heading box-inline">
 											${review.userLogin}
 											<c:if test="${sessionScope.role =='ADMIN'}">
-												<button class="bDel btn-primary" id="del">Удалить</button>
+												<button class="bDel btn-primary" id="del">${delete_button}</button>
 											</c:if>
 										</p>
 										<p class="text-muted text-sm">${review.time}</p>

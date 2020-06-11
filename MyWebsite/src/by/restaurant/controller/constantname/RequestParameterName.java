@@ -53,8 +53,8 @@ public final class RequestParameterName {
 	public static final String DISH_DELETED = "dishDeleted";
 	public static final String SIGN_IN_REQUIRED = "signInRequired";
 	public static final String BASKET_CLEARED = "basketCleared";
-	public static final String TIME = "time";
-	public static final String DATE = "date";
+//	public static final String TIME = "time";
+//	public static final String DATE = "date";
 	public static final String ORDER_ADDED = "orderAdded";
 	public static final String ORDER_DELETED = "orderDeleted";
 	public static final String USER = "user";
@@ -74,6 +74,7 @@ public final class RequestParameterName {
 	public static final String ORDER_DONE = "orderDone";
 	public static final String ORDER_CLOSED = "orderClosed";
 	public static final String NOTHING_FOUND_MESSAGE = "nothingFound";
+	public static final String DATE_TIME = "dateTime";
 
 
 }

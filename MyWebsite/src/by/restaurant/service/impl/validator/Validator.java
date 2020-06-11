@@ -29,4 +29,28 @@ public class Validator {
 		}
 		return true;
 	}
+
+	public static boolean validateString(String str) {
+
+		if (str.isEmpty() || str == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean validatePositiveNumber(int number){
+		
+		if(number < 0) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean validatePositiveNumber(double number){
+		
+		if(number < 0) {
+			return false;
+		}
+		return true;
+	}
 }

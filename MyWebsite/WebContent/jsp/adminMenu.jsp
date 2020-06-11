@@ -569,7 +569,7 @@ input {
 						name="dishAmount" placeholder="Введите вес" id="amount"
 						style="margin-bottom: 20px;"> <br>
 					<p>
-						<select name="dishCategory">
+						<select class="custom-select" name="dishCategory">
 							<option disabled>Выберите категорию</option>
 							<option value="SNACKS">Закуски</option>
 							<option value="SALADS">Салаты</option>

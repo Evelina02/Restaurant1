@@ -55,10 +55,12 @@ public class XMLService {
 	}
 
 	private static List<Dish> process(XMLStreamReader reader) throws XMLStreamException {
+		
 		List<Dish> dishes = new ArrayList<Dish>();
 		Set<String> ingredients = null;
 		Dish dish = null;
 		RestaurantTagName elementName = null;
+		
 		while (reader.hasNext()) {
 			int type = reader.next();
 			switch (type) {
@@ -166,7 +168,7 @@ public class XMLService {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer tr = tf.newTransformer();
         DOMSource s = new DOMSource(xmlDoc);
-        StreamResult result = new StreamResult(new File("F:\\file.xml"));
+        StreamResult result = new StreamResult(new File("D:\\xml\\allDishes.xml"));
         try {
 			tr.transform(s, result);
 		} catch (TransformerException e) {

@@ -108,3 +108,60 @@ $(document).ready(function(){
 		});
 	});
 	});
+
+
+
+
+
+$(".multiple_select").mousedown(function(e) {
+    if (e.target.tagName == "OPTION") 
+    {
+      return; //don't close dropdown if i select option
+    }
+    $(this).toggleClass('multiple_select_active'); //close dropdown if click inside <select> box
+});
+$(".multiple_select").on('blur', function(e) {
+    $(this).removeClass('multiple_select_active'); //close dropdown if click outside <select>
+});
+	
+$('.multiple_select option').mousedown(function(e) { //no ctrl to select multiple
+    e.preventDefault(); 
+    $(this).prop('selected', $(this).prop('selected') ? false : true); //set selected options on click
+    $(this).parent().change(); //trigger change event
+});
+
+	
+	$("#myFilter").on('change', function() {
+      var selected = $("#myFilter").val().toString(); //get all options and convert to string
+      
+      var document_style = document.documentElement.style;
+      
+      //var document_style = $(this).style;
+      if(selected !== ""){
+        document_style.setProperty('--text', "'Отказаться от: "+selected+"'");
+      }else{
+        document_style.setProperty('--text', "'Выберите ингредиенты'");
+      }
+      
+      
+		var dishId = $(this).parent().find('#dishId').val();
+		var command = "refuse_of_ingredients";
+
+      $.ajax({
+			type: 'POST',
+			data: {command: command, dishId:dishId, selected:selected},
+			url:  'http://localhost:8080/MyWebsite/AjaxController',
+			success : function(result){
+				
+				var obj = JSON.parse(result)
+
+				if(obj.status == "yes"){
+					alert("Ok!")
+				}else{
+					alert("No!")
+				}
+			}	
+		});
+      
+      
+	});

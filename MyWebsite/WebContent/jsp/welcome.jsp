@@ -36,7 +36,7 @@
 }
 
 </style>
-<title>Insert title here</title>
+<title>${restaurant_name}</title>
 </head>
 <body id="welcome">
 <c:import url="header.jsp"/>
@@ -45,6 +45,8 @@
 <fmt:message bundle="${loc}" key="register.success_message" var="register_success" />
 <fmt:message bundle="${loc}" key="message.hello" var="hello" />
 <fmt:message bundle="${loc}" key="message.goodbye" var="goodbye" />
+<fmt:message bundle="${loc}" key="welcome.text" var="welcome_text" />
+<fmt:message bundle="${loc}" key="text.name.restaurant" var="restaurant_name" />
 
 
 
@@ -70,7 +72,7 @@
 	
         <div class="call-to row no-gutters" >
           <div class="col-12">
-            <h1>Добро пожаловать!</h1>
+            <h1>${welcome_text}</h1>
           </div>
         </div>
 

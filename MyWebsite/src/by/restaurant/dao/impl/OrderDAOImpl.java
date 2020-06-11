@@ -62,6 +62,11 @@ public class OrderDAOImpl implements OrderDAO {
 
 	private static final String CLOSE_ORDER = 
 			"update orders set state='CLOSED' where id_order=?";
+
+	private static final String INSERT_REFUSALS_OF_INGREDIENTS = 
+    		"insert into refusal_of_ingredients(id_order, id_dish, ingredient) "
+    		+ "values(?, ?, ?)";
+ 
 	
 	@Override
 	public boolean addOrder(Order order, int idUser) throws DAOException {
@@ -88,6 +93,9 @@ public class OrderDAOImpl implements OrderDAO {
 
 			insertOrderDish(connection, order.getBasket(), order.getId());
 			
+			
+			insertRefusalOfIngredients(connection, order.getId(), order.getBasket().getDishes());
+			
 			connection.commit();
 			
 			return true;
@@ -113,6 +121,25 @@ public class OrderDAOImpl implements OrderDAO {
 				}
 				pool.closeConnection(connection, ps);
 			}
+	}
+
+	private void insertRefusalOfIngredients(Connection connection, int idOrder, Set<Dish> dishes) throws SQLException {
+
+		PreparedStatement ps = connection.prepareStatement(INSERT_REFUSALS_OF_INGREDIENTS);
+		
+		for(Dish dish: dishes) {
+			
+			if(dish.getRefusalOfIngredients() != null) {
+				
+				for(String refusedIngredient: dish.getRefusalOfIngredients()) {
+					ps.setInt(1, idOrder);
+					ps.setInt(2, dish.getId());
+					ps.setString(3, refusedIngredient);
+				}
+			}
+		}
+		ps.close();
+
 	}
 
 	@Override

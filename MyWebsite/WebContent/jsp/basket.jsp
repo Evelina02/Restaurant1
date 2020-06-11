@@ -13,11 +13,7 @@
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="${pageContext.request.contextPath}/css/basket.css" type="text/css" rel="stylesheet">
-    
-    
-    
-    
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animate/animate.css">
@@ -30,6 +26,48 @@
     
  <style> 
 
+:root
+{
+	--text: "Выберите ингредиенты";
+}
+.multiple_select
+{
+	height: 25px;
+	width: 90%;
+	overflow: hidden;
+	-webkit-appearance: menulist;
+	position: relative;
+}
+.multiple_select::before
+{
+	content: var(--text);
+	display: block;
+  margin-left: 5px;
+  margin-bottom: 2px;
+}
+.multiple_select_active
+{
+	overflow: visible !important;
+}
+.multiple_select option
+{
+	display: none;
+    height: 25px;
+	background-color: white;
+}
+.multiple_select_active option
+{
+	display: block;
+}
+
+.multiple_select option::before {
+  content: "\2610";
+}
+.multiple_select option:checked::before {
+  content: "\2611";
+}
+
+/*         */
  
 body {
 
@@ -423,6 +461,10 @@ margin-bottom:5px;
   display: none;
 }
 
+.multiselect-container>li>a>label {
+  padding: 4px 20px 3px 20px;
+}
+
 
 /*
 .shopping-cart {
@@ -592,8 +634,7 @@ input:focus {
 
 
   </style>   
-    
-    
+        
 <title>${basket_text}</title>
 </head>
 <body>
@@ -603,6 +644,25 @@ input:focus {
 <fmt:setBundle basename="resources.localization.local" var="loc" />
 <fmt:message bundle="${loc}" key="text.basket" var="basket_text" />
 <fmt:message bundle="${loc}" key="basket_cleared" var="empty_basket" />
+<fmt:message bundle="${loc}" key="dish.title" var="title" />
+<fmt:message bundle="${loc}" key="dish.count" var="count" />
+<fmt:message bundle="${loc}" key="dish.price" var="price" />
+<fmt:message bundle="${loc}" key="dish.ingredients" var="ingredients" />
+<fmt:message bundle="${loc}" key="dish.refusalOfIngredients" var="refusalOfIngredients" />
+<fmt:message bundle="${loc}" key="button.deleteAll" var="deleteAll_button" />
+<fmt:message bundle="${loc}" key="makeOrder" var="make_order" />
+<fmt:message bundle="${loc}" key="makingOrder" var="making_order" />
+<fmt:message bundle="${loc}" key="chooseDeliveryType" var="choose_deliveryType" />
+<fmt:message bundle="${loc}" key="selfDelivery" var="self_delivery" />
+<fmt:message bundle="${loc}" key="byCourier" var="by_courier" />
+<fmt:message bundle="${loc}" key="choosePaymentType" var="choose_paymentType" />
+<fmt:message bundle="${loc}" key="paymentByCreditCard" var="by_credit_card" />
+<fmt:message bundle="${loc}" key="paymentInCash" var="in_cash" />
+<fmt:message bundle="${loc}" key="chooseDeliveryDateTime" var="choose_delivery_date_time" />
+<fmt:message bundle="${loc}" key="text.order" var="order" />
+<fmt:message bundle="${loc}" key="chooseIngredients" var="choose_ingredients" />
+<fmt:message bundle="${loc}" key="text.totalPrice" var="total_price_text" />
+
 
 	<div class="container-fluid">
 		<c:choose>
@@ -610,8 +670,6 @@ input:focus {
 				<h1 style="text-align: center;">${empty_basket}</h1>
 			</c:when>
 			<c:otherwise>
-
-
 				<table class="table table-hover">
 					<thead class="thead-dark">
 						<tr>
@@ -619,17 +677,16 @@ input:focus {
 								<form action="${pageContext.request.contextPath}/Controller"
 									method="post">
 									<input type="hidden" name="command" value="clear_basket">
-									<button class="btn btn-light" type="submit" style="width:115px">Удалить всё</button>
+									<button class="btn btn-light" type="submit" style="width:115px">${deleteAll_button}</button>
 
 								</form>
 
 							</th>
-							<th scope="col">Название</th>
-							<th scope="col">Количество</th>
-							<th scope="col">Цена</th>
-							<th scope="col">Ингредиенты</th>
-			<!-- 				<th scope="col">Refusal of ingredients</th>
--->
+							<th scope="col">${title}</th>
+							<th scope="col">${count}</th>
+							<th scope="col">${price}</th>
+							<th scope="col">${ingredients}</th>
+							<th scope="col">${refusalOfIngredients}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -650,15 +707,11 @@ input:focus {
 								</td>
 								<td>
 									<div class="dish-img">
-
 										<img src="${dish.picture}" alt="">
 									</div>
 									<div class="dish-title">
-
 										<p>${dish.name}</p>
 									</div>
-
-
 								</td>
 
 								<td>
@@ -694,21 +747,39 @@ input:focus {
 										<ul>
 											<li>${ingredient}</li>
 										</ul>
-									</c:forEach></td>
-								<td></td>
+									</c:forEach>
+								</td>
 
+
+								<c:if test="${not empty dish.ingredients}">
+									<td>
+										<div style="padding: 20px">
+											<input type="hidden" id="dishId" value="${dish.id}" /> 
+											<select
+												name="ingredientsForRefusal" id="myFilter"
+												class="multiple_select" multiple>
+												<c:forEach items="${dish.ingredients}" var="ingredient">
+													<option value="${ingredient}">${ingredient}</option>
+												</c:forEach>
+											</select>
+
+										</div>
+									<td>
+								
+								</c:if>
+								
 							</tr>
 						</c:forEach>
 
 						<tr class="table-success">
-							<td colspan="4">Итого</td>
+							<td colspan="4">${total_price_text}</td>
 							<td colspan="2"><span id="totalPrice"> 
 							   <fmt:formatNumber value="${basket.totalPrice}" type="number"/>
 							</span></td>
 						</tr>
 						<tr>
 							<td>
-								<a href="#blur">Оформить заказ</a>
+								<a href="#blur">${make_order}</a>
 							</td>
 						</tr>
 					</tbody>
@@ -716,58 +787,57 @@ input:focus {
 
 			</c:otherwise>
 		</c:choose>
+		
+		
+		
+		
+		
 	</div>
-
-
-
 
 	<div id="blur">
 		<div class="order" id="window">
-<a href="#" class="close">
-<img name="cross" src="http://itsnottrashdesigns.com/wp-content/uploads/2016/05/Remove_Item_icon.png" style="wigth:20px; height:20px;">
-</a>
+			<a href="#" class="close"> <img name="cross"
+				src="http://itsnottrashdesigns.com/wp-content/uploads/2016/05/Remove_Item_icon.png"
+				style="wigth: 20px; height: 20px;">
+			</a>
 			<form class="checkout"
 				action="${pageContext.request.contextPath}/Controller" method="post">
 				<input type="hidden" name="command" value="create_order">
 
 				<div class="checkout-header">
-					<h1 class="checkout-title">
-						Оформление заказа
-						<!-- <span class="checkout-price">$10</span>
-      -->
-					</h1>
+					<h1 class="checkout-title">${making_order}</h1>
 				</div>
 
-				<span class="type">Выберите способ доставки:</span>
+				<span class="type">${choose_deliveryType}:</span>
 				<div class="custom-control custom-radio">
 					<input type="radio" id="by_courier" name="delivery" value="courier"
-						class="checkout-input custom-control-input">
-					<label class="custom-control-label" for="by_courier">Курьером</label>
+						class="checkout-input custom-control-input"> <label
+						class="custom-control-label" for="by_courier">${by_courier}</label>
 				</div>
 				<div class="custom-control custom-radio">
-					<input type="radio"  id="self_delivery" name="delivery" value="self_delivery"
-						class="checkout-input custom-control-input" checked> 
-						<label class="custom-control-label" for="self_delivery">Самовывоз</label>
+					<input type="radio" id="self_delivery" name="delivery"
+						value="self_delivery" class="checkout-input custom-control-input"
+						checked> <label class="custom-control-label"
+						for="self_delivery">${self_delivery}</label>
 				</div>
 
-				<br>
-				<br> <span class="type">Выберите способ оплаты:</span>
+				<br> <br> <span class="type">${choose_paymentType}:</span>
 				<div class="custom-control custom-radio">
 					<input type="radio" id="credit_card" value="card" name="payment"
 						class="checkout-input custom-control-input"
 						onChange="Selected(this)"> <label
-						class="custom-control-label" for="credit_card">Картой</label>
+						class="custom-control-label" for="credit_card">${by_credit_card}</label>
 				</div>
 				<div class="custom-control custom-radio">
 					<input type="radio" id="in_cash" name="payment" value="cash"
-						class="checkout-input custom-control-input" checked>
-					<label class="custom-control-label" for="in_cash">Наличными</label>
+						class="checkout-input custom-control-input" checked> <label
+						class="custom-control-label" for="in_cash">${in_cash}</label>
 				</div>
-				<br>
-				<br> <span class="type">Выберите ожидаемое дату/время:</span>
-				 <input type="date" class="checkout-input" name="date" required> 
-				 <input type="time" class="checkout-input" name="time" requireds> <br>
-				<br>
+				<br> <br> <span class="type">${choose_delivery_date_time}:</span> 
+				
+				<input type="datetime-local" id="txtDateTime" class="checkout-input" name="dateTime" required/>
+				
+				<br> <br>
 				<div id="card" class="deactive">
 					<p>
 						<input type="text" class="checkout-input checkout-exp"
@@ -782,38 +852,157 @@ input:focus {
 
 				</div>
 				<p>
-					<input type="submit" value="Оформить" class="checkout-btn">
+					<input type="submit" value="${order}" class="checkout-btn">
 				</p>
-
-
-
-				
-
 			</form>
 		</div>
 	</div>
+
+	<!--  
+<form id="form1">
+<div style="padding:20px">
+<select id="chkveg" multiple="multiple">
+<option value="cheese">Cheese</option>
+<option value="tomatoes">Tomatoes</option>
+<option value="mozarella">Mozzarella</option>
+<option value="mushrooms">Mushrooms</option>
+<option value="pepperoni">Pepperoni</option>
+<option value="onions">Onions</option>
+
+</select><br /><br />
+<input type="button" id="btnget" value="Get Selected Values" />
+</div>
+</form>
+
+-->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 	<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>
-<script src="${pageContext.request.contextPath}/vendor/bootstrap/js/popper.js"></script>
-<script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
-<script src="${pageContext.request.contextPath}/vendor/daterangepicker/moment.min.js"></script>
-<script src="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/vendor/bootstrap/js/popper.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/vendor/daterangepicker/moment.min.js"></script>
+	<script src="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.js"></script>
 <script src="${pageContext.request.contextPath}/vendor/countdowntime/countdowntime.js"></script>
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
 <!--===============================================================================================-->
 <script src="${pageContext.request.contextPath}/js/myJS.js"></script>
 	
 <script>
+/*
+$(".multiple_select").mousedown(function(e) {
+    if (e.target.tagName == "OPTION") 
+    {
+      return; //don't close dropdown if i select option
+    }
+    $(this).toggleClass('multiple_select_active'); //close dropdown if click inside <select> box
+});
+$(".multiple_select").on('blur', function(e) {
+    $(this).removeClass('multiple_select_active'); //close dropdown if click outside <select>
+});
+	
+$('.multiple_select option').mousedown(function(e) { //no ctrl to select multiple
+    e.preventDefault(); 
+    $(this).prop('selected', $(this).prop('selected') ? false : true); //set selected options on click
+    $(this).parent().change(); //trigger change event
+});
 
+	
+	$("#myFilter").on('change', function() {
+      var selected = $("#myFilter").val().toString(); //get all options and convert to string
+      /*
+      var document_style = document.documentElement.style;
+      if(selected !== ""){
+        document_style.setProperty('--text', "'Отказаться от: "+selected+"'");
+      }else{
+        document_style.setProperty('--text', "'Выберите ингредиенты'");
+      }
+      
+      
+		var dishId = $(this).parent().find('#dishId').val();
+		var command = "refuse_of_ingredients";
+
+      $.ajax({
+			type: 'POST',
+			data: {command: command, dishId:dishId, selected:selected},
+			url:  'http://localhost:8080/MyWebsite/AjaxController',
+			success : function(result){
+				
+				var obj = JSON.parse(result)
+
+				if(obj.status == "yes"){
+					alert("Ok!")
+				}else{
+					alert("No!")
+				}
+			}	
+		});
+      
+      
+	});
+
+
+	*/
+	
+	/*
 	function Selected(a) {
 	  document.getElementById("courier").style.display = 'none';
 	  document.getElementById("card").style.display = 'none';
 
 	  document.getElementById(a.value).style.display = 'block';
 	}
+	
+	*/
+	
+	function zero_first_format(value)
+    {
+        if (value < 10)
+        {
+            value='0'+value;
+        }
+        return value;
+    }
+
+$(function(){
+    var dtToday = new Date();
+    
+    var month = zero_first_format(dtToday.getMonth() + 1);
+    var nextMonth = zero_first_format(dtToday.getMonth() + 2);
+    var day = zero_first_format(dtToday.getDate());
+    var year = dtToday.getFullYear();
+    
+    var minDate = year + '-' + month + '-' + day;
+    var maxDate = year + '-' + nextMonth + '-' + day;
+    
+    var hours = zero_first_format(dtToday.getHours());
+    var minutes = zero_first_format(dtToday.getMinutes());
+    var minDateTime = minDate + 'T' + hours + ':' + minutes;
+    var maxDateTime = maxDate + 'T' + '17' + ':' + '00';
+
+    //alert(minDateTime);
+
+    $('#txtDateTime').attr('min', minDateTime);
+    $('#txtDateTime').attr('max', maxDateTime);
+
+
+});
+
+</script>
+
+<script>
+
+
 </script>
  
-</body>
+
+									</body>
 </html>

@@ -11,12 +11,24 @@ import by.restaurant.dao.UserDAO;
 import by.restaurant.dao.factory.DAOFactory;
 import by.restaurant.service.OrderService;
 import by.restaurant.service.ServiceException;
+import by.restaurant.service.impl.validator.Validator;
+import by.restaurant.service.impl.validator.ValidatorException;
 
 public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public boolean addOrder(Order order, int idUser) throws ServiceException {
-//valid
+
+		if(!Validator.validateIsNull(order)) {
+			//log
+			throw new ValidatorException("Order is null!");
+		}
+		
+		if(!Validator.validatePositiveNumber(idUser)) {
+			//log
+			throw new ValidatorException("Id of user is a negative number!");
+		}
+		
 		boolean status;
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
@@ -39,6 +51,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<Order> allOrdersOfUser(int idUser) throws ServiceException{
 		
+		if(!Validator.validatePositiveNumber(idUser)) {
+			//log
+			throw new ValidatorException("Id of user is a negative number!");
+		}
+		
 		List<Order> orders;
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
@@ -57,6 +74,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean cancelOrder(int orderId) throws ServiceException {
 
+		if(!Validator.validatePositiveNumber(orderId)) {
+			//log
+			throw new ValidatorException("Id of order is a negative number!");
+		}
+		
 		boolean canceled;
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
@@ -91,11 +113,15 @@ public class OrderServiceImpl implements OrderService {
 		return orders;
 
 	}
-
 	
 	@Override
 	public boolean closeOrder(int orderId) throws ServiceException {
 
+		if(!Validator.validatePositiveNumber(orderId)) {
+			//log
+			throw new ValidatorException("Id of order is a negative number!");
+		}
+		
 		boolean closed;
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
@@ -116,6 +142,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean doOrder(int orderId) throws ServiceException {
 
+		if(!Validator.validatePositiveNumber(orderId)) {
+			//log
+			throw new ValidatorException("Id of order is a negative number!");
+		}
+		
 		boolean done;
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
@@ -136,6 +167,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public int getIdOrderByOrderTime(String orderTime) throws ServiceException {
 
+		if(!Validator.validateString(orderTime)) {
+			//log
+			throw new ValidatorException("Order time is null!");
+		}
+		
 		int idOrder;
 		try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();

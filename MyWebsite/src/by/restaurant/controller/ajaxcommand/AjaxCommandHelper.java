@@ -6,6 +6,7 @@ import java.util.Map;
 import by.restaurant.controller.ajaxcommand.impl.AddDishToBasket;
 import by.restaurant.controller.ajaxcommand.impl.ChangeAmountOfDish;
 import by.restaurant.controller.ajaxcommand.impl.NoSuchCommand;
+import by.restaurant.controller.ajaxcommand.impl.RefuseOfIngredients;
 
 
 public class AjaxCommandHelper {
@@ -18,6 +19,7 @@ public class AjaxCommandHelper {
 		
 		ajaxCommands.put(AjaxCommandName.CHANGE_AMOUNT_OF_DISH, new ChangeAmountOfDish());
 		ajaxCommands.put(AjaxCommandName.ADD_DISH_TO_BASKET, new AddDishToBasket());
+		ajaxCommands.put(AjaxCommandName.REFUSE_OF_INGREDIENTS, new RefuseOfIngredients());
 
 		ajaxCommands.put(AjaxCommandName.NO_SUCH_COMMAND, new NoSuchCommand());
 	}

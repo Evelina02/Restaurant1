@@ -42,11 +42,16 @@ public class DishServiceImpl implements DishService {
 			throw new ServiceException("Error during changing dish in service", e);
 		}
 		return added;
-	}
+	} 
 	
 	@Override
 	public List<Dish> searchDishByPartOfName(String partOfName) throws ServiceException {
 
+		if(!Validator.validateString(partOfName)) {
+			//log
+			throw new ValidatorException("Searching dish is null!");
+		}
+		
 		List<Dish> dishes;
 		try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();
@@ -142,15 +147,34 @@ public class DishServiceImpl implements DishService {
 		 return dishes;
 	} 
 	
-	public void putDishToBasket(Basket basket, Dish dish, int count) {
-		//валидация
+	public void putDishToBasket(Basket basket, Dish dish, int count) throws ServiceException {
+
+		if(!Validator.validateIsNull(basket) || !Validator.validateIsNull(dish)) {
+			//log
+			throw new ValidatorException("Object is null!");
+		}
+
+		if(!Validator.validatePositiveNumber(count)) {
+			//log
+			throw new ValidatorException("Count of dish is a negative number!");
+		}
+		
 		basket.getDishes().add(dish);
 		basket.getCountDishById().put(dish.getId(), count);
 	}
 	
-	public void deleteDishFromBasket(Basket basket, int idDish) {
-		// валидация
-
+	public void deleteDishFromBasket(Basket basket, int idDish) throws ServiceException {
+		
+		if(!Validator.validateIsNull(basket)) {
+			//log
+			throw new ValidatorException("Basket is null!");
+		}
+		
+		if(!Validator.validatePositiveNumber(idDish)) {
+			//log
+			throw new ValidatorException("Id of dish is a negative number!");
+		}
+		
 		Dish dish = null;
 		for (Dish d : basket.getDishes()) {
 			if (d.getId() == idDish) {
@@ -163,16 +187,23 @@ public class DishServiceImpl implements DishService {
 		
 	}
 	
-	public void clearBasket(Basket basket) {
-		// валидация
+	public void clearBasket(Basket basket) throws ServiceException {
+
+		if(!Validator.validateIsNull(basket)) {
+			//log
+			throw new ValidatorException("Basket is null!");
+		}
 
 		basket.getDishes().clear();
 		basket.getCountDishById().clear();
 	}
 	
-	public void countTotalPrice(Basket basket) {
-		// валидация
-
+	public void countTotalPrice(Basket basket) throws ServiceException {
+		
+		if(!Validator.validateIsNull(basket)) {
+			//log
+			throw new ValidatorException("Basket is null!");
+		}
 		
 		double totalPrice = 0;
 		for(Dish dish : basket.getDishes()){
@@ -180,7 +211,6 @@ public class DishServiceImpl implements DishService {
 		}
 		basket.setTotalPrice(totalPrice);
 	}
-
 
 	@Override
 	public List<Dish> getAllDishes() throws ServiceException {
@@ -197,10 +227,14 @@ public class DishServiceImpl implements DishService {
 		 return alldishes;
 	}
 
-
 	@Override
 	public boolean deleteDish(int dishId) throws ServiceException {
 
+		if(!Validator.validatePositiveNumber(dishId)) {
+			//log
+			throw new ValidatorException("Id of dish is a negative number!");
+		}
+		
 		boolean deleted;
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
@@ -218,10 +252,19 @@ public class DishServiceImpl implements DishService {
 		return deleted;
 	}
 
-
 	@Override
-	public boolean updateDish(int idDish, String picture, Double price, String amount) throws ServiceException {
+	public boolean updateDish(int idDish, String picture, double price, String amount) throws ServiceException {
 
+		if(!Validator.validatePositiveNumber(idDish)) {
+			//log
+			throw new ValidatorException("Id of dish is a negative number!");
+		}
+		
+		if(!Validator.validateString(picture) || !Validator.validateString(amount) || !Validator.validatePositiveNumber(price)) {
+			//log
+			throw new ValidatorException("Information of dish is not correct!");
+		}
+		
 		boolean updated;
 
 		try {

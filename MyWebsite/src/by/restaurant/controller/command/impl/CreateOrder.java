@@ -43,12 +43,12 @@ public class CreateOrder implements Command {
 		PaymentType paymentType = null;
 
 		Date date = new Date();
-		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss a");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String orderTime = format.format(date);
 
-		String deliveryTime = request.getParameter(RequestParameterName.DATE) + " "
-				+ request.getParameter(RequestParameterName.TIME);
-
+		String deliveryTime = request.getParameter(RequestParameterName.DATE_TIME);
+		deliveryTime = deliveryTime.replace('T', ' ');
+		
 		String delivery = request.getParameter("delivery");
 		if (delivery.equals("courier")) {
 			deliveryType = DeliveryType.BY_COURIER;
@@ -62,7 +62,7 @@ public class CreateOrder implements Command {
 		} else if (payment.equals("cash")) {
 			paymentType = PaymentType.IN_CASH;
 		}
-
+		
 		Basket basket = (Basket) session.getAttribute(SessionAttributeName.BASKET);
 
 		OrderState state = OrderState.IN_PROCESS;

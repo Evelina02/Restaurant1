@@ -23,7 +23,7 @@ public interface DishService {
 	void clearBasket(Basket basket) throws ServiceException;
 	void countTotalPrice(Basket basket) throws ServiceException;
 	boolean deleteDish(int dishId) throws ServiceException;
-	boolean updateDish(int idDish, String picture, Double price, String amount) throws ServiceException;
+	boolean updateDish(int idDish, String picture, double price, String amount) throws ServiceException;
 	List<Dish> searchDishByPartOfName(String partOfName) throws ServiceException;
 
 }

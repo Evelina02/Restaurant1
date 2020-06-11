@@ -37,10 +37,17 @@ public class ResetPassword implements Command {
 		String login = request.getParameter(RequestParameterName.LOGIN);
 
 		try {
-			String newPassword = RandomStringUtils.random(8, 0, 61, true, true, SYMBOLS.toCharArray());
 
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			UserService userService = serviceFactory.getUserService();
+
+			if (!userService.isExist(login)) {
+				request.setAttribute(RequestParameterName.NO_SUCH_LOGIN, resourceBundle.getString("wrong_login"));
+				RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.SIGN_IN_PAGE);
+				dispatcher.forward(request, response);
+			}else {
+				
+			String newPassword = RandomStringUtils.random(8, 0, 61, true, true, SYMBOLS.toCharArray());
 
 			boolean reseted = userService.resetPassword(login, BCrypt.hashpw(newPassword, BCrypt.gensalt()));
 
@@ -56,6 +63,7 @@ public class ResetPassword implements Command {
 				sslSender.send(MAIL_SUBJECT, MAIL_BODY + newPassword , userEmail);
 
 				response.sendRedirect(request.getContextPath() + "/jsp/authorization.jsp?message=password_changed");
+			}
 			}
 		} catch (ServiceException e) {
 			// log

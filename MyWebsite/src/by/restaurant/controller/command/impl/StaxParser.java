@@ -32,7 +32,8 @@ public class StaxParser implements Command {
 		HttpSession session = request.getSession();
 		
 		try {
-			List<Dish> dishes = XMLService.parse(request.getParameter("fileName"));
+			String fileName = request.getParameter("fileName");
+			List<Dish> dishes = XMLService.parse(fileName);
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			DishService dishService = serviceFactory.getDishService();
 

@@ -401,8 +401,21 @@ px
 		var="save_change_error" />
 	<fmt:message bundle="${loc}" key="wrong_old_password"
 		var="password_change_error" />
-	<fmt:message bundle="${loc}" key="password_changed"
-		var="password_change_success" />
+	<fmt:message bundle="${loc}" key="password_changed"	var="password_change_success" />
+
+	<fmt:message bundle="${loc}" key="text.enter.login" var="login_text" />
+	<fmt:message bundle="${loc}" key="text.enter.password" var="password_text" />	
+	<fmt:message bundle="${loc}" key="text.changePassword" var="change_password_text" />
+	<fmt:message bundle="${loc}" key="text.enter.email" var="mail_text" />
+	<fmt:message bundle="${loc}" key="text.enter.address" var="address_text" />
+	<fmt:message bundle="${loc}" key="text.saveChanges" var="save_changes_text" />
+	<fmt:message bundle="${loc}" key="changingPassword" var="changing_password" />
+	<fmt:message bundle="${loc}" key="text.newPassword" var="new_password" />
+	<fmt:message bundle="${loc}" key="text.oldPassword" var="old_password" />
+	<fmt:message bundle="${loc}" key="text.newPasswordOnceAgain" var="new_password_once_again" />
+	<fmt:message bundle="${loc}" key="text.change" var="change_text" />
+
+
 
 <script type="text/javascript">
 function validateForm(form){
@@ -459,29 +472,32 @@ function validateForm(form){
 			<table class="table">
 				<tbody>
 					<tr>
-						<th>Логин</th>
+						<th>${login_text}</th>
 						<td><input type="text" name="login" value="${user.login}"
-						pattern="^([a-zA-Z]+)[a-zA-Z\d_]{4,25}$"></td>
+						pattern="^[a-zA-Z][a-zA-Z0-9-_\\.]{3,20}$"
+						style="width:300px"></td>
+						
 					</tr>
 					<tr>
-						<th>Пароль</th>
-						<td><a href="#blur">Изменить пароль</a></td>
+						<th>${password_text}</th>
+						<td><a href="#blur">${change_password_text}</a></td>
 					</tr>
 
 					<tr>
-						<th>Электронная почта</th>
+						<th>${mail_text}</th>
 						<td><input type="text" name="email" value="${user.email}"
-						pattern="[a-zA-Z0-9.\-_]+@[a-zA-Z]+\.[a-zA-Z]+"></td>
+						pattern="[a-zA-Z0-9.\-_]+@[a-zA-Z]+\.[a-zA-Z]+"
+						style="width:300px"></td>
 					</tr>
 					<tr>
-						<th>Адрес</th>
+						<th>${address_text}</th>
 						<td><input type="text" name="address" value="${user.address}"
+						style="width:300px";
 						></td>
 					</tr>
 				</tbody>
 			</table>
-			<button type="submit" class="btn btn-primary" style="width: 222px;">Сохранить
-				изменения</button>
+			<button type="submit" class="btn btn-primary" style="width: 222px;">${save_changes_text}</button>
 		</form>
 
 	</div>
@@ -502,24 +518,27 @@ function validateForm(form){
 				<input type="hidden" name="command" value="change_password">
 
 				<div class="checkout-header">
-					<h1 class="checkout-title">Смена пароля</h1>
+					<h1 class="checkout-title">${changing_password}</h1>
 				</div>
 
 				<div id="login" class="validate-input">
 					<!--валидация   локализация -->
 					<input type="password" name="old_password"
-						class="placeholder input100" placeholder="Старый пароль:"
-						data-validate="Старый пароль обязателен!" required
+						class="placeholder input100" placeholder="${old_password}:"
+						data-validate="Старый пароль обязателен!" 
+						pattern = "^[a-zA-z]{1}[a-zA-Z1-9]{3,20}$" required
 					>
 						 <input
 						type="password" name="new_password" class="placeholder input100"
-						placeholder="Новый пароль:" data-validate="Введите пароль!" required
+						placeholder="${new_password}:" data-validate="Введите пароль!" 
+						pattern = "^[a-zA-z]{1}[a-zA-Z1-9]{3,20}$" required
 					>
 					<input type="password" name="new_password1"
-						class="placeholder input100" placeholder="Новый пароль ещё раз:"
-						data-validate="Введите пароль!" required
+						class="placeholder input100" placeholder="${new_password_once_again}:"
+						data-validate="Введите пароль!" 
+						pattern = "^[a-zA-z]{1}[a-zA-Z1-9]{3,20}$" required
 						> 
-						<input type="submit" value="Сменить">
+						<input type="submit" value="${change_text}">
 				</div>
 			</form>
 		</div>

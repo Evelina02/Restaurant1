@@ -18,7 +18,6 @@
 
 <title>${menu_text}</title>
 
-
 <style type="text/css">
 
 .serachInput:: -ms - clear{
@@ -355,8 +354,6 @@ background-color:#f30;
 } */
     </style>
 
-
-
 </head>
 <body>
 <c:import url="header.jsp"/>
@@ -365,6 +362,14 @@ background-color:#f30;
 <fmt:message bundle="${loc}" key="text.menu" var="menu_text" />
 <fmt:message bundle="${loc}" key="dish_added" var="dish_added" />
 <fmt:message bundle="${loc}" key="nothing_found" var="nothing_found" />
+<fmt:message bundle="${loc}" key="button.addToBasket" var="add_to_basket" />
+<fmt:message bundle="${loc}" key="dishCategory.snacks" var="snacks_text" />
+<fmt:message bundle="${loc}" key="dishCategory.salads" var="salads_text" />
+<fmt:message bundle="${loc}" key="dishCategory.hotDishes" var="hot_dishes_text" />
+<fmt:message bundle="${loc}" key="dishCategory.pizza" var="pizza_text" />
+<fmt:message bundle="${loc}" key="dishCategory.desserts" var="desserts_text" />
+<fmt:message bundle="${loc}" key="dishCategory.drinks" var="drinks_text"/>
+<fmt:message bundle="${loc}" key="searchHere" var="search_here"/>
 
 
       	<c:if test="${not empty requestScope.dishAdded}">
@@ -385,7 +390,7 @@ background-color:#f30;
 					<form action="${pageContext.request.contextPath}/Controller" method="post">
 						<input type="hidden" name="command"
 							value="search_dishes_by_part_of_name"> 
-							<input class="searchInput" type="text" placeholder="Искать здесь..." name="partOfName">
+							<input class="searchInput" type="text" placeholder="${search_here}..." name="partOfName">
 						<button type="submit">
 							<img name="cross"
 								src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Blue_magnifying_glass_icon.svg/834px-Blue_magnifying_glass_icon.svg.png"
@@ -400,22 +405,21 @@ background-color:#f30;
 					<div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
 						<a class="nav-item nav-link active" id="nav-snacks-tab"
 							data-toggle="tab" href="#nav-snacks" role="tab"
-							aria-controls="nav-snacks" aria-selected="true">Закуски</a> <a
+							aria-controls="nav-snacks" aria-selected="true">${snacks_text}</a> <a
 							class="nav-item nav-link" id="nav-hot-dishes-tab"
 							data-toggle="tab" href="#nav-hot-dishes" role="tab"
-							aria-controls="nav-hot-dishes" aria-selected="false">Горячие
-							блюда</a> <a class="nav-item nav-link" id="nav-salads-tab"
+							aria-controls="nav-hot-dishes" aria-selected="false">${hot_dishes_text}</a> <a class="nav-item nav-link" id="nav-salads-tab"
 							data-toggle="tab" href="#nav-salads" role="tab"
-							aria-controls="nav-salads" aria-selected="false">Салаты</a> <a
+							aria-controls="nav-salads" aria-selected="false">${salads_text}</a> <a
 							class="nav-item nav-link" id="nav-pizza-tab" data-toggle="tab"
 							href="#nav-pizza" role="tab" aria-controls="nav-pizza"
-							aria-selected="false">Пицца</a> <a class="nav-item nav-link"
+							aria-selected="false">${pizza_text}</a> <a class="nav-item nav-link"
 							id="nav-desserts-tab" data-toggle="tab" href="#nav-desserts"
-							role="tab" aria-controls="nav-desserts" aria-selected="false">Десерты</a>
+							role="tab" aria-controls="nav-desserts" aria-selected="false">${desserts_text}</a>
 
 						<a class="nav-item nav-link" id="nav-drinks-tab" data-toggle="tab"
 							href="#nav-drinks" role="tab" aria-controls="nav-drinks"
-							aria-selected="false">Напитки</a>
+							aria-selected="false">${drinks_text}</a>
 
 					</div>
 				</nav>
@@ -472,7 +476,7 @@ background-color:#f30;
 
 										<button type="submit" class="addToBasket addButton"
 											>
-											Добавить в корзину 
+											${add_to_basket} 
 										</button>
 
 									<!-- </form>-->
@@ -532,7 +536,7 @@ background-color:#f30;
 
 										<button type="submit" class="addToBasket addButton"
 											>
-											Добавить в корзину 
+											${add_to_basket}
 										</button>
 
 									
@@ -592,7 +596,7 @@ background-color:#f30;
 
 										<button type="submit" class="addToBasket addButton"
 											>
-											Добавить в корзину 
+											${add_to_basket} 
 										</button>
 
 									
@@ -652,7 +656,7 @@ background-color:#f30;
 
 										<button type="submit" class="addToBasket addButton"
 										>
-											Добавить в корзину 
+											${add_to_basket}
 										</button>
 
 							
@@ -711,7 +715,7 @@ background-color:#f30;
 
 										<button type="submit" class="addToBasket addButton "
 									>
-											Добавить в корзину 
+											${add_to_basket} 
 										</button>
 
 									<!--/dish-buttons -->
@@ -769,7 +773,7 @@ background-color:#f30;
 
 										<button type="submit" class="addToBasket addButton "
 											>
-											Добавить в корзину 
+											${add_to_basket} 
 										</button>
 
 								
@@ -844,7 +848,7 @@ background-color:#f30;
 										</div>
 
 										<button type="submit" class="addToBasket addButton">
-											Добавить в корзину</button>
+											${add_to_basket}</button>
 
 									
 									<!--/dish-buttons -->

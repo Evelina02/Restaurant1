@@ -144,7 +144,7 @@
 									method="post">
 									<input type="hidden" name="command" value="cancel_order">
 									<input type="hidden" name="order_id" value="${order.id}">
-									<button class="btn btn-danger" type="submit" style="width:50px;">Отменить</button>
+									<button class="btn btn-danger" type="submit" style="width:250px;">Отменить</button>
 
 								</form>
 
