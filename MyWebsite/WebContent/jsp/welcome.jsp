@@ -15,6 +15,7 @@
 <style type="text/css">
 
 #welcome{
+	
 	height:800px;
 	background-image: url(../img/fon.jpg);
 	background-repeat: no-repeat;
@@ -38,8 +39,10 @@
 </style>
 <title>${restaurant_name}</title>
 </head>
+
 <body id="welcome">
 <c:import url="header.jsp"/>
+
 <fmt:setLocale value="${sessionScope.local}" />
 <fmt:setBundle basename="resources.localization.local" var="loc" />
 <fmt:message bundle="${loc}" key="register.success_message" var="register_success" />
@@ -72,7 +75,9 @@
 	
         <div class="call-to row no-gutters" >
           <div class="col-12">
-            <h1>${welcome_text}</h1>
+            <h1 style="font-family: 'Lobster', cursive;
+            	letter-spacing: 6px;">
+            	${welcome_text}</h1>
           </div>
         </div>
 

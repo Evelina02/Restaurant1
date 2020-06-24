@@ -10,6 +10,7 @@
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="${pageContext.request.contextPath}/css/basket.css" type="text/css" rel="stylesheet">
     
@@ -29,7 +30,9 @@
     
  <style> 
 
- 
+ body{
+font-family: 'Lobster', cursive;
+ }
 
   </style>   
     
@@ -98,11 +101,21 @@
 						</td>
 						
 						<td><c:forEach items="${order.basket.dishes}" var="dish">
-								<div class="dish-title">
+										<div class="dish-title">
 
-									<p>${dish.name}*${order.basket.countDishById.get(dish.id)}</p>
-								</div>
-							</c:forEach></td>
+											<p>${dish.name}*${order.basket.countDishById.get(dish.id)}
+												<br>
+												<c:if test="${not empty dish.refusalOfIngredients}">
+													<span style="color: red; font-size: 14px;"> Отказ: <c:forEach
+															items="${dish.refusalOfIngredients}"
+															var="refusedIngredient">
+										${refusedIngredient},									
+									</c:forEach>
+													</span>
+												</c:if>
+											</p>
+										</div>
+									</c:forEach></td>
 
 
 

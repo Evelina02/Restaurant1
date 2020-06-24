@@ -14,14 +14,17 @@
 	crossorigin="anonymous">
 <link href="${pageContext.request.contextPath}/css/style.css"
 	type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
 
 <style>
 body {
-	font-family: 'Montserrat', sans-serif;
+	/*font-family: 'Montserrat', sans-serif;*/
+	
 	margin: 0px -15px;
 }
 
 header {
+	font-family: 'Lobster', cursive;
 	height: 75px;
 	margin: 0 -15px;
 	margin-right: 0px;

@@ -14,11 +14,13 @@ import by.restaurant.controller.constantname.JspPageName;
 import by.restaurant.controller.constantname.RequestParameterName;
 import by.restaurant.controller.constantname.SessionAttributeName;
 import by.restaurant.service.DishService;
+import by.restaurant.service.OrderService;
+import by.restaurant.service.ServiceException;
+import by.restaurant.service.UserService;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class ShowBasket implements Command {
 
-	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.localization.local");
@@ -32,10 +34,26 @@ public class ShowBasket implements Command {
 //		if (message != null && message.equals(RequestParameterName.BASKET_CLEARED)) {
 //			request.setAttribute(RequestParameterName.BASKET_CLEARED, resourceBundle.getString("basket_cleared"));
 //		}
-		session.setAttribute(SessionAttributeName.COMMAND, "show_basket");
+		try {
+// баллы		
+			ServiceFactory serviceFactory = ServiceFactory.getInstance();
+			UserService userService = serviceFactory.getUserService();
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.BASKET_PAGE);
-		dispatcher.forward(request, response);
+			int idUser = (int) session.getAttribute(SessionAttributeName.ID_USER);
+			double loyaltyPoints = userService.getLoyaltyPointsById(idUser);
+
+			request.setAttribute(RequestParameterName.USER_LOYALTY_POINTS, loyaltyPoints);
+
+			session.setAttribute(SessionAttributeName.COMMAND, "show_basket");
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.BASKET_PAGE);
+			dispatcher.forward(request, response);
+
+		} catch (ServiceException e) {
+			// log
+			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
+			dispatcher.forward(request, response);
+		}
 
 	}
 

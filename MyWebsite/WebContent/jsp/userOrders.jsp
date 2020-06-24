@@ -29,8 +29,16 @@
     
  <style> 
 
+body{
+	font-size: 16px;
+}
  
-
+.image{
+text-align: center;
+ margin: 50px auto;
+  font-size: 22px;
+  font-family: 'Lobster', cursive;
+}
   </style>   
     
     
@@ -60,7 +68,10 @@
 	<div class="container-fluid">	
 	<c:choose>
 			<c:when test="${empty requestScope.allUserOrders}">
-				<h1 style="text-align: center;">${no_orders}</h1>
+				<div class="image">
+					<h1>${no_orders}</h1>
+					<img src="https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/11001410572/original/shopping109.png?1455021247">
+				</div>
 			</c:when>
 			<c:otherwise>
 	
@@ -87,12 +98,24 @@
 							<p>${order.id}</p>
 
 						</td>
-						<td><c:forEach items="${order.basket.dishes}" var="dish">
-								<div class="dish-title">
+						<td>
+							<c:forEach items="${order.basket.dishes}" var="dish">
+										<div class="dish-title">
 
-									<p>${dish.name}*${order.basket.countDishById.get(dish.id)}</p>
-								</div>
-							</c:forEach></td>
+											<p>${dish.name}*${order.basket.countDishById.get(dish.id)}
+												<br>
+												<c:if test="${not empty dish.refusalOfIngredients}">
+													<span style="color: red; font-size: 14px;"> 
+													Отказ: 
+													<c:forEach items="${dish.refusalOfIngredients}"
+															var="refusedIngredient">
+										${refusedIngredient},									
+									</c:forEach>
+													</span>
+												</c:if>
+											</p>
+										</div>
+									</c:forEach></td>
 
 
 

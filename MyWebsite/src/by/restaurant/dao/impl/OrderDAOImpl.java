@@ -32,16 +32,15 @@ public class OrderDAOImpl implements OrderDAO {
 	private ConnectionPool pool = ConnectionPool.getInstance();
 
     private static final String SELECT_DISHES_OF_ORDER = 
-    		"select * from dish as d "
-    	    + "join order_dish od on od.id_dish=d.id_dish "
-    	    + "where id_order=?";
+    		"select * from dish as d join order_dish od on od.id_dish=d.id_dish "
+    		+ "where od.id_order=?";
 
 	private static final String SELECT_ALL_ORDERS= 
 			"select * from orders o join users u on o.id_client=u.id_user order by id_order desc";
 
     private static final String INSERT_ORDER = 
     		"insert into orders(id_client, order_time, delivery_time, price, payment_type, "
-    		+ "delivery_type, state) values(?, ?, ?, ?, ?, ?, ?)";
+    		+ "delivery_type, state, used_loyalty_points) values(?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String INSERT_ORDER_DISH = 
     		"insert into order_dish(id_order, id_dish, amount) "
@@ -66,7 +65,15 @@ public class OrderDAOImpl implements OrderDAO {
 	private static final String INSERT_REFUSALS_OF_INGREDIENTS = 
     		"insert into refusal_of_ingredients(id_order, id_dish, ingredient) "
     		+ "values(?, ?, ?)";
+
+	private static final String SELECT_REFUSED_INGREDIENTS = 
+			"select ingredient from refusal_of_ingredients "
+			+ "where id_order=? and id_dish=?";
+
+//	private static final String WHERE_ID_DISH = 
+//			"and d.id_dish=?";
  
+	
 	
 	@Override
 	public boolean addOrder(Order order, int idUser) throws DAOException {
@@ -86,13 +93,16 @@ public class OrderDAOImpl implements OrderDAO {
 			ps.setString(5, order.getPaymentType().name());
 			ps.setString(6, order.getDeliveryType().name());
 			ps.setString(7, order.getState().name());
+			
+			if(order.getBasket().isUsedLoyaltyPoints()) {//+
+				ps.setInt(8, 1);
+			}
 
 			ps.executeUpdate();
 
 			order.setId(selectIdOrderByOrderTime(connection, order.getOrderTime()));
 
 			insertOrderDish(connection, order.getBasket(), order.getId());
-			
 			
 			insertRefusalOfIngredients(connection, order.getId(), order.getBasket().getDishes());
 			
@@ -124,22 +134,22 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	private void insertRefusalOfIngredients(Connection connection, int idOrder, Set<Dish> dishes) throws SQLException {
-
-		PreparedStatement ps = connection.prepareStatement(INSERT_REFUSALS_OF_INGREDIENTS);
 		
 		for(Dish dish: dishes) {
 			
 			if(dish.getRefusalOfIngredients() != null) {
 				
+				PreparedStatement ps = connection.prepareStatement(INSERT_REFUSALS_OF_INGREDIENTS);
+				
 				for(String refusedIngredient: dish.getRefusalOfIngredients()) {
 					ps.setInt(1, idOrder);
 					ps.setInt(2, dish.getId());
 					ps.setString(3, refusedIngredient);
+					ps.executeUpdate();
 				}
+				ps.close();
 			}
 		}
-		ps.close();
-
 	}
 
 	@Override
@@ -216,6 +226,7 @@ public class OrderDAOImpl implements OrderDAO {
 		order.setPaymentType(PaymentType.valueOf(rs.getString(6)));
 		order.setDeliveryType(DeliveryType.valueOf(rs.getString(7)));
 		order.setState(OrderState.valueOf(rs.getString(8)));
+		order.getBasket().setUsedLoyaltyPoints(rs.getBoolean(9));//+
 		order.setUserLogin(rs.getString("login"));
 		return order;
 	}
@@ -234,7 +245,7 @@ public class OrderDAOImpl implements OrderDAO {
 		ResultSet rs = ps.executeQuery();
 		
 		while(rs.next()) {
-			dishes.add(createDishFromResultSet(rs));
+			dishes.add(createDishFromResultSet(id_order, rs));
 			countDishById.put(rs.getInt("id_dish"), rs.getInt(10));
 		}
 		
@@ -245,7 +256,7 @@ public class OrderDAOImpl implements OrderDAO {
 		return basket;
 	}
 
-	private Dish createDishFromResultSet(ResultSet rs) throws SQLException, ConnectionPoolException {
+	private Dish createDishFromResultSet(int idOrder, ResultSet rs) throws SQLException, ConnectionPoolException {
 		
 		Dish dish = new Dish();
 
@@ -256,7 +267,34 @@ public class OrderDAOImpl implements OrderDAO {
 		dish.setCategory(Category.valueOf(rs.getString("category")));
 		dish.setAmount(rs.getString(6));//amount
 		
+		dish.setRefusalOfIngredients(createRefusedIngredients(idOrder, dish.getId()));
 		return dish;
+	}
+
+	private Set<String> createRefusedIngredients(int idOrder, int idDish) throws SQLException, ConnectionPoolException {
+
+		Set<String> refusedIngredients = null;
+		
+		Connection connection = pool.takeConnection();;
+
+		PreparedStatement ps = connection.prepareStatement(SELECT_REFUSED_INGREDIENTS);
+		ps.setInt(1, idOrder);
+		ps.setInt(2, idDish);
+
+		ResultSet rs = ps.executeQuery();
+		
+		if (rs != null) {
+			refusedIngredients = new HashSet<>();
+
+			while (rs.next()) {
+				refusedIngredients.add(rs.getString(1));
+			}
+		}
+		
+		pool.closeConnection(connection, ps, rs);
+
+
+		return refusedIngredients;
 	}
 
 	@Override

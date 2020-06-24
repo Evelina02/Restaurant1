@@ -41,4 +41,8 @@ public interface UserService {
 	String getEmailById(int idUser) throws ServiceException;
 
 	int getIdByLogin(String login) throws ServiceException;
+
+	double getLoyaltyPointsById(int idUser) throws ServiceException;
+
+	boolean updateLoyaltyPoints(int idUser, double loyaltyPoints) throws ServiceException;
 }

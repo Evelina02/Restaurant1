@@ -72,9 +72,32 @@ public class CreateOrder implements Command {
 		try {
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			OrderService orderService = serviceFactory.getOrderService();
-
+			
 			int idUser = (int) session.getAttribute(SessionAttributeName.ID_USER);
 			boolean added = orderService.addOrder(order, idUser);
+
+			
+			//для баллов
+			UserService userService = serviceFactory.getUserService();
+
+			double orderPrice = basket.getTotalPrice();
+			double loyaltyPoints = userService.getLoyaltyPointsById(idUser);
+			
+			if(orderPrice > 10 && orderPrice <= 30) {
+				loyaltyPoints += orderPrice * 0.01;
+			}else if(orderPrice > 30 && orderPrice <= 60) {
+				loyaltyPoints += orderPrice * 0.03;
+			}else if(orderPrice > 60 && orderPrice <= 100) {
+				loyaltyPoints += orderPrice * 0.05;
+			}else if(orderPrice > 100) {
+				loyaltyPoints += orderPrice * 0.07;
+			}
+			
+			userService.updateLoyaltyPoints(idUser, loyaltyPoints);
+			
+			
+			
+			
 
 			if (!added) {
 				request.setAttribute(RequestParameterName.CREATE_ORDER_ERROR_MESSAGE,
@@ -89,7 +112,6 @@ public class CreateOrder implements Command {
 
 				session.removeAttribute(SessionAttributeName.BASKET);
 
-				UserService userService = serviceFactory.getUserService();
 				String userEmail = userService.getEmailById(idUser);
 				int idOrder = orderService.getIdOrderByOrderTime(orderTime);
 

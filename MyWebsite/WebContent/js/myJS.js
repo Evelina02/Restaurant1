@@ -131,18 +131,24 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 });
 
 	
-	$("#myFilter").on('change', function() {
-      var selected = $("#myFilter").val().toString(); //get all options and convert to string
+	$(".multiple_select").on('change', function() {
+		//var selected = $("#myFilter").val().toString(); //get all options and convert to string
+		var selected = $(this).val().toString(); //работает
+
+//		var s = $(this);
+//		var sss = $(this).parent();
+//		var document_style = $(this).parent().style;
+//		
+//		
+//      var document_style = document.documentElement.style;
+//      
+//      if(selected !== ""){
+//        document_style.setProperty('--text', "'Отказаться от: "+selected+"'");
+//      }else{
+//        document_style.setProperty('--text', "'Выберите ингредиенты'");
+//      }
       
-      var document_style = document.documentElement.style;
-      
-      //var document_style = $(this).style;
-      if(selected !== ""){
-        document_style.setProperty('--text', "'Отказаться от: "+selected+"'");
-      }else{
-        document_style.setProperty('--text', "'Выберите ингредиенты'");
-      }
-      
+		
       
 		var dishId = $(this).parent().find('#dishId').val();
 		var command = "refuse_of_ingredients";
@@ -156,12 +162,51 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 				var obj = JSON.parse(result)
 
 				if(obj.status == "yes"){
-					alert("Ok!")
+					//alert("Ok!")
 				}else{
-					alert("No!")
+					//alert("No!")
 				}
 			}	
 		});
-      
-      
 	});
+	
+	
+	
+	$(document).ready(function(){
+		$('.use_loyalty_points').click(function () {
+
+//			var loyalty_points_value = $(this).parent().find('#loyalty_points').innerHTML;
+
+			
+			var $loyalty_points_value = $(this).parent().find('#loyalty_points');
+			var count = $(this).parent().find('#countOfPoints').val();
+
+			if(count <= 0 || count > loyalty_points_value){
+				alert("Введите корректное число баллов!!!")
+			}
+			else{
+			
+				var command = "use_loyalty_points";
+				var $loyalty_points = $(this).parent().parent().find('#loyalty_points');
+				
+				$.ajax({
+					type: 'POST',
+					data: {command: command, count:count},
+					url:  'http://localhost:8080/MyWebsite/AjaxController',
+					success : function(result){
+						
+						var obj = JSON.parse(result)
+						
+						$('#totalPrice').html(obj.newTotalPrice);
+						//остаток баллов
+						$loyalty_points.html(obj.newLoyaltyPoints);
+			
+					}	
+				});
+			}
+		});
+});
+	
+	
+	
+	

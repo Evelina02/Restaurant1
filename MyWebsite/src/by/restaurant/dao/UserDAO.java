@@ -23,5 +23,7 @@ public interface UserDAO {
 	String getEmailByLogin(String login) throws DAOException;
 	String getEmailById(int idUser)  throws DAOException;
 	int getIdByLogin(String login) throws DAOException;
+	double getLoyaltyPointsById(int idUser) throws DAOException;
+	int updateUserLoyaltyPoints(int idUser, double loyaltyPoints) throws DAOException;
 	
 }

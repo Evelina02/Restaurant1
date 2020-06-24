@@ -26,9 +26,16 @@
     
  <style> 
 
-:root
+.image{
+text-align: center;
+ margin: 50px auto;
+  font-size: 22px;
+  font-family: 'Lobster', cursive;
+}
+
+div .selectedIngredients
 {
-	--text: "Выберите ингредиенты";
+	--text: "Отказаться от:";
 }
 .multiple_select
 {
@@ -38,7 +45,7 @@
 	-webkit-appearance: menulist;
 	position: relative;
 }
-.multiple_select::before
+div .multiple_select::before
 {
 	content: var(--text);
 	display: block;
@@ -466,171 +473,6 @@ margin-bottom:5px;
 }
 
 
-/*
-.shopping-cart {
-  width: 750px;
-  height: 423px;
-  margin: 80px auto;
-  background: #FFFFFF;
-  box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.10);
-  border-radius: 6px;
- 
-  display: flex;
-  flex-direction: column;
-}
-.title {
-  height: 60px;
-  border-bottom: 1px solid #E1E8EE;
-  padding: 20px 30px;
-  color: #5E6977;
-  font-size: 18px;
-  font-weight: 400;
-}
- 
-.item {
-  padding: 20px 30px;
-  height: 120px;
-  display: flex;
-}
- 
-.item:nth-child(3) {
-  border-top:  1px solid #E1E8EE;
-  border-bottom:  1px solid #E1E8EE;
-}
-.buttons {
-  position: relative;
-  padding-top: 30px;
-  margin-right: 60px;
-}
-.delete-btn{
-  display: inline-block;
-  Cursor: pointer;
-  width: 20px;
-  height: 20px;
-  background: url("") no-repeat center;
-}
- 
-
-.is-active {
-  animation-name: animate;
-  animation-duration: .8s;
-  animation-iteration-count: 1;
-  animation-timing-function: steps(28);
-  animation-fill-mode: forwards;
-}
- 
-@keyframes animate {
-  0%   { background-position: left;  }
-  50%  { background-position: right; }
-  100% { background-position: right; }
-}
-.image {
-  margin-right: 50px;
-    position: relative;
-	overflow: hidden;
-}
- 
-.image img{
-    position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	max-width: 30%;
-	max-height: 30%;
-	margin: auto;
-	transition: transform .4s ease-out;
-}
- 
-
-.description {
-  padding-top: 10px;
-  margin-right: 60px;
-  width: 115px;
-}
- 
-.description span {
-  display: block;
-  font-size: 14px;
-  color: #43484D;
-  font-weight: 400;
-}
- 
-.description span:first-child {
-  margin-bottom: 5px;
-}
-.description span:last-child {
-  font-size: 10px;
-  font-weight: 300;
-  margin-top: 8px;
-  color: #86939E;
-}
-.quantity {
-  padding-top: 20px;
-  margin-right: 60px;
-}
-.quantity input {
-  -webkit-appearance: none;
-  border: none;
-  text-align: center;
-  width: 32px;
-  font-size: 16px;
-  color: #43484D;
-  font-weight: 300;
-}
- 
-button[class*=btn] {
-  width: 30px;
-  height: 30px;
-  background-color: #E1E8EE;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-.minus-btn img {
-  margin-bottom: 3px;
-}
-.plus-btn img {
-  margin-top: 2px;
-}
- 
-button:focus,
-input:focus {
-  outline:0;
-}
-.total-price {
-  width: 83px;
-  padding-top: 27px;
-  text-align: center;
-  font-size: 16px;
-  color: #43484D;
-  font-weight: 300;
-}
-@media (max-width: 800px) {
-  .shopping-cart {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-  }
-  .item {
-    height: auto;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .image img {
-    width: 30%;
-    height: 30%;
-  }
-
-  .quantity,
-  .description {
-    width: 100%;
-    text-align: center;
-    margin: 6px 0;
-  }
-
-}
-*/
 
 
   </style>   
@@ -667,7 +509,10 @@ input:focus {
 	<div class="container-fluid">
 		<c:choose>
 			<c:when test="${sessionScope.basket == null}">
-				<h1 style="text-align: center;">${empty_basket}</h1>
+				<div class="image">
+					<h1>${empty_basket}</h1>
+					<img src="https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/11001410572/original/shopping109.png?1455021247">
+				</div>
 			</c:when>
 			<c:otherwise>
 				<table class="table table-hover">
@@ -695,7 +540,8 @@ input:focus {
 								<td>
 									<form action="${pageContext.request.contextPath}/Controller"
 										method="post">
-										<input type="hidden" name="command"	value="delete_dish_from_basket"> <input type="hidden"
+										<input type="hidden" name="command"	value="delete_dish_from_basket">
+										 <input type="hidden"
 											name="dishId" value="${dish.id}">
 
 										<button class="delete-btn">
@@ -725,7 +571,7 @@ input:focus {
 																		
 										<button class="minus btn btn-danger"  type="button">-</button>
 										<input type="text"  name="count" id="count" class="form-control"
-											value="${basket.countDishById.get(dish.id)}">
+											value="${basket.countDishById.get(dish.id)}" disabled>
 										<button class="plus btn btn-success" type="button">+</button>
 									
 									
@@ -743,7 +589,8 @@ input:focus {
 								</td>
 
 
-								<td><c:forEach items="${dish.ingredients}" var="ingredient">
+								<td>
+									<c:forEach items="${dish.ingredients}" var="ingredient">
 										<ul>
 											<li>${ingredient}</li>
 										</ul>
@@ -753,7 +600,7 @@ input:focus {
 
 								<c:if test="${not empty dish.ingredients}">
 									<td>
-										<div style="padding: 20px">
+										<div style="padding: 20px" class="selectedIngredients">
 											<input type="hidden" id="dishId" value="${dish.id}" /> 
 											<select
 												name="ingredientsForRefusal" id="myFilter"
@@ -772,10 +619,24 @@ input:focus {
 						</c:forEach>
 
 						<tr class="table-success">
-							<td colspan="4">${total_price_text}</td>
+							<td colspan="3">${total_price_text}</td>
 							<td colspan="2"><span id="totalPrice"> 
-							   <fmt:formatNumber value="${basket.totalPrice}" type="number"/>
+							   <fmt:formatNumber value="${basket.totalPrice}" type="number"/> руб
 							</span></td>
+							<td>
+							<div>
+								У вас 
+							
+								<span id="loyalty_points">${userLoyaltyPoints}</span> баллов
+								<br>
+								
+								<!-- max min для текстового поля -->
+									<input type="text" id="countOfPoints" pattern="(0|[1-9]\d{0,3})([.,]\d{1,2})$">
+									<button class="use_loyalty_points btn-success"  type="button" style="width: 150px;">ИСПОЛЬЗОВАТЬ</button>
+					
+									
+								</div>
+							</td>
 						</tr>
 						<tr>
 							<td>

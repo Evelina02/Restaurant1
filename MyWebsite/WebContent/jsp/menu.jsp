@@ -121,7 +121,7 @@ padding-top:0;
    padding-top:0;  
 height:40px;
     color: rgb(217, 0, 5);
-    font-size: 20px;
+    font-size: 22px;
     margin-bottom:10px;
    }
 
@@ -328,30 +328,8 @@ box-shadow: 0px 0px 20px #000;
 -moz-border-radius: 15px;
 border-radius: 15px;
 }
-  /*
-.close{
-display:block;
-position:absolute;
-top:-12px;
-right:5px;
-width:25px;
-height:25px;
-line-height:28px;
-color:#fff;
-background:#1BA600;
-cursor:pointer;
--webkit-border-radius: 15px;
--moz-border-radius: 15px;
--ms-border-radius: 15px;
--o-border-radius: 15px;
-border-radius: 15px;
--moz-box-shadow: 1px 1px 3px #000;
--webkit-box-shadow: 1px 1px 3px #000;
-box-shadow: 1px 1px 3px #000;
-}
-.close:hover {
-background-color:#f30;
-} */
+
+
     </style>
 
 </head>
@@ -470,7 +448,7 @@ background-color:#f30;
 
 										<div class="amount">
 											<button class="minus btn btn-danger" type="button">-</button>
-											<input type="text" name="count" class="count" value="1">
+											<input type="text" name="count" class="count" value="1" disabled>
 											<button class="plus btn btn-success" type="button">+</button>
 										</div>
 
@@ -524,13 +502,13 @@ background-color:#f30;
 
 					
 										<input type="hidden" name="command" class="command" value="add_dish_to_basket">
-										<input type="hidden" name="dishId" class="dishId" value="${hotDish.id}">
+										<input type="hidden" name="dishId" class="dishId" value="${hotDish.id}" >
 										<input type="hidden" name="dishCategory" class="dishCategory" value="hotDishes">
 
 
 										<div class="amount">
 											<button class="minus btn btn-danger" type="button">-</button>
-											<input type="text" name="count" class="count" value="1">
+											<input type="text" name="count" class="count" value="1" disabled>
 											<button class="plus btn btn-success" type="button">+</button>
 										</div>
 
@@ -590,7 +568,7 @@ background-color:#f30;
 
 										<div class="amount">
 											<button class="minus btn btn-danger" type="button">-</button>
-											<input type="text" name="count" class="count" value="1">
+											<input type="text" name="count" class="count" value="1" disabled>
 											<button class="plus btn btn-success" type="button">+</button>
 										</div>
 
@@ -650,7 +628,7 @@ background-color:#f30;
 
 										<div class="amount">
 											<button class="minus btn btn-danger" type="button">-</button>
-											<input type="text" name="count" class="count" value="1">
+											<input type="text" name="count" class="count" value="1" disabled>
 											<button class="plus btn btn-success" type="button">+</button>
 										</div>
 
@@ -709,7 +687,7 @@ background-color:#f30;
 
 										<div class="amount">
 											<button class="minus btn btn-danger" type="button">-</button>
-											<input type="text" name="count" class="count" value="1">
+											<input type="text" name="count" class="count" value="1" disabled>
 											<button class="plus btn btn-success" type="button">+</button>
 										</div>
 
@@ -767,7 +745,7 @@ background-color:#f30;
 
 										<div class="amount">
 											<button class="minus btn btn-danger" type="button">-</button>
-											<input type="text" name="count" class="count" value="1">
+											<input type="text" name="count" class="count" value="1" disabled>
 											<button class="plus btn btn-success" type="button">+</button>
 										</div>
 
@@ -843,7 +821,7 @@ background-color:#f30;
 
 										<div class="amount">
 											<button class="minus btn btn-danger" type="button">-</button>
-											<input type="text" name="count" class="count" value="1">
+											<input type="text" name="count" class="count" value="1" disabled>
 											<button class="plus btn btn-success" type="button">+</button>
 										</div>
 
@@ -858,8 +836,6 @@ background-color:#f30;
 						</div>
 					</div>
 				</div>
-
-
 
 			</c:if>       
  </div>                            

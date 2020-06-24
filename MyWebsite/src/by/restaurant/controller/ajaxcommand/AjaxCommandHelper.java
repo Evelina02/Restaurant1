@@ -7,6 +7,7 @@ import by.restaurant.controller.ajaxcommand.impl.AddDishToBasket;
 import by.restaurant.controller.ajaxcommand.impl.ChangeAmountOfDish;
 import by.restaurant.controller.ajaxcommand.impl.NoSuchCommand;
 import by.restaurant.controller.ajaxcommand.impl.RefuseOfIngredients;
+import by.restaurant.controller.ajaxcommand.impl.UseLoyaltyPoints;
 
 
 public class AjaxCommandHelper {
@@ -20,6 +21,7 @@ public class AjaxCommandHelper {
 		ajaxCommands.put(AjaxCommandName.CHANGE_AMOUNT_OF_DISH, new ChangeAmountOfDish());
 		ajaxCommands.put(AjaxCommandName.ADD_DISH_TO_BASKET, new AddDishToBasket());
 		ajaxCommands.put(AjaxCommandName.REFUSE_OF_INGREDIENTS, new RefuseOfIngredients());
+		ajaxCommands.put(AjaxCommandName.USE_LOYALTY_POINTS, new UseLoyaltyPoints());
 
 		ajaxCommands.put(AjaxCommandName.NO_SUCH_COMMAND, new NoSuchCommand());
 	}

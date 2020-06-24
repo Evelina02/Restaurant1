@@ -62,6 +62,12 @@ public class UserDAOImpl implements UserDAO {
 	private static final String SELECT_ID_BY_LOGIN = 
 			"select id_user from users where login=?";
 
+	private static final String SELECT_LOYALTY_POINTS_BY_ID = 
+			"select loyalty_points from users where id_user=?";
+
+	private static final String UPDATE_LOYALTY_POINTS = 
+			"update users set loyalty_points=? where id_user=?";
+
 	@Override
 	public int addUser(User user) throws DAOException {
 
@@ -586,6 +592,63 @@ public class UserDAOImpl implements UserDAO {
 		}
 
 		return idUser;
+	}
+
+	@Override
+	public double getLoyaltyPointsById(int idUser) throws DAOException {
+
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		double loyaltyPoints = 0;
+
+		try {
+
+			connection = pool.takeConnection();
+			ps = connection.prepareStatement(SELECT_LOYALTY_POINTS_BY_ID);
+			ps.setInt(1, idUser);
+
+			rs = ps.executeQuery();
+			rs.next();
+			loyaltyPoints = rs.getDouble(1);
+
+		} catch (SQLException e) {
+			throw new DAOException("Error during getting loyaltyPoints of user from database!", e);
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("Error during getting connection from connection pool!", e);
+		} finally {
+			pool.closeConnection(connection, ps, rs);
+		}
+
+		return loyaltyPoints;
+	}
+
+	@Override
+	public int updateUserLoyaltyPoints(int idUser, double loyaltyPoints) throws DAOException {
+
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		int status = 0;
+
+		try {
+			connection = pool.takeConnection();
+
+			ps = connection.prepareStatement(UPDATE_LOYALTY_POINTS);
+			
+			ps.setDouble(1, loyaltyPoints);
+			ps.setInt(2, idUser);
+
+			status = ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DAOException("Error during updatint loyalty points of user in database!", e);
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("Error during getting connection from connection pool!", e);
+		} finally {
+			pool.closeConnection(connection, ps, rs);
+		}
+		return status;
 	}
 
 }

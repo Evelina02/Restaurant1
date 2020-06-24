@@ -75,6 +75,7 @@ public final class RequestParameterName {
 	public static final String ORDER_CLOSED = "orderClosed";
 	public static final String NOTHING_FOUND_MESSAGE = "nothingFound";
 	public static final String DATE_TIME = "dateTime";
+	public static final String USER_LOYALTY_POINTS = "userLoyaltyPoints";
 
 
 }

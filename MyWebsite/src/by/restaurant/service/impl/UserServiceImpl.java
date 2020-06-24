@@ -375,4 +375,54 @@ public class UserServiceImpl implements UserService {
        }
 		 return idUser;
 	}
+
+	
+	@Override
+	public double getLoyaltyPointsById(int idUser) throws ServiceException {
+		
+		if(!Validator.validatePositiveNumber(idUser)) {
+			//log
+			throw new ValidatorException("Id of user is a negative number!");
+		}
+		
+		double loyaltyPoints;
+		try {
+			 DAOFactory daoFactory = DAOFactory.getInstance();
+			 UserDAO userDAO = daoFactory.getUserDAO();
+			 loyaltyPoints = userDAO.getLoyaltyPointsById(idUser);
+		} catch (DAOException e) {
+			 throw new ServiceException("Error during getting loyalty points of user (in service)", e);
+       }
+		 return loyaltyPoints;
+	}
+
+	
+	@Override
+	public boolean updateLoyaltyPoints(int idUser, double loyaltyPoints) throws ServiceException {
+		
+		if(!Validator.validatePositiveNumber(idUser)) {
+			//log
+			throw new ValidatorException("Id of user is a negative number!");
+		}
+		if(!Validator.validatePositiveNumber(loyaltyPoints)) {
+			//log
+			throw new ValidatorException("Loyalty points of user is a negative number!");
+		}
+		
+		boolean updated;
+
+		try {
+			DAOFactory daoFactory = DAOFactory.getInstance();
+			UserDAO userDAO = daoFactory.getUserDAO();
+			int status = userDAO.updateUserLoyaltyPoints(idUser, loyaltyPoints);
+			if(status == 1) {
+				updated = true;
+			 }else {
+				updated = false;
+			 }
+		} catch (DAOException e) {
+			throw new ServiceException("Error during updating loyalty points of user in service", e);
+		}
+		return updated;
+	}
 }
