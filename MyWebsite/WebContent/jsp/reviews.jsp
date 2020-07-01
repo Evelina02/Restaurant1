@@ -203,6 +203,14 @@ margin-bottom: 0px;
 						</div>
 					</div>
 				</c:if>
+				
+				<c:if test="${empty sessionScope.role or sessionScope.role == null}">
+				Для того, чтобы оставить отзыв, пожалуйста, 
+					<a href="${pageContext.request.contextPath}/jsp/authorization.jsp">войдите!</a>
+								
+				</c:if>
+				
+				
 				<div class="panel">
 					<div class="panel-body">
 

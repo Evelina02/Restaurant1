@@ -155,10 +155,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean changePassword(int idUser, String oldPassword, String newPassword) throws ServiceException {
 		
-		if(!Validator.validatePassword(oldPassword) || !Validator.validatePassword(newPassword)){
-			//log
-			throw new ValidatorException("Password is not correct!");
-		}
+//		if(!Validator.validatePassword(oldPassword) || !Validator.validatePassword(newPassword)){
+//			//log
+//			throw new ValidatorException("Password is not correct!");
+//		}
 		
 		boolean changed;
 		 try {

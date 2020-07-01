@@ -47,10 +47,10 @@ public class DishServiceImpl implements DishService {
 	@Override
 	public List<Dish> searchDishByPartOfName(String partOfName) throws ServiceException {
 
-		if(!Validator.validateString(partOfName)) {
-			//log
-			throw new ValidatorException("Searching dish is null!");
-		}
+//		if(!Validator.validateString(partOfName)) {
+//			//log
+//			throw new ValidatorException("Searching dish is null!");
+//		}
 		
 		List<Dish> dishes;
 		try {

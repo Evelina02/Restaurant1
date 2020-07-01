@@ -4,7 +4,6 @@
 <html>
 <head>
 <meta charset="utf-8">
-<%@ page buffer="812kb" autoFlush="true" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -408,8 +407,8 @@ input {
 				</form>
 				
 				
-				<form action="${pageContext.request.contextPath}/Controller" method="post">
-		
+		<!--		<form action="${pageContext.request.contextPath}/Controller" method="post">
+		 
 		XML:
 		<input type="file" class="form-control-file" name="fileName" style="height:40px; display: inline; width:250px;">
 		<div class="btn-group" role="group">
@@ -418,7 +417,7 @@ input {
 				class="btn btn-dark" style="display: inline; width:150px; height:40px;">Импорт</button>
 				</div>
 				</form>
-			
+		-->	
 		<table class="table table-hover">
 			<thead class="thead-dark">
 				<tr>

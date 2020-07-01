@@ -175,10 +175,8 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 	$(document).ready(function(){
 		$('.use_loyalty_points').click(function () {
 
-//			var loyalty_points_value = $(this).parent().find('#loyalty_points').innerHTML;
+			var loyalty_points_value = $(this).parent().find('#loyalty_points').text();
 
-			
-			var $loyalty_points_value = $(this).parent().find('#loyalty_points');
 			var count = $(this).parent().find('#countOfPoints').val();
 
 			if(count <= 0 || count > loyalty_points_value){
@@ -186,9 +184,26 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 			}
 			else{
 			
-				var command = "use_loyalty_points";
-				var $loyalty_points = $(this).parent().parent().find('#loyalty_points');
+				var newLoyaltyPoints = loyalty_points_value - count;
 				
+				var totalPriceElement =document.getElementById('totalPrice');
+				var totalPrice = totalPriceElement.innerHTML;
+				var newTotalPrice =  parseFloat(totalPrice) - count;
+
+				var $loyalty_points = $(this).parent().parent().find('#loyalty_points');
+	
+				
+				
+				
+				$('#totalPrice').html(newTotalPrice);
+				//остаток баллов
+				$loyalty_points.html(newLoyaltyPoints);
+	
+				
+				
+/*			
+ var command = "use_loyalty_points";
+ 
 				$.ajax({
 					type: 'POST',
 					data: {command: command, count:count},
@@ -203,10 +218,34 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 			
 					}	
 				});
+				
+*/
 			}
 		});
 });
 	
 	
 	
+	
+	
+	
+	
+	$(document).ready(function(){
+		$('.reset_loyalty_points').click(function () {
+
+			
+			var originalLoyaltyPoints = (document.getElementById('original_loyalty_points')).value;
+			$('#loyalty_points').html(originalLoyaltyPoints);
+
+			var originalTotalPrice = (document.getElementById('original_total_price')).value;
+			$('#totalPrice').html(originalTotalPrice);
+			
+			
+
+			
+			
+			// очистить поле
+			
+		});
+});
 	

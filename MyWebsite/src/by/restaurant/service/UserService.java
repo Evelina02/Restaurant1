@@ -1,8 +1,6 @@
 package by.restaurant.service;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import by.restaurant.bean.Review;
 import by.restaurant.bean.User;
 

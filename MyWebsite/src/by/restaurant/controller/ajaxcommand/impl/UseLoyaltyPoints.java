@@ -55,11 +55,12 @@ public class UseLoyaltyPoints implements AjaxCommand {
 			double oldLoyaltyPoints = userService.getLoyaltyPointsById(idUser);
 			double newLoyaltyPoints = oldLoyaltyPoints - countOfPoints;
 
-			userService.updateLoyaltyPoints(idUser, newLoyaltyPoints);
+			//в базу потом
+			//userService.updateLoyaltyPoints(idUser, newLoyaltyPoints);
 
 			//3
 	
-			basket.setUsedLoyaltyPoints(true);
+			// это тоже потом basket.setUsedLoyaltyPoints(true);
 			responseToJsp = "{\"newLoyaltyPoints\":\"" + newLoyaltyPoints + "\",\"newTotalPrice\":\"" + newTotalPrice + "\"}";
 		
 			

@@ -5,8 +5,6 @@
 <head>
 <meta charset="utf-8">
 
-<%@ page buffer="812kb" autoFlush="true" %>
-
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     
@@ -620,19 +618,22 @@ margin-bottom:5px;
 
 						<tr class="table-success">
 							<td colspan="3">${total_price_text}</td>
-							<td colspan="2"><span id="totalPrice"> 
-							   <fmt:formatNumber value="${basket.totalPrice}" type="number"/> руб
-							</span></td>
+							<td colspan="2"><span id="totalPrice">${basket.totalPrice}</span> 
+							   руб
+							<input type="hidden" id="original_total_price" value="${basket.totalPrice}">
+							   
+							</td>
 							<td>
 							<div>
 								У вас 
 							
 								<span id="loyalty_points">${userLoyaltyPoints}</span> баллов
+								<input type="hidden" id="original_loyalty_points" value="${userLoyaltyPoints}">
 								<br>
 								
-								<!-- max min для текстового поля -->
 									<input type="text" id="countOfPoints" pattern="(0|[1-9]\d{0,3})([.,]\d{1,2})$">
 									<button class="use_loyalty_points btn-success"  type="button" style="width: 150px;">ИСПОЛЬЗОВАТЬ</button>
+									<button class="reset_loyalty_points btn-danger"  type="button" style="width: 150px;">СБРОСИТЬ</button>
 					
 									
 								</div>

@@ -520,23 +520,23 @@ function validateForm(form){
 				<div class="checkout-header">
 					<h1 class="checkout-title">${changing_password}</h1>
 				</div>
-
+<!-- pattern = "^[a-zA-z]{1}[a-zA-Z1-9]{3,20}$"-->
 				<div id="login" class="validate-input">
 					<!--валидация   локализация -->
 					<input type="password" name="old_password"
 						class="placeholder input100" placeholder="${old_password}:"
 						data-validate="Старый пароль обязателен!" 
-						pattern = "^[a-zA-z]{1}[a-zA-Z1-9]{3,20}$" required
+						 required
 					>
 						 <input
 						type="password" name="new_password" class="placeholder input100"
 						placeholder="${new_password}:" data-validate="Введите пароль!" 
-						pattern = "^[a-zA-z]{1}[a-zA-Z1-9]{3,20}$" required
+						 required
 					>
 					<input type="password" name="new_password1"
 						class="placeholder input100" placeholder="${new_password_once_again}:"
 						data-validate="Введите пароль!" 
-						pattern = "^[a-zA-z]{1}[a-zA-Z1-9]{3,20}$" required
+						 required
 						> 
 						<input type="submit" value="${change_text}">
 				</div>

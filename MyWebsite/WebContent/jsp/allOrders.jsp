@@ -5,8 +5,6 @@
 <head>
 <meta charset="utf-8">
 
-<%@ page buffer="812kb" autoFlush="true" %>
-
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     

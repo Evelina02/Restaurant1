@@ -93,10 +93,12 @@ public class OrderDAOImpl implements OrderDAO {
 			ps.setString(5, order.getPaymentType().name());
 			ps.setString(6, order.getDeliveryType().name());
 			ps.setString(7, order.getState().name());
-			
-			if(order.getBasket().isUsedLoyaltyPoints()) {//+
-				ps.setInt(8, 1);
-			}
+			ps.setBoolean(8, order.getBasket().isUsedLoyaltyPoints());
+//			if(order.getBasket().isUsedLoyaltyPoints()) {//+
+//				
+//			}else {
+//				ps.setInt(8, 0);
+//			}
 
 			ps.executeUpdate();
 
