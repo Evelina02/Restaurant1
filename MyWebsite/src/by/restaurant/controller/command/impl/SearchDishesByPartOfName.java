@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Dish;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.constantname.JspPageName;
@@ -20,11 +24,12 @@ import by.restaurant.service.ServiceException;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class SearchDishesByPartOfName implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(SearchDishesByPartOfName.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		//ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.localization.local");
 		HttpSession session = request.getSession();
 
 		String partOfName = request.getParameter("partOfName");
@@ -47,7 +52,7 @@ public class SearchDishesByPartOfName implements Command {
 			dispatcher.forward(request, response);
 			}
 		} catch (ServiceException e) {
-			// log
+            logger.log(Level.ERROR, "Error during searching dish in menu", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}

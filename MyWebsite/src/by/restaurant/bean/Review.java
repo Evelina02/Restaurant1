@@ -115,7 +115,7 @@ public class Review implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Review [id=" + id + ", body=" + body + ", time=" + time + ", userLogin=" + userLogin + ", isDeleted="
+		return getClass().getName() + "@" + "[id=" + id + ", body=" + body + ", time=" + time + ", userLogin=" + userLogin + ", isDeleted="
 				+ isDeleted + "]";
 	}
 

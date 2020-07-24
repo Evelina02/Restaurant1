@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Dish;
 import by.restaurant.bean.Order;
 import by.restaurant.controller.command.Command;
@@ -23,8 +27,9 @@ import by.restaurant.service.factory.ServiceFactory;
 
 public class AdminMenu implements Command {
 
+	private static final Logger logger = LogManager.getLogger(AdminMenu.class);
 	private static final String DISH_CHANGED = "dish_changed";
-	private static final String DISH_ADDED = "dish_added";// добавить в localiz
+	private static final String DISH_ADDED = "dish_added";//
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -56,7 +61,7 @@ public class AdminMenu implements Command {
 			dispatcher.forward(request, response);
 
 		} catch (ServiceException e) {
-			// log
+            logger.log(Level.ERROR, "Error during opening the page menu for admin", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}

@@ -168,7 +168,7 @@ public class Order implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", orderTime=" + orderTime + ", deliveryTime=" + deliveryTime + ", paymentType="
+		return getClass().getName() + "@" + "[id=" + id + ", orderTime=" + orderTime + ", deliveryTime=" + deliveryTime + ", paymentType="
 				+ paymentType + ", deliveryType=" + deliveryType + ", state=" + state + ", userLogin=" + userLogin
 				+ ", basket=" + basket + "]";
 	}

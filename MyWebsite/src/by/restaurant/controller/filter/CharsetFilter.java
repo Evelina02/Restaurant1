@@ -10,6 +10,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import by.restaurant.controller.listener.PoolListener;
+
 @WebFilter(urlPatterns = {"/*"})
 public class CharsetFilter implements Filter{
 

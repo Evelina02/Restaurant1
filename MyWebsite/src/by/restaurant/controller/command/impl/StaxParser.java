@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Dish;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.constantname.JspPageName;
@@ -22,6 +25,8 @@ import by.restaurant.service.XMLService;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class StaxParser implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(StaxParser.class);
 
 	private static final String ADD_DISH_ERROR = "add_dish_error";
 

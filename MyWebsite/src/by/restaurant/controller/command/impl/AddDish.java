@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Basket;
 import by.restaurant.bean.Dish;
 import by.restaurant.bean.Order;
@@ -31,6 +35,7 @@ import by.restaurant.service.factory.ServiceFactory;
 
 public class AddDish implements Command {
 
+	private static final Logger logger = LogManager.getLogger(AddDish.class);
 	private static final String ADD_DISH_ERROR = "add_dish_error";
 
 	@Override
@@ -41,9 +46,9 @@ public class AddDish implements Command {
 
 		String name = request.getParameter(RequestParameterName.DISH_NAME);
 		String picture = request.getParameter(RequestParameterName.DISH_PICTURE);
-		String amount = request.getParameter(RequestParameterName.DISH_AMOUNT);
+		String amount = replaceCommaWithDot(request.getParameter(RequestParameterName.DISH_AMOUNT));
 		Category category = Category.valueOf(request.getParameter(RequestParameterName.DISH_CATEGORY));
-		Double price = Double.parseDouble(request.getParameter(RequestParameterName.DISH_PRICE));
+		Double price = Double.parseDouble(replaceCommaWithDot(request.getParameter(RequestParameterName.DISH_PRICE)));
 		String ingredients = request.getParameter(RequestParameterName.DISH_INGREDIENTS);
 		Dish dish;
 		
@@ -55,7 +60,7 @@ public class AddDish implements Command {
 			dish = new Dish(name, price, picture, category, amount, ingredientsList);
 			
 		}
-	
+
 		try {
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			DishService dishService = serviceFactory.getDishService();
@@ -73,7 +78,7 @@ public class AddDish implements Command {
 			response.sendRedirect(request.getContextPath() + "/Controller?command=admin_menu&message=dish_added");
 
 		} catch (ServiceException e) {
-			// log
+            logger.log(Level.ERROR, "Error during additing a new dish in menu", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}
@@ -94,5 +99,10 @@ public class AddDish implements Command {
 	private String firstUpperCase(String word) {
 		
 		return word.substring(0, 1).toUpperCase() + word.substring(1);
+	}
+	
+	private String replaceCommaWithDot(String str) {
+		
+		return str.replace(',', '.');
 	}
 }

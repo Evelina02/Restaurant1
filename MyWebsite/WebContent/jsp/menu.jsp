@@ -840,6 +840,7 @@ border-radius: 15px;
 			</c:if>       
  </div>                            
                        
+<restaurant:footer local="${sessionScope.local}"/>  
 
 <!--===============================================================================================-->
 <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>

@@ -7,6 +7,7 @@
 
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+        <%@ taglib prefix="restaurant" uri="/WEB-INF/tld/taglib.tld" %>
     
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -23,6 +24,11 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/signInUp.css">
     
  <style> 
+.my-btn{
+	background-color: green;
+}
+
+
 
 .image{
 text-align: center;
@@ -121,14 +127,15 @@ body {
 button[class*=btn] {
   width: 40px;
   height: 30px;
-  background-color: rgb(230,230,250);
+ background-color: rgb(230,230,250);
   border-radius: 6px;
   border: none;
   cursor: pointer;
 }
 
- 
+ /*
 button:focus,
+*/
 input:focus {
   outline:0;
 }
@@ -561,16 +568,16 @@ margin-bottom:5px;
 								<td>
 									<div class="dish-amount">
 									
-									<!-- удали эту форму -->
+									<!-- delete -->
 									<form action="${pageContext.request.contextPath}/Controller"
 										method="post">
 										<input type="hidden" id="command"	value="change_amount_of_dish">
 										 <input type="hidden" name="dishId" id="dishId" value="${dish.id}">
 																		
-										<button class="minus btn btn-danger"  type="button">-</button>
+										<button class="minus btn btn-outline-danger "  type="button"><b>-</b></button>
 										<input type="text"  name="count" id="count" class="form-control"
 											value="${basket.countDishById.get(dish.id)}" disabled>
-										<button class="plus btn btn-success" type="button">+</button>
+										<button class="plus btn btn-outline-success" type="button"><b>+</b></button>
 									
 									
 									</form>									
@@ -632,8 +639,8 @@ margin-bottom:5px;
 								<br>
 								
 									<input type="text" id="countOfPoints" pattern="(0|[1-9]\d{0,3})([.,]\d{1,2})$">
-									<button class="use_loyalty_points btn-success"  type="button" style="width: 150px;">ИСПОЛЬЗОВАТЬ</button>
-									<button class="reset_loyalty_points btn-danger"  type="button" style="width: 150px;">СБРОСИТЬ</button>
+									<button class="use_loyalty_points btn btn-outline-success"  type="button" style="width: 150px;"><b>ИСПОЛЬЗОВАТЬ</b></button>
+									<button class="reset_loyalty_points btn btn-outline-danger"  type="button" style="width: 150px;"><b>СБРОСИТЬ</b></button>
 					
 									
 								</div>
@@ -713,6 +720,10 @@ margin-bottom:5px;
 					</p>
 
 				</div>
+				
+				<input type="hidden" id="usedPoints" name="usedPoints" value=0>
+				
+				
 				<p>
 					<input type="submit" value="${order}" class="checkout-btn">
 				</p>
@@ -737,6 +748,10 @@ margin-bottom:5px;
 </form>
 
 -->
+
+<restaurant:footer local="${sessionScope.local}"/>  
+
+
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 

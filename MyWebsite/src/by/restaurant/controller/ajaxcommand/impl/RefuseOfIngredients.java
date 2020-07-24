@@ -12,9 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Basket;
 import by.restaurant.bean.Dish;
 import by.restaurant.controller.ajaxcommand.AjaxCommand;
+import by.restaurant.controller.command.impl.AddDish;
 import by.restaurant.controller.command.impl.ShowMenu;
 import by.restaurant.controller.constantname.JspPageName;
 import by.restaurant.controller.constantname.RequestParameterName;
@@ -55,50 +59,7 @@ public class RefuseOfIngredients implements AjaxCommand {
 					dish.setRefusalOfIngredients(refusedIngredients);
 				}
 
-				
-				
-				
-				
-				
-//				
-//				if(refusedIngredients.size() > 1 ) {
-//
-//					for(String ingredient: refusedIngredients) {
-//
-//						if (refusedIngredientsOfDish == null) {
-//							refusedIngredientsOfDish = new HashSet<>();
-//							refusedIngredientsOfDish.add(ingredient);
-//							dish.setRefusalOfIngredients(refusedIngredientsOfDish);
-//						} else {
-//							if (refusedIngredientsOfDish.contains(ingredient)) {
-//
-//								refusedIngredientsOfDish.remove(ingredient);
-//								dish.setRefusalOfIngredients(refusedIngredientsOfDish);
-//							} else {
-//								refusedIngredientsOfDish.add(ingredient);
-//								dish.setRefusalOfIngredients(refusedIngredientsOfDish);
-//							}
-//						}
-//					}
-//				}else {
-//
-//					if (refusedIngredientsOfDish == null) {
-//						refusedIngredientsOfDish = new HashSet<>();
-//						refusedIngredientsOfDish.add(selectedIngredients);
-//						dish.setRefusalOfIngredients(refusedIngredientsOfDish);
-//					} else {
-//						if (refusedIngredientsOfDish.contains(selectedIngredients)) {
-//
-//							refusedIngredientsOfDish.remove(selectedIngredients);
-//							dish.setRefusalOfIngredients(refusedIngredientsOfDish);
-//						} else {
-//							refusedIngredientsOfDish.add(selectedIngredients);
-//							dish.setRefusalOfIngredients(refusedIngredientsOfDish);
-//						}
-//					}
-//				}
-						
-	
+		
 				responseToJsp = "{\"status\":\"yes\"}";
 				break;
 				}

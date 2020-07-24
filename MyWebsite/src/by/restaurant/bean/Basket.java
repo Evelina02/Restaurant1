@@ -16,7 +16,7 @@ public class Basket implements Serializable {
 	 private Set<Dish> dishes;
 	 private Map <Integer, Integer> countDishById;
 	 private double totalPrice;
-	 private boolean usedLoyaltyPoints;
+	 private double usedLoyaltyPoints;
 	
 	 public Basket() {
 
@@ -49,11 +49,11 @@ public class Basket implements Serializable {
 		this.totalPrice = totalPrice;
 	}
 
-	public boolean isUsedLoyaltyPoints() {
+	public double getUsedLoyaltyPoints() {
 		return usedLoyaltyPoints;
 	}
 
-	public void setUsedLoyaltyPoints(boolean usedLoyaltyPoints) {
+	public void setUsedLoyaltyPoints(double usedLoyaltyPoints) {
 		this.usedLoyaltyPoints = usedLoyaltyPoints;
 	}
 
@@ -66,7 +66,8 @@ public class Basket implements Serializable {
 		long temp;
 		temp = Double.doubleToLongBits(totalPrice);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + (usedLoyaltyPoints ? 1231 : 1237);
+		temp = Double.doubleToLongBits(usedLoyaltyPoints);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -91,16 +92,16 @@ public class Basket implements Serializable {
 			return false;
 		if (Double.doubleToLongBits(totalPrice) != Double.doubleToLongBits(other.totalPrice))
 			return false;
-		if (usedLoyaltyPoints != other.usedLoyaltyPoints)
+		if (Double.doubleToLongBits(usedLoyaltyPoints) != Double.doubleToLongBits(other.usedLoyaltyPoints))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Basket [dishes=" + dishes + ", countDishById=" + countDishById + ", totalPrice=" + totalPrice
+		return getClass().getName() + "@" + "[dishes=" + dishes + ", countDishById=" + countDishById + ", totalPrice=" + totalPrice
 				+ ", usedLoyaltyPoints=" + usedLoyaltyPoints + "]";
 	}
+
 	
-	 
 }

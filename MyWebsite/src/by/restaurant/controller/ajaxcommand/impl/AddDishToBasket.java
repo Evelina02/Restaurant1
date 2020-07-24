@@ -10,9 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Basket;
 import by.restaurant.bean.Dish;
 import by.restaurant.controller.ajaxcommand.AjaxCommand;
+import by.restaurant.controller.command.impl.AddDish;
 import by.restaurant.controller.command.impl.ShowMenu;
 import by.restaurant.controller.constantname.JspPageName;
 import by.restaurant.controller.constantname.RequestParameterName;
@@ -22,6 +27,8 @@ import by.restaurant.service.ServiceException;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class AddDishToBasket implements AjaxCommand {
+
+	private static final Logger logger = LogManager.getLogger(AddDishToBasket.class);
 
 	private static final String DISH_CATEGORY = "dishCategory";
 	private static final String COUNT = "count";
@@ -116,7 +123,7 @@ public class AddDishToBasket implements AjaxCommand {
 
 			}
 		} catch (ServiceException e) {
-			// log
+			logger.log(Level.ERROR, "Error during adding dish to basket", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}

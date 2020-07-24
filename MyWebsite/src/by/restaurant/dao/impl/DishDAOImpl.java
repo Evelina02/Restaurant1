@@ -9,9 +9,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Dish;
 import by.restaurant.bean.User;
 import by.restaurant.bean.constant.Category;
+import by.restaurant.controller.filter.CharsetFilter;
 import by.restaurant.dao.DAOException;
 import by.restaurant.dao.DishDAO;
 
@@ -20,7 +26,7 @@ import by.restaurant.dao.pool.ConnectionPoolException;
 
 public class DishDAOImpl implements DishDAO {
 
-    //private static Logger logger = LogManager.getLogger();
+	private static final Logger logger = LogManager.getLogger(DishDAOImpl.class);
 	private ConnectionPool pool = ConnectionPool.getInstance();
 	
     
@@ -104,7 +110,7 @@ public class DishDAOImpl implements DishDAO {
 					try {
 						connection.rollback();
 					}catch(SQLException ex) {
-						//log
+						logger.log(Level.ERROR, "Error during additing dish in database!(dao)", e);
 					}
 				}
 				throw new DAOException("Error during additing dish in database!", e);
@@ -115,7 +121,7 @@ public class DishDAOImpl implements DishDAO {
 				try {
 					connection.setAutoCommit(true);
 				} catch (SQLException e) {
-					// log
+					logger.log(Level.ERROR, "Error during additing dish in database!(dao)", e);
 				}
 				pool.closeConnection(connection, ps);
 			}
@@ -141,6 +147,7 @@ public class DishDAOImpl implements DishDAO {
 				dishes.add(createDishFromResultSet(rs));
 			}
 		}catch(SQLException e) {
+			logger.log(Level.ERROR, "Error during finding snacks in database!(dao)", e);
 			throw new DAOException("Error during finding snacks in database!", e);
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -167,6 +174,7 @@ public class DishDAOImpl implements DishDAO {
 				dishes.add(createDishFromResultSet(rs));
 			}
 		}catch(SQLException e) {
+			logger.log(Level.ERROR, "Error during finding snacks in database!(dao)", e);
 			throw new DAOException("Error during finding snacks in database!", e);
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -195,6 +203,7 @@ public class DishDAOImpl implements DishDAO {
 				dishes.add(createDishFromResultSet(rs));
 			}
 		}catch(SQLException e) {
+			logger.log(Level.ERROR, "Error during finding hot dishes in database!(dao)", e);
 			throw new DAOException("Error during finding hot dishes in database!", e);
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -222,6 +231,7 @@ public class DishDAOImpl implements DishDAO {
 				dishes.add(createDishFromResultSet(rs));
 			}
 		}catch(SQLException e) {
+			logger.log(Level.ERROR, "Error during finding pizza in database!(dao)", e);
 			throw new DAOException("Error during finding pizza in database!", e);
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -249,6 +259,7 @@ public class DishDAOImpl implements DishDAO {
 				dishes.add(createDishFromResultSet(rs));
 			}
 		}catch(SQLException e) {
+			logger.log(Level.ERROR, "Error during finding desserts in database!(dao)", e);
 			throw new DAOException("Error during finding desserts in database!", e);
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -276,6 +287,7 @@ public class DishDAOImpl implements DishDAO {
 				dishes.add(createDishFromResultSet(rs));
 			}
 		}catch(SQLException e) {
+			logger.log(Level.ERROR, "Error during finding drinks in database!(dao)", e);
 			throw new DAOException("Error during finding drinks in database!", e);
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -304,6 +316,7 @@ public class DishDAOImpl implements DishDAO {
 			}
 			
 		}catch(SQLException e) {
+			logger.log(Level.ERROR, "Error during finding salads in database!(dao)", e);
 			throw new DAOException("Error during finding salads in database!", e);
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -414,6 +427,7 @@ public class DishDAOImpl implements DishDAO {
 				dishes.add(createDishFromResultSet(rs));
 			}
 		}catch(SQLException e) {
+			logger.log(Level.ERROR, "Error during finding snacks in database!(dao)", e);
 			throw new DAOException("Error during finding snacks in database!", e);
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -443,6 +457,7 @@ public class DishDAOImpl implements DishDAO {
 			
 			status = ps.executeUpdate();
 			}catch(SQLException e) {
+				logger.log(Level.ERROR, "Error during deleting dish!(dao)", e);
 				throw new DAOException("Error during deleting dish!", e);
 			}catch(ConnectionPoolException e) {
 				throw new DAOException("Error during getting connection from connection pool!", e);
@@ -476,6 +491,7 @@ public class DishDAOImpl implements DishDAO {
 
 			status = ps.executeUpdate();
 		} catch (SQLException e) {
+			logger.log(Level.ERROR, "Error during additing user in database!(dao)", e);
 			throw new DAOException("Error during additing user in database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);

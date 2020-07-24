@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Basket;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.constantname.JspPageName;
@@ -19,6 +23,8 @@ import by.restaurant.service.ServiceException;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class ClearBasket implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(ClearBasket.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,7 +43,7 @@ public class ClearBasket implements Command {
 
 			response.sendRedirect(request.getContextPath() + "/Controller?command=show_basket&message=basket_cleared");
 		} catch (ServiceException e) {
-			// log
+            logger.log(Level.ERROR, "Error during clearing basket", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}

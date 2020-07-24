@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Basket;
 import by.restaurant.bean.Dish;
 import by.restaurant.bean.Order;
@@ -28,7 +32,8 @@ import by.restaurant.dao.pool.ConnectionPoolException;
 
 public class OrderDAOImpl implements OrderDAO {
 
-    //private static Logger logger = LogManager.getLogger();
+	private static final Logger logger = LogManager.getLogger(OrderDAOImpl.class);
+	
 	private ConnectionPool pool = ConnectionPool.getInstance();
 
     private static final String SELECT_DISHES_OF_ORDER = 
@@ -70,10 +75,7 @@ public class OrderDAOImpl implements OrderDAO {
 			"select ingredient from refusal_of_ingredients "
 			+ "where id_order=? and id_dish=?";
 
-//	private static final String WHERE_ID_DISH = 
-//			"and d.id_dish=?";
- 
-	
+
 	
 	@Override
 	public boolean addOrder(Order order, int idUser) throws DAOException {
@@ -93,12 +95,7 @@ public class OrderDAOImpl implements OrderDAO {
 			ps.setString(5, order.getPaymentType().name());
 			ps.setString(6, order.getDeliveryType().name());
 			ps.setString(7, order.getState().name());
-			ps.setBoolean(8, order.getBasket().isUsedLoyaltyPoints());
-//			if(order.getBasket().isUsedLoyaltyPoints()) {//+
-//				
-//			}else {
-//				ps.setInt(8, 0);
-//			}
+			ps.setDouble(8, order.getBasket().getUsedLoyaltyPoints());
 
 			ps.executeUpdate();
 
@@ -118,10 +115,10 @@ public class OrderDAOImpl implements OrderDAO {
 						connection.rollback();
 						return false;
 					}catch(SQLException ex) {
-						//log
+						logger.log(Level.ERROR, "Error during additing order in database!(dao)", e);
 					}
 				}
-				throw new DAOException("Error during additing dish in database!", e);
+				throw new DAOException("Error during additing order in database!", e);
 				
 			}catch(ConnectionPoolException e) {
 				throw new DAOException("Error during getting connection from connection pool!", e);
@@ -172,6 +169,7 @@ public class OrderDAOImpl implements OrderDAO {
             }
             
         } catch (SQLException e) {
+			logger.log(Level.ERROR, "Error during getting all orders in process from database!(dao)", e);
             throw new DAOException("Error during getting all orders in process from database", e);
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -228,7 +226,7 @@ public class OrderDAOImpl implements OrderDAO {
 		order.setPaymentType(PaymentType.valueOf(rs.getString(6)));
 		order.setDeliveryType(DeliveryType.valueOf(rs.getString(7)));
 		order.setState(OrderState.valueOf(rs.getString(8)));
-		order.getBasket().setUsedLoyaltyPoints(rs.getBoolean(9));//+
+		order.getBasket().setUsedLoyaltyPoints(rs.getDouble(9));//+
 		order.setUserLogin(rs.getString("login"));
 		return order;
 	}
@@ -317,7 +315,8 @@ public class OrderDAOImpl implements OrderDAO {
 			
 			status = ps.executeUpdate();
 			}catch(SQLException e) {
-				throw new DAOException("Error during additing user in database!", e);
+				logger.log(Level.ERROR, "Error during canceling order in database!(dao)", e);
+				throw new DAOException("Error during canceling order in database!", e);
 			}catch(ConnectionPoolException e) {
 				throw new DAOException("Error during getting connection from connection pool!", e);
 			} finally {
@@ -344,7 +343,8 @@ public class OrderDAOImpl implements OrderDAO {
             }
             
         } catch (SQLException e) {
-            throw new DAOException("Error during getting all orders in process from database", e);
+			logger.log(Level.ERROR, "Error during getting all orders from database!(dao)", e);
+            throw new DAOException("Error during getting all orders from database", e);
 		}catch(ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -371,6 +371,7 @@ public class OrderDAOImpl implements OrderDAO {
 			
 			status = ps.executeUpdate();
 			}catch(SQLException e) {
+				logger.log(Level.ERROR, "Error during doing order in database!(dao)", e);
 				throw new DAOException("Error during doing order in database!", e);
 			}catch(ConnectionPoolException e) {
 				throw new DAOException("Error during getting connection from connection pool!", e);
@@ -399,6 +400,7 @@ public class OrderDAOImpl implements OrderDAO {
 			
 			status = ps.executeUpdate();
 			}catch(SQLException e) {
+				logger.log(Level.ERROR, "Error during closing order in database!(dao)", e);
 				throw new DAOException("Error during closing order in database!", e);
 			}catch(ConnectionPoolException e) {
 				throw new DAOException("Error during getting connection from connection pool!", e);
@@ -422,7 +424,8 @@ public class OrderDAOImpl implements OrderDAO {
 			idOrder = selectIdOrderByOrderTime(connection, orderTime);
 
 		} catch (SQLException e) {
-			throw new DAOException("Error during getting email of user from database!", e);
+			logger.log(Level.ERROR, "Error during getting id order by order time!(dao)", e);
+			throw new DAOException("Error during getting id order by order time!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -431,6 +434,5 @@ public class OrderDAOImpl implements OrderDAO {
 
 		return idOrder;
 	}
-
 	
 }

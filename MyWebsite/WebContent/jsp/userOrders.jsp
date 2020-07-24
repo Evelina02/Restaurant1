@@ -9,13 +9,10 @@
 
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+        <%@ taglib prefix="restaurant" uri="/WEB-INF/tld/taglib.tld" %>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="${pageContext.request.contextPath}/css/basket.css" type="text/css" rel="stylesheet">
-    
-    
-    
-    
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
@@ -31,6 +28,8 @@
 
 body{
 	font-size: 16px;
+	text-align: center;
+	
 }
  
 .image{
@@ -124,6 +123,13 @@ text-align: center;
 								<p>${order.basket.totalPrice}</p>
 							</div>
 
+	 						<c:if test="${order.basket.usedLoyaltyPoints != '0'}">
+								<span style="color: blue; font-size: 14px;"> 
+								Использовано ${order.basket.usedLoyaltyPoints} баллов
+							</span>
+
+							</c:if>
+							
 						</td>
 
 
@@ -184,6 +190,9 @@ text-align: center;
 </c:otherwise>
 </c:choose>
 	</div>
+
+
+<restaurant:footer local="${sessionScope.local}"/>  
 
 	<!--===============================================================================================-->
 <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>

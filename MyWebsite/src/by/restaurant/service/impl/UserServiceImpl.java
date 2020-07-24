@@ -1,8 +1,13 @@
 package by.restaurant.service.impl;
 
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Review;
 import by.restaurant.bean.User;
+import by.restaurant.controller.listener.PoolListener;
 import by.restaurant.dao.DAOException;
 import by.restaurant.dao.UserDAO;
 import by.restaurant.dao.factory.DAOFactory;
@@ -13,11 +18,12 @@ import by.restaurant.service.impl.validator.ValidatorException;
 
 public class UserServiceImpl implements UserService {
 	
+	private static final Logger logger = LogManager.getLogger(PoolListener.class);
+
 	@Override
 	public User getUser(String login, String password) throws ServiceException{
 		
 		if(!Validator.validateLogin(login)) {
-			//log
 			throw new ValidatorException("Login is not correct!");
 		}
 //		if(!Validator.validatePassword(password)) {
@@ -37,10 +43,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean addUser(User user) throws ServiceException {
+	public synchronized boolean addUser(User user) throws ServiceException {
 
 		if(!Validator.validateIsNull(user)) {
-			//log
 			throw new ValidatorException("Object user is null!");
 		}
 		

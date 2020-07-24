@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.constant.DeliveryType;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.command.util.Sender;
@@ -20,6 +24,8 @@ import by.restaurant.service.UserService;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class DoOrder implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(DoOrder.class);
 
 	private static final String MAIL_SUBJECT = "Ваш заказ готов!";
 	private static final String END_OF_BODY = "\n\n\nОнлайн-ресторан";
@@ -58,7 +64,7 @@ public class DoOrder implements Command {
 			response.sendRedirect(request.getContextPath() + "/Controller?command=all_orders&message=order_done");
 
         } catch (ServiceException e) {
-            //log
+            logger.log(Level.ERROR, "Error during doing order for user", e);
         	RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
         }

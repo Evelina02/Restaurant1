@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 import by.restaurant.controller.command.Command;
@@ -22,6 +25,8 @@ import by.restaurant.service.UserService;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class ResetPassword implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(ResetPassword.class);
 
 	private static final String MAIL_SUBJECT = "Восстановление пароля";
 	private static final String MAIL_BODY = "Здравствуйте! Операция восстановления пароля прошла успешно! Ваш новый пароль - ";
@@ -66,7 +71,7 @@ public class ResetPassword implements Command {
 			}
 			}
 		} catch (ServiceException e) {
-			// log
+            logger.log(Level.ERROR, "Error during reseting password", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}

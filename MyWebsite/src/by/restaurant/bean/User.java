@@ -131,7 +131,7 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", login=" + login + ", password=" + password + ", role=" + role + ", email=" + email
+		return getClass().getName() + "@" + "[id=" + id + ", login=" + login + ", password=" + password + ", role=" + role + ", email=" + email
 				+ ", address=" + address + ", loyaltyPoints=" + loyaltyPoints + ", banned=" + banned + ", orders="
 				+ orders + ", reviews=" + reviews + "]";
 	}

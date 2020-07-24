@@ -16,13 +16,38 @@ $('.plus').click(function () {
 		success : function(result){
 			var obj = JSON.parse(result)
 			
-			$('#totalPrice').html(obj.totalPrice);
-			$price.html(obj.dishPrice);
+			
+			
+			var RoundedTotalPrice = Math.floor(obj.totalPrice * 100) / 100;
+			$('#totalPrice').html(RoundedTotalPrice);
+			var RoundedDishPrice = Math.floor(obj.dishPrice * 100) / 100;
 
+			$price.html(RoundedDishPrice);
+			
+			$('#original_total_price').val(obj.totalPrice);
+			
+			
+			
+//			$('#totalPrice').html(obj.totalPrice);
+//			$price.html(obj.dishPrice);
+//			
+//			$('#original_total_price').val(obj.totalPrice);
+
+			
+			var originalLoyaltyPoints = (document.getElementById('original_loyalty_points')).value;
+			$('#loyalty_points').html(originalLoyaltyPoints);
+
+
+			var count =document.getElementById('countOfPoints');
+			count.value = 0;
+
+			var usedPoints =document.getElementById('usedPoints');
+			usedPoints.value = 0;
 		}	
 	});
 });
 });
+
 
 $(document).ready(function(){
 	$('.minus').click(function () {
@@ -44,9 +69,37 @@ $(document).ready(function(){
 			success : function(result){
 				var obj = JSON.parse(result)
 				
-				$('#totalPrice').html(obj.totalPrice);
-				$price.html(obj.dishPrice);
+//				$('#totalPrice').html(obj.totalPrice);
+//				$price.html(obj.dishPrice);
+//
+//				$('#original_total_price').val(obj.totalPrice);
 
+
+				
+				var RoundedTotalPrice = Math.floor(obj.totalPrice * 100) / 100;
+				$('#totalPrice').html(RoundedTotalPrice);
+				var RoundedDishPrice = Math.floor(obj.dishPrice * 100) / 100;
+
+				$price.html(RoundedDishPrice);
+				
+				$('#original_total_price').val(obj.totalPrice);
+				
+				
+				
+				
+				
+				
+				
+				//сброс баллов
+				var originalLoyaltyPoints = (document.getElementById('original_loyalty_points')).value;
+				$('#loyalty_points').html(originalLoyaltyPoints);
+
+
+				var count =document.getElementById('countOfPoints');
+				count.value = 0;
+
+				var usedPoints =document.getElementById('usedPoints');
+				usedPoints.value = 0;
 			}	
 		});
 	});
@@ -132,24 +185,8 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 
 	
 	$(".multiple_select").on('change', function() {
-		//var selected = $("#myFilter").val().toString(); //get all options and convert to string
-		var selected = $(this).val().toString(); //работает
+		var selected = $(this).val().toString(); 
 
-//		var s = $(this);
-//		var sss = $(this).parent();
-//		var document_style = $(this).parent().style;
-//		
-//		
-//      var document_style = document.documentElement.style;
-//      
-//      if(selected !== ""){
-//        document_style.setProperty('--text', "'Отказаться от: "+selected+"'");
-//      }else{
-//        document_style.setProperty('--text', "'Выберите ингредиенты'");
-//      }
-      
-		
-      
 		var dishId = $(this).parent().find('#dishId').val();
 		var command = "refuse_of_ingredients";
 
@@ -178,21 +215,21 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 			var loyalty_points_value = $(this).parent().find('#loyalty_points').text();
 
 			var count = $(this).parent().find('#countOfPoints').val();
+			var totalPriceElement =document.getElementById('totalPrice');
+			var totalPrice = Number(totalPriceElement.innerHTML);
 
 			if(count <= 0 || count > loyalty_points_value){
 				alert("Введите корректное число баллов!!!")
+			}else if(count > totalPrice){
+				alert("Вы не можете использовать больше баллов, чем Вам заказ!!!")
 			}
 			else{
 			
 				var newLoyaltyPoints = loyalty_points_value - count;
 				
-				var totalPriceElement =document.getElementById('totalPrice');
-				var totalPrice = totalPriceElement.innerHTML;
 				var newTotalPrice =  parseFloat(totalPrice) - count;
 
 				var $loyalty_points = $(this).parent().parent().find('#loyalty_points');
-	
-				
 				
 				
 				$('#totalPrice').html(newTotalPrice);
@@ -201,25 +238,15 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 	
 				
 				
-/*			
- var command = "use_loyalty_points";
- 
-				$.ajax({
-					type: 'POST',
-					data: {command: command, count:count},
-					url:  'http://localhost:8080/MyWebsite/AjaxController',
-					success : function(result){
-						
-						var obj = JSON.parse(result)
-						
-						$('#totalPrice').html(obj.newTotalPrice);
-						//остаток баллов
-						$loyalty_points.html(obj.newLoyaltyPoints);
-			
-					}	
-				});
 				
-*/
+				var usedPointsElement =document.getElementById('usedPoints');
+				var usedPointsValue = usedPoints.value;
+				var newUsedPoints = Number(count) + Number(usedPointsValue);				
+				usedPointsElement.value = newUsedPoints;
+			
+				var count =document.getElementById('countOfPoints');
+				count.value = 0;
+				
 			}
 		});
 });
@@ -229,7 +256,7 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 	
 	
 	
-	
+/////////////////////////////////////////////////////////////	
 	$(document).ready(function(){
 		$('.reset_loyalty_points').click(function () {
 
@@ -239,13 +266,52 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 
 			var originalTotalPrice = (document.getElementById('original_total_price')).value;
 			$('#totalPrice').html(originalTotalPrice);
-			
-			
 
+			var count =document.getElementById('countOfPoints');
+			count.value = 0;
+
+			var usedPoints =document.getElementById('usedPoints');
+			usedPoints.value = 0;
 			
-			
-			// очистить поле
 			
 		});
 });
+/////////////////////////////////////////////////////////////	
+
 	
+	$(document).ready(function(){
+		$('.reset_password').click(function () {
+			
+		var command = "reset_password";
+		var login = $(this).parent().parent().parent().find('#user_login').val();
+
+		if(login == "" || login == " "){
+			alert("Вы не ввели свой логин!!!");
+			
+		}else
+		
+		if(confirm('Отправить новый пароль на Вашу почту?')) {
+		      $.ajax({
+					type: 'POST',
+					data: {command: command, login: login},
+					url:  'http://localhost:8080/MyWebsite/AjaxController',
+					success : function(result){
+						
+						var obj = JSON.parse(result)
+
+						if(obj.message == "no_such_login"){
+							alert("Нет пользователя с таким логином");
+						}else if(obj.message == "error"){
+							alert("Ошибка при отправке сообщения. Попробуйте позже");
+						}else if(obj.message == "ok"){
+							alert("Ваш новый пароль отправлен на Вашу почту! Вы можете изменить его в разделе 'Профиль'!");
+						}
+
+					}	
+				});
+		    
+		  } else { }
+		});
+	});
+	
+

@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Basket;
 import by.restaurant.bean.Order;
 import by.restaurant.bean.Review;
@@ -29,6 +33,7 @@ import by.restaurant.service.factory.ServiceFactory;
 
 public class AddReview implements Command {
 
+	private static final Logger logger = LogManager.getLogger(AddReview.class);
 	private static final String ADD_REVIEW_ERROR = "add_review_error";//добавить в loc
 
 	@Override
@@ -44,11 +49,6 @@ public class AddReview implements Command {
 		
 
 		Review review = new Review(comment, reviewTime);
-		
-		
-		
-		
-		
 
 		try {
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -69,7 +69,7 @@ public class AddReview implements Command {
 			response.sendRedirect(request.getContextPath() + "/Controller?command=all_reviews&message=review_added");
 
 		} catch (ServiceException e) {
-			// log
+            logger.log(Level.ERROR, "Error during additing a new review", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}

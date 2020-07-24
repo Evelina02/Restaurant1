@@ -1,15 +1,13 @@
 package by.restaurant.service.impl;
 
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import by.restaurant.bean.Basket;
 import by.restaurant.bean.Dish;
-import by.restaurant.bean.Order;
-import by.restaurant.bean.User;
+import by.restaurant.controller.listener.PoolListener;
 import by.restaurant.dao.DAOException;
 import by.restaurant.dao.DishDAO;
-import by.restaurant.dao.OrderDAO;
-import by.restaurant.dao.UserDAO;
 import by.restaurant.dao.factory.DAOFactory;
 import by.restaurant.service.DishService;
 import by.restaurant.service.ServiceException;
@@ -18,12 +16,12 @@ import by.restaurant.service.impl.validator.ValidatorException;
 
 public class DishServiceImpl implements DishService {
 
-	
+	private static final Logger logger = LogManager.getLogger(PoolListener.class);
+
 	@Override
 	public boolean addDish(Dish dish) throws ServiceException {
 
 		if(!Validator.validateIsNull(dish)) {
-			//log
 			throw new ValidatorException("Object dish is null!");
 		}
 		
@@ -47,11 +45,6 @@ public class DishServiceImpl implements DishService {
 	@Override
 	public List<Dish> searchDishByPartOfName(String partOfName) throws ServiceException {
 
-//		if(!Validator.validateString(partOfName)) {
-//			//log
-//			throw new ValidatorException("Searching dish is null!");
-//		}
-		
 		List<Dish> dishes;
 		try {
 			 DAOFactory daoFactory = DAOFactory.getInstance();

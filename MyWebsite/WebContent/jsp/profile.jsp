@@ -7,6 +7,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+    <%@ taglib prefix="restaurant" uri="/WEB-INF/tld/taglib.tld" %>
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -14,10 +15,6 @@
 	crossorigin="anonymous">
 <link href="${pageContext.request.contextPath}/css/basket.css"
 	type="text/css" rel="stylesheet">
-
-
-
-
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/vendor/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
@@ -414,6 +411,8 @@ px
 	<fmt:message bundle="${loc}" key="text.oldPassword" var="old_password" />
 	<fmt:message bundle="${loc}" key="text.newPasswordOnceAgain" var="new_password_once_again" />
 	<fmt:message bundle="${loc}" key="text.change" var="change_text" />
+	<fmt:message bundle="${loc}" key="text1.loyaltyPoints" var="loyaltyPoints_text1" />
+	<fmt:message bundle="${loc}" key="text2.loyaltyPoints" var="loyaltyPoints_text2" />
 
 
 
@@ -495,6 +494,16 @@ function validateForm(form){
 						style="width:300px";
 						></td>
 					</tr>
+					
+					<c:if test="${sessionScope.role =='CLIENT'}">
+					
+					<tr>
+						<th><span style="color:blue;">
+						${loyaltyPoints_text1} ${user.loyaltyPoints} ${loyaltyPoints_text2}
+						</span>
+						</th>
+					</tr>
+					</c:if>
 				</tbody>
 			</table>
 			<button type="submit" class="btn btn-primary" style="width: 222px;">${save_changes_text}</button>
@@ -543,6 +552,9 @@ function validateForm(form){
 			</form>
 		</div>
 	</div>
+	
+	<restaurant:footer local="${sessionScope.local}"/>  
+	
 	<!--===============================================================================================-->
 	<script
 		src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>

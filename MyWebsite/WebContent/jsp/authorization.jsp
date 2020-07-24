@@ -6,13 +6,13 @@
 
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+    <%@ taglib prefix="restaurant" uri="/WEB-INF/tld/taglib.tld" %>
+
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/png" href="img/icons/favicon.ico"/>
 	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<link href="${pageContext.request.contextPath}/css/style.css" type="text/css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animate/animate.css">
@@ -22,17 +22,19 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.css">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/signInUpUtil.css">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/signInUp.css">
-	
+
 	
 	<style type="text/css">
-	/* input[type="password"] {
-  color: transparent;
-} */
-
-
-
-/*//////////////////////////////////////////////////////////////////
-[ FONT ]*/
+	
+.reset_password{
+margin-top: -143px; 
+margin-left: 430px; 
+background-color: rgb(0,191,255) !important;
+}
+	
+.reset_password:hover {
+  background-color: blue !important;
+}
 
 @font-face {
   font-family: Poppins-Regular;
@@ -550,75 +552,10 @@ margin-buttom:40px;
 padding: 5px 20px 20px 0;
 text-decoration: underline;
 
-/*font-family: Poppins-Regular;
 
-
- background: #d11717;
-03
-  border: 2px solid #eee;
-04
-  height: 38px;
-05
-  width: 125px;
-06
-  margin: 50px 0 0 50px;
-07
-  overflow: hidden;
-08
-  display: block;
-09
-  text-align: center;
-10
-  line-height: 38px;
-/*Скругленные углы*/
-/*02
--webkit-border-radius: 10px;
-03
--moz-border-radius: 10px;
-04
-border-radius: 10px;
-05
- 
-06
-/*Градиент*/
-/*07
-background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
-08
-background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
-09
-background-image: -o-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
-10
-background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
-11
-background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
-12
- 
-13
-/*Тень*/
-/*14
--webkit-box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.2);
-15
--moz-box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.2);
-16
-box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.2);
-/*Переход*/
-/*2
--webkit-transition: All 0.5s ease;
-3
--moz-transition: All 0.5s ease;
-4
--o-transition: All 0.5s ease;
-5
--ms-transition: All 0.5s ease;
-6
-transition: All 0.5s ease;
-*/
-
-}
-
-.reset:hover{
+.reset_password:hover{
 /*background-color: #ff3434;*/
-text-shadow: 0 0 21px rgba(223, 206, 228, 0.5), 0 -1px 0 #311d47;
+text-sshadow: 0 0 21px rgba(223, 206, 228, 0.5), 0 -1px 0 #311d47;
 
 color: blue;
 }
@@ -646,46 +583,6 @@ color: blue;
 <fmt:message bundle="${loc}" key="password_reseted" var="password_reseted" />
 
 
-<!--  
-	<h1>${authorization_text}</h1>
-	<br> 
-	<h2><c:if test="${not empty requestScope.noSuchLogin}">
-          <c:out value="${wrong_login}"/>
-    </c:if></h2>
-      
-    <h2><c:if test="${not empty requestScope.wrongPassword}">
-          <c:out value="${wrong_password}"/>
-    </c:if></h2>
-      
-      
-      
-	<form action="${pageContext.request.contextPath}/Controller" method="post" onsubmit="return validateForm(this)">
-		<input type="hidden" name="command" value="sign_in"><p>
-		<input type="text" name="login" placeholder=${enter_login} maxlength="10" required><br><br> 
-		<input type="password" name="password" placeholder=${enter_password1} maxlength="10" required></p> 
-		<hr><br>
-		<input type="submit" name="sign_in" value=${sign_in_text} >
-		<br><br> 
-		<a href="${pageContext.request.contextPath}/jsp/registration.jsp">${registration_text}</a>
-	</form>
-	
-	<script type="text/javascript">
-		function validateForm(form){
-			var login = form.login.value
-			var password = form.password.value
-
-			if(login == "" || login == " "){
-				alert("You have not entered your login!!!");
-				return false;
-			}else if(password == "" || password == " "){
-				alert("You have not entered your password");
-				return false;
-			}
-		}
-	</script>
-	
-	-->
-
 	<div class="limiter">
 		<c:if test="${not empty requestScope.signInRequired}">
 			<div class="alert alert-danger" role="alert">
@@ -710,13 +607,13 @@ color: blue;
 			<strong><c:out value="${banned_user}" /></strong>
 		</div>
 	</c:if>
-
+<!--  
 			<c:if test="${not empty requestScope.resetPasswordError}">
 		<div class="alert alert-danger" role="alert">
 			<strong><c:out value="${reset_password_error}" /></strong>
 		</div>
 	</c:if>
-
+-->
 		<c:if test="${not empty param.message}">
 			<div class="alert alert-success" role="alert">
 				<strong><c:out value="${password_reseted}" /></strong>
@@ -733,10 +630,13 @@ color: blue;
 
 				<form class="login100-form validate-form"
 					action="${pageContext.request.contextPath}/Controller"
-					method="post" onsubmit="return validateForm(this)">
+					method="post" >
+					
+		<!--  			onsubmit="return validateForm(this)"> -->
+		
 					<div class="wrap-input100 validate-input m-b-26"
 						data-validate="Username is required">
-						<input class="input100" type="text" name="login"
+						<input class="input100" type="text" id="user_login" name="login"
 							placeholder=${enter_login}> 
 							<span class="focus-input100"></span>
 					</div>
@@ -748,23 +648,42 @@ color: blue;
 							class="focus-input100"></span>
 					</div>
 
-
+<!--  
 					<div class="">
 						<div class="">
 							<button class="reset" type="submit" name="command"
 								value="reset_password">${forgot_password}</button>
 						</div>
 					</div>
+-->
+
 
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" type="submit" name="command"
-							value="sign_in">${sign_in_text}</button>
+						<button class="login100-form-btn" type="submit" 
+						name="command" value="sign_in"
+						style="margin-top: 20px;" >
+						${sign_in_text}</button>
 					</div>
-				</form>
+			</form>	
+				
+<div class="container-login100-form-btn">
+							<button class="reset_password login100-form-btn"
+							style="" >
+								${forgot_password}</button>
+</div>
+		
 			</div>
 		</div>
 	</div>
 	
+
+	
+	
+	
+	
+	
+	
+
 	<!--
 	
 	<script type="text/javascript">
@@ -783,6 +702,7 @@ color: blue;
 	</script>
 	
 	  -->
+	<restaurant:footer local="${sessionScope.local}"/>  
 	
 <!--===============================================================================================-->
 <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
@@ -795,6 +715,7 @@ color: blue;
 <script src="${pageContext.request.contextPath}/vendor/countdowntime/countdowntime.js"></script>
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
 <!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/js/myJS.js"></script>
 	
 	
 	

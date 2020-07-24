@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 import by.restaurant.bean.Review;
@@ -20,7 +23,8 @@ import by.restaurant.dao.pool.ConnectionPoolException;
 
 public class UserDAOImpl implements UserDAO {
 
-	// private static Logger logger = LogManager.getLogger();
+	private static final Logger logger = LogManager.getLogger(UserDAOImpl.class);
+	
 	private ConnectionPool pool = ConnectionPool.getInstance();
 
 	private static final String INSERT_USER = "insert into users(login, password, role, email, address)"
@@ -89,6 +93,7 @@ public class UserDAOImpl implements UserDAO {
 
 			status = ps.executeUpdate();
 		} catch (SQLException e) {
+			logger.log(Level.ERROR, "Error during additing user in database!(dao)", e);
 			throw new DAOException("Error during additing user in database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -121,6 +126,7 @@ public class UserDAOImpl implements UserDAO {
 				return null;
 			}
 		} catch (SQLException e) {
+			logger.log(Level.ERROR, "Error during getting user from database!(dao)", e);
 			throw new DAOException("Error during getting user from database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -151,7 +157,8 @@ public class UserDAOImpl implements UserDAO {
 			user = createUserFromResultSet(rs);
 
 		} catch (SQLException e) {
-			throw new DAOException("Error during getting user from database!", e);
+			logger.log(Level.ERROR, "Error during getting user by id from database!(dao)", e);
+			throw new DAOException("Error during getting user by id from database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -182,7 +189,8 @@ public class UserDAOImpl implements UserDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException("Error during getting user from database!", e);
+			logger.log(Level.ERROR, "Error during checking if user exists in database!(dao)", e);
+			throw new DAOException("Error during checking if user exists in database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -207,7 +215,8 @@ public class UserDAOImpl implements UserDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException("Error finding unbanned users in database", e);
+			logger.log(Level.ERROR, "Error finding unbanned users from database!(dao)", e);
+			throw new DAOException("Error finding unbanned users from database", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -237,7 +246,8 @@ public class UserDAOImpl implements UserDAO {
 
 			status = ps.executeUpdate();
 		} catch (SQLException e) {
-			throw new DAOException("Error during additing user in database!", e);
+			logger.log(Level.ERROR, "Error during updating user in database!(dao)", e);
+			throw new DAOException("Error during updating user in database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -279,7 +289,8 @@ public class UserDAOImpl implements UserDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException("Error finding unbanned users in database", e);
+			logger.log(Level.ERROR, "Error during showing all reviews!(dao)", e);
+			throw new DAOException("Error during showing all reviews!", e);
 		} catch (ConnectionPoolException e) {
 
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -329,7 +340,8 @@ public class UserDAOImpl implements UserDAO {
 				ps1.close();
 			}
 		} catch (SQLException e) {
-			throw new DAOException("Error during additing user in database!", e);
+			logger.log(Level.ERROR, "Error during changing password!(dao)", e);
+			throw new DAOException("Error during changing password!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -357,7 +369,8 @@ public class UserDAOImpl implements UserDAO {
 
 			status = ps.executeUpdate();
 		} catch (SQLException e) {
-			throw new DAOException("Error during additing user in database!", e);
+			logger.log(Level.ERROR, "Error: ban user!(dao)", e);
+			throw new DAOException("Error: ban user!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -384,7 +397,8 @@ public class UserDAOImpl implements UserDAO {
 
 			status = ps.executeUpdate();
 		} catch (SQLException e) {
-			throw new DAOException("Error during additing user in database!", e);
+			logger.log(Level.ERROR, "Error: unban user!(dao)", e);
+			throw new DAOException("Error: unban user!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -414,7 +428,8 @@ public class UserDAOImpl implements UserDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException("Error during getting user from database!", e);
+			logger.log(Level.ERROR, "Error during checking if user is banned!(dao)", e);
+			throw new DAOException("Error during checking if user is banned!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -442,6 +457,7 @@ public class UserDAOImpl implements UserDAO {
 
 			status = ps.executeUpdate();
 		} catch (SQLException e) {
+			logger.log(Level.ERROR, "Error during additing review in database!(dao)", e);
 			throw new DAOException("Error during additing review in database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -470,6 +486,7 @@ public class UserDAOImpl implements UserDAO {
 
 			status = ps.executeUpdate();
 		} catch (SQLException e) {
+			logger.log(Level.ERROR, "Error during deleting review in database!(dao)", e);
 			throw new DAOException("Error during deleting review in database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -498,6 +515,7 @@ public class UserDAOImpl implements UserDAO {
 
 			status = ps.executeUpdate();
 		} catch (SQLException e) {
+			logger.log(Level.ERROR, "Error during reseting password in database!(dao)", e);
 			throw new DAOException("Error during reseting password in database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -526,6 +544,7 @@ public class UserDAOImpl implements UserDAO {
 			email = rs.getString(1);
 
 		} catch (SQLException e) {
+			logger.log(Level.ERROR, "Error during getting email of user from database!(dao)", e);
 			throw new DAOException("Error during getting email of user from database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -555,7 +574,8 @@ public class UserDAOImpl implements UserDAO {
 			email = rs.getString(1);
 
 		} catch (SQLException e) {
-			throw new DAOException("Error during getting email of user from database!", e);
+			logger.log(Level.ERROR, "Error during getting email of user by id from database!(dao)", e);
+			throw new DAOException("Error during getting email of user by id from database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -584,7 +604,8 @@ public class UserDAOImpl implements UserDAO {
 			idUser = rs.getInt(1);
 
 		} catch (SQLException e) {
-			throw new DAOException("Error during getting email of user from database!", e);
+			logger.log(Level.ERROR, "Error during getting id of user by login from database!(dao)", e);
+			throw new DAOException("Error during getting id of user from database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {
@@ -613,6 +634,7 @@ public class UserDAOImpl implements UserDAO {
 			loyaltyPoints = rs.getDouble(1);
 
 		} catch (SQLException e) {
+			logger.log(Level.ERROR, "Error during getting loyaltyPoints of user from database!(dao)", e);
 			throw new DAOException("Error during getting loyaltyPoints of user from database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
@@ -642,7 +664,8 @@ public class UserDAOImpl implements UserDAO {
 
 			status = ps.executeUpdate();
 		} catch (SQLException e) {
-			throw new DAOException("Error during updatint loyalty points of user in database!", e);
+			logger.log(Level.ERROR, "Error during updating loyalty points of user from database!(dao)", e);
+			throw new DAOException("Error during updating loyalty points of user in database!", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("Error during getting connection from connection pool!", e);
 		} finally {

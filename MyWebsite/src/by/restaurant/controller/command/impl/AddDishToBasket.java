@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Basket;
 import by.restaurant.bean.Dish;
 import by.restaurant.bean.User;
@@ -28,6 +32,7 @@ import by.restaurant.service.factory.ServiceFactory;
 
 public class AddDishToBasket implements Command {
 
+	private static final Logger logger = LogManager.getLogger(AddDishToBasket.class);
 	private static final String DISH_CATEGORY = "dishCategory";
 	private static final String COUNT = "count";
 
@@ -121,7 +126,7 @@ public class AddDishToBasket implements Command {
 			response.sendRedirect(request.getContextPath() + "/Controller?command=show_menu&message=dish_added");
 
 		} catch (ServiceException e) {
-			// log
+            logger.log(Level.ERROR, "Error during additing dish to basket", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}

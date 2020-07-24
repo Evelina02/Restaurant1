@@ -8,6 +8,7 @@ public enum AjaxCommandName {
 	ADD_DISH_TO_BASKET, 
 	REFUSE_OF_INGREDIENTS, 
 	USE_LOYALTY_POINTS, 
+	RESET_PASSWORD, 
 
 
 }

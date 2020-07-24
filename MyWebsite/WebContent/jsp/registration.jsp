@@ -5,6 +5,8 @@
 <head>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+	    <%@ taglib prefix="restaurant" uri="/WEB-INF/tld/taglib.tld" %>
+	
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
 	<link rel="icon" type="image/png" href="img/icons/favicon.ico"/>
@@ -673,6 +675,7 @@ input.input100 {
 	
 	
 	
+	<restaurant:footer local="${sessionScope.local}"/>  
 	
 	
 <!--===============================================================================================-->

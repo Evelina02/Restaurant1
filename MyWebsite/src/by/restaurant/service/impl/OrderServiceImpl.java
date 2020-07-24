@@ -2,9 +2,13 @@ package by.restaurant.service.impl;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Dish;
 import by.restaurant.bean.Order;
 import by.restaurant.bean.User;
+import by.restaurant.controller.listener.PoolListener;
 import by.restaurant.dao.DAOException;
 import by.restaurant.dao.OrderDAO;
 import by.restaurant.dao.UserDAO;
@@ -15,6 +19,8 @@ import by.restaurant.service.impl.validator.Validator;
 import by.restaurant.service.impl.validator.ValidatorException;
 
 public class OrderServiceImpl implements OrderService {
+
+	private static final Logger logger = LogManager.getLogger(PoolListener.class);
 
 	@Override
 	public boolean addOrder(Order order, int idUser) throws ServiceException {

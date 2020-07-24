@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.constantname.JspPageName;
 import by.restaurant.controller.constantname.RequestParameterName;
@@ -21,19 +25,15 @@ import by.restaurant.service.factory.ServiceFactory;
 
 public class ShowBasket implements Command {
 
+	private static final Logger logger = LogManager.getLogger(ShowBasket.class);
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.localization.local");
 		HttpSession session = request.getSession();
 
-//		String message = request.getParameter(RequestParameterName.MESSAGE);
-//		if (message != null && message.equals(RequestParameterName.DISH_DELETED)) {
-//			request.setAttribute(RequestParameterName.DISH_DELETED, resourceBundle.getString("dish_deleted"));
-//		}
-//		
-//		if (message != null && message.equals(RequestParameterName.BASKET_CLEARED)) {
-//			request.setAttribute(RequestParameterName.BASKET_CLEARED, resourceBundle.getString("basket_cleared"));
-//		}
+        logger.log(Level.ERROR, "Error during opening the basket", "!!!!!!");
+
 		try {
 // баллы		
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -50,7 +50,7 @@ public class ShowBasket implements Command {
 			dispatcher.forward(request, response);
 
 		} catch (ServiceException e) {
-			// log
+            logger.log(Level.ERROR, "Error during opening the basket page", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}

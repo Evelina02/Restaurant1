@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.constantname.JspPageName;
 import by.restaurant.controller.constantname.RequestParameterName;
@@ -19,6 +23,8 @@ import by.restaurant.service.UserService;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class ChangeDish implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(ChangeDish.class);
 
 	private static final String CHANGE_DISH_ERROR = "change_dish_error";
 
@@ -29,8 +35,8 @@ public class ChangeDish implements Command {
 		HttpSession session = request.getSession();
 
 		String picture = request.getParameter(RequestParameterName.PICTURE);
-		Double price = Double.parseDouble(request.getParameter(RequestParameterName.PRICE));
-		String amount = request.getParameter(RequestParameterName.AMOUNT);
+		Double price = Double.parseDouble(replaceCommaWithDot(request.getParameter(RequestParameterName.PRICE)));
+		String amount = replaceCommaWithDot(request.getParameter(RequestParameterName.AMOUNT));
 
 		try {
 
@@ -49,10 +55,14 @@ public class ChangeDish implements Command {
 			response.sendRedirect(request.getContextPath() + "/Controller?command=admin_menu&message=dish_changed");
 
         } catch (ServiceException e) {
-            //log
+            logger.log(Level.ERROR, "Error during changing dish in admin menu", e);
         	RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
         }
 	}
 
+	private String replaceCommaWithDot(String str) {
+		
+		return str.replace(',', '.');
+	}
 }

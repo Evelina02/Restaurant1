@@ -145,7 +145,7 @@ public class Dish implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Dish [id=" + id + ", name=" + name + ", price=" + price + ", picture=" + picture + ", category="
+		return getClass().getName() + "@" + "[id=" + id + ", name=" + name + ", price=" + price + ", picture=" + picture + ", category="
 				+ category + ", amount=" + amount + ", state=" + state + ", isDeleted=" + isDeleted + ", ingredients="
 				+ ingredients + ", refusalOfIngredients=" + refusalOfIngredients + "]";
 	}

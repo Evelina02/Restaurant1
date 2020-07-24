@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Order;
 import by.restaurant.controller.command.Command;
 import by.restaurant.controller.constantname.JspPageName;
@@ -21,6 +25,7 @@ import by.restaurant.service.factory.ServiceFactory;
 
 public class AllOrders implements Command {
 
+	private static final Logger logger = LogManager.getLogger(AllOrders.class);
 	private static final String ORDER_DONE = "order_done";
 	private static final String ORDER_CLOSED = "order_closed";
 
@@ -55,7 +60,7 @@ public class AllOrders implements Command {
 			dispatcher.forward(request, response);
 
 		} catch (ServiceException e) {
-			// log
+            logger.log(Level.ERROR, "Error during opening the page with all orders for admin", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}

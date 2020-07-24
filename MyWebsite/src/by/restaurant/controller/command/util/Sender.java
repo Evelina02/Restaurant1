@@ -3,11 +3,23 @@ package by.restaurant.controller.command.util;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.RequestDispatcher;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import by.restaurant.controller.command.impl.AddDish;
+import by.restaurant.controller.constantname.JspPageName;
+import by.restaurant.service.ServiceException;
+
 import java.util.Properties;
 
 public class Sender {
 
-    private String username = "evelina.sarkisyan.1990@mail.ru";
+	private static final Logger logger = LogManager.getLogger(Sender.class);
+    
+	private String username = "evelina.sarkisyan.1990@mail.ru";
     private String password = "02evelina.sarkisyan02";
     private Properties props;
 
@@ -21,7 +33,7 @@ public class Sender {
         props.put("mail.smtp.port", "465");
     }
 
-    public void send(String subject, String text, String toEmail){
+    public void send(String subject, String text, String toEmail) throws ServiceException{
         Session session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
@@ -41,8 +53,10 @@ public class Sender {
 
             //отправляем сообщение
             Transport.send(message);
+            
         } catch (MessagingException e) {
-        	//log сообщение не отправлено
+			logger.log(Level.ERROR, "Error during sending message to user", e);
+			throw new ServiceException();
         }
     }
 }

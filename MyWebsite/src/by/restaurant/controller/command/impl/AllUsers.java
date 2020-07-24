@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Order;
 import by.restaurant.bean.User;
 import by.restaurant.controller.command.Command;
@@ -22,6 +26,7 @@ import by.restaurant.service.UserService;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class AllUsers implements Command {
+	private static final Logger logger = LogManager.getLogger(AllUsers.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,22 +44,13 @@ public class AllUsers implements Command {
 
 		    request.setAttribute(RequestParameterName.ALL_USERS, users);
 
-			
-//			String message = request.getParameter(RequestParameterName.MESSAGE);
-//			if (message != null && message.equals(ORDER_ADDED)) {
-//				request.setAttribute(RequestParameterName.ORDER_ADDED, resourceBundle.getString("order.added"));
-//			}        если user_banned
-//			if (message != null && message.equals(ORDER_DELETED)) {
-//				request.setAttribute(RequestParameterName.ORDER_DELETED, resourceBundle.getString("order.deleted"));
-//			}
-
 			session.setAttribute(SessionAttributeName.COMMAND, "all_users");
 
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.USERS_PAGE);
 			dispatcher.forward(request, response);
 
 		} catch (ServiceException e) {
-			// log
+            logger.log(Level.ERROR, "Error during opening the page with all users for admin", e);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 		}

@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.restaurant.bean.Dish;
 import by.restaurant.bean.User;
 import by.restaurant.bean.constant.Role;
@@ -23,6 +27,8 @@ import by.restaurant.service.ServiceException;
 import by.restaurant.service.factory.ServiceFactory;
 
 public class ShowMenu implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(ShowMenu.class);
 
 	private static List<Dish> snacks;
     private static List<Dish> hotDishes;
@@ -67,18 +73,12 @@ public class ShowMenu implements Command {
 		    request.setAttribute(RequestParameterName.DRINKS, drinks);
 
             session.setAttribute(SessionAttributeName.COMMAND, "show_menu");
-//
-//            if(request.getAttribute(RequestParameterName.DISH_ADDED) != null){
-//        		request.setAttribute(RequestParameterName.DISH_ADDED, resourceBundle.getString("dish_added"));
-//            }
-
-
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.MENU_PAGE);
     		dispatcher.forward(request, response);
     		
 	    } catch (ServiceException e) {
-	        //log
+            logger.log(Level.ERROR, "Error during opening the menu page", e);
 	    	RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.ERROR_PAGE);
 			dispatcher.forward(request, response);
 	    }
@@ -90,19 +90,13 @@ public class ShowMenu implements Command {
 			return snacks;
 		}
 
-
-
 		public static void setSnacks(List<Dish> snacks) {
 			ShowMenu.snacks = snacks;
 		}
 
-
-
 		public static List<Dish> getHotDishes() {
 			return hotDishes;
 		}
-
-
 
 		public static void setHotDishes(List<Dish> hotDishes) {
 			ShowMenu.hotDishes = hotDishes;

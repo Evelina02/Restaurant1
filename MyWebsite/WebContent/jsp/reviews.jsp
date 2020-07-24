@@ -7,6 +7,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+    <%@ taglib prefix="restaurant" uri="/WEB-INF/tld/taglib.tld" %>
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -245,6 +246,11 @@ margin-bottom: 0px;
 		<!-- /.row -->
 	</section>
 	<!-- /.container -->
+
+
+<restaurant:footer local="${sessionScope.local}"/>  
+
+
 
 	<!--===============================================================================================-->
 	<script
