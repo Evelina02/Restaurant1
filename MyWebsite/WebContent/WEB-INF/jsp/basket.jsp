@@ -588,7 +588,8 @@ margin-bottom:5px;
 
 								<td>
 									<div class="dish-price">
-										<span id="price">${dish.price*basket.countDishById.get(dish.id)}</span>
+							<!-- 		<span id="price">${dish.price*basket.countDishById.get(dish.id)}</span>  -->	
+									<span id="price"><fmt:formatNumber value="${dish.price*basket.countDishById.get(dish.id)}" maxFractionDigits="2"/></span>
 									</div>
 
 								</td>

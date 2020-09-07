@@ -41,8 +41,9 @@ public class ShowBasket implements Command {
 
 			int idUser = (int) session.getAttribute(SessionAttributeName.ID_USER);
 			double loyaltyPoints = userService.getLoyaltyPointsById(idUser);
+			double roundedLoyaltyPoints = Math.floor(loyaltyPoints * 100) / 100;
 
-			request.setAttribute(RequestParameterName.USER_LOYALTY_POINTS, loyaltyPoints);
+			request.setAttribute(RequestParameterName.USER_LOYALTY_POINTS, roundedLoyaltyPoints);
 
 			session.setAttribute(SessionAttributeName.COMMAND, "show_basket");
 

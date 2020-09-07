@@ -91,7 +91,7 @@ public class CreateOrder implements Command {
 			double oldLoyaltyPoints = userService.getLoyaltyPointsById(idUser);
 			double newLoyaltyPoints = oldLoyaltyPoints - countOfPoints;
 
-			// в базу потом
+		
 			userService.updateLoyaltyPoints(idUser, newLoyaltyPoints);
 
 			// 3

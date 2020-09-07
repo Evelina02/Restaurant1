@@ -143,12 +143,10 @@ public class DishServiceImpl implements DishService {
 	public void putDishToBasket(Basket basket, Dish dish, int count) throws ServiceException {
 
 		if(!Validator.validateIsNull(basket) || !Validator.validateIsNull(dish)) {
-			//log
 			throw new ValidatorException("Object is null!");
 		}
 
 		if(!Validator.validatePositiveNumber(count)) {
-			//log
 			throw new ValidatorException("Count of dish is a negative number!");
 		}
 		
@@ -159,12 +157,10 @@ public class DishServiceImpl implements DishService {
 	public void deleteDishFromBasket(Basket basket, int idDish) throws ServiceException {
 		
 		if(!Validator.validateIsNull(basket)) {
-			//log
 			throw new ValidatorException("Basket is null!");
 		}
 		
 		if(!Validator.validatePositiveNumber(idDish)) {
-			//log
 			throw new ValidatorException("Id of dish is a negative number!");
 		}
 		
@@ -183,7 +179,6 @@ public class DishServiceImpl implements DishService {
 	public void clearBasket(Basket basket) throws ServiceException {
 
 		if(!Validator.validateIsNull(basket)) {
-			//log
 			throw new ValidatorException("Basket is null!");
 		}
 
@@ -194,7 +189,6 @@ public class DishServiceImpl implements DishService {
 	public void countTotalPrice(Basket basket) throws ServiceException {
 		
 		if(!Validator.validateIsNull(basket)) {
-			//log
 			throw new ValidatorException("Basket is null!");
 		}
 		
@@ -202,7 +196,10 @@ public class DishServiceImpl implements DishService {
 		for(Dish dish : basket.getDishes()){
 			totalPrice += dish.getPrice()*basket.getCountDishById().get(dish.getId());
 		}
-		basket.setTotalPrice(totalPrice);
+		
+		double rounded≈otalPrice = Math.floor(totalPrice * 100) / 100;
+
+		basket.setTotalPrice(rounded≈otalPrice);
 	}
 
 	@Override
@@ -224,16 +221,15 @@ public class DishServiceImpl implements DishService {
 	public boolean deleteDish(int dishId) throws ServiceException {
 
 		if(!Validator.validatePositiveNumber(dishId)) {
-			//log
 			throw new ValidatorException("Id of dish is a negative number!");
 		}
 		
 		boolean deleted;
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
-			DishDAO orderDAO = daoFactory.getDishDAO();
+			DishDAO dishDAO = daoFactory.getDishDAO();
 
-			int status = orderDAO.deleteDish(dishId);
+			int status = dishDAO.deleteDish(dishId);
 			if(status == 1) {
 				deleted = true;
 			 }else {

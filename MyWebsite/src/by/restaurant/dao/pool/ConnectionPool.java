@@ -143,8 +143,6 @@ public final class ConnectionPool {
             con.close();}
         } catch (SQLException e) {
 			logger.log(Level.ERROR, "Connection isn't return to the pool!", e);
-
-            //logger.log(Level.ERROR, ".",e);
         }
         try {
             if(st!=null){

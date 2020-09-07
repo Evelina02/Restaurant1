@@ -49,6 +49,17 @@ public class User implements Serializable{
 		this.reviews = reviews;
 	}
 
+	public User(int id, String login, String password, Role role, String email, String address) {
+
+		super();
+		this.id = id;
+		this.login = login;
+		this.password = password;
+		this.role = role;
+		this.email = email;
+		this.address = address;		
+	}
+
 	public int getId() {
 		return id;
 	}

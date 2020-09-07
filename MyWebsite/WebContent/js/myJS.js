@@ -214,7 +214,8 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 
 			var loyalty_points_value = $(this).parent().find('#loyalty_points').text();
 
-			var count = $(this).parent().find('#countOfPoints').val();
+			var countVal = $(this).parent().find('#countOfPoints').val();
+			var count = Number(countVal);
 			var totalPriceElement =document.getElementById('totalPrice');
 			var totalPrice = Number(totalPriceElement.innerHTML);
 
@@ -225,7 +226,7 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 			}
 			else{
 			
-				var newLoyaltyPoints = loyalty_points_value - count;
+				var newLoyaltyPoints = parseFloat(loyalty_points_value) - count;
 				
 				var newTotalPrice =  parseFloat(totalPrice) - count;
 
@@ -234,9 +235,11 @@ $('.multiple_select option').mousedown(function(e) { //no ctrl to select multipl
 				
 				$('#totalPrice').html(newTotalPrice);
 				//остаток баллов
-				$loyalty_points.html(newLoyaltyPoints);
-	
 				
+	
+				var roundedNewLoyaltyPoints = Math.floor(newLoyaltyPoints * 100) / 100;
+				$loyalty_points.html(roundedNewLoyaltyPoints);
+
 				
 				
 				var usedPointsElement =document.getElementById('usedPoints');
